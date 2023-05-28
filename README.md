@@ -1,5 +1,5 @@
 # egui webapp
-CroossWebPlatformAssembly
+CrossWebPlatformAssembly
 
 ---
-> ### based on [emilk/eframe_template](https://github.com/emilk/eframe_template)
+> ### Powered by egui: https://github.com/emilk/egui/
