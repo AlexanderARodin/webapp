@@ -11,13 +11,11 @@ use crate::root_app::domik_view::*;
 #[serde(default)]
 pub struct RootApp {
     txt: String,
-
     #[serde(skip)]
     pressed: bool,
 
     #[serde(skip)]
     sequencer: MidiSequencer,
-
     #[serde(skip)]
     domikView: DomikView,
 }
@@ -53,17 +51,18 @@ impl eframe::App for RootApp {
             self.domikView.updateUI( ui, &mut self.sequencer );
         });
 
-        egui::Window::new("tst wnd").show( ctx, |ui| {
-            ui.horizontal( |ui| {
-                let btn = ui.button( "try to save TEXT" );
-                ui.label( format!(" <{}>", self.pressed) );
-                if btn.clicked(){
-                    println!("clicked with PRESSURE!!!");
-                    self.pressed = true;
-            }
+        egui::CentralPanel::default()
+            .show( ctx, |ui| {
+                ui.horizontal( |ui| {
+                    let btn = ui.button( "try to save TEXT" );
+                    ui.label( format!(" <{}>", self.pressed) );
+                    if btn.clicked(){
+                        println!("clicked with PRESSURE!!!");
+                        self.pressed = true;
+                    }
+                });
+                ui.text_edit_singleline(&mut self.txt);
+                ui.label( format!("just edited: [{}]", self.txt) );
             });
-            ui.text_edit_singleline(&mut self.txt);
-            ui.label( format!("just edited: [{}]", self.txt) );
-        });
     }
 }

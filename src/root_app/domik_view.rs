@@ -1,3 +1,5 @@
+const annot: &str = "v5.04";
+
 use crate::root_app::midi_sequencer;
 
 
@@ -15,7 +17,7 @@ impl DomikView {
     }
     pub fn updateUI(&mut self, ui: &mut egui::Ui, 
                     sequencer: &mut midi_sequencer::MidiSequencer ) {
-            ui.label("WWWapp Template v5.03");
+            ui.label( format!("WWWapp Template {}", annot) );
             ui.separator();
             let btn = ui.button( "try to save TEXT" );
             if btn.clicked(){
