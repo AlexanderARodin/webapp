@@ -1,3 +1,7 @@
+#![allow(non_snake_case)]
+
+mod domik_view;
+use crate::root_app::domik_view::*;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
@@ -37,7 +41,7 @@ impl eframe::App for RootApp {
 
     fn update( &mut self, ctx: &egui::Context, _frame: &mut eframe::Frame ) {
 
-        egui::Window::new("simple DoMiKkkk").show( ctx, |ui| {
+        egui::Window::new(self.domikView.title.clone()).show( ctx, |ui| {
             self.domikView.updateUI( ui );
         });
 

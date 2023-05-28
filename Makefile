@@ -5,9 +5,11 @@ help:
 	@echo 'there is no help.. yet'
 
 edit:
-	@nvim ./src/root_app.rs
+	@nvim ./src/root_app/domik_view.rs
 edit_main:
 	@nvim ./src/main.rs
+edit_domik:
+	@nvim ./src/root_app.rs
 
 savetogit:
 	@git add . && git commit -m 'saving' && git push

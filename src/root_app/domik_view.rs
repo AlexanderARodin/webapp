@@ -1,6 +1,6 @@
 //
-struct DomikView {
-    title: String,
+pub struct DomikView {
+    pub title: String,
 }
 impl Default for DomikView {
     fn default() -> Self {
