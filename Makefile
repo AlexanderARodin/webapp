@@ -4,9 +4,9 @@ binname="webapp"
 help:
 	@echo 'there is no help.. yet'
 
-editmidi:
+edit:
 	@nvim ./src/root_app/midi_sequencer.rs
-editdomik:
+editview:
 	@nvim ./src/root_app/domik_view.rs
 editapp:
 	@nvim ./src/root_app.rs
