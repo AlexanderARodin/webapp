@@ -1,5 +1,8 @@
 #![allow(non_snake_case)]
 
+mod midi_sequencer;
+use crate::root_app::midi_sequencer::*;
+
 mod domik_view;
 use crate::root_app::domik_view::*;
 
@@ -12,12 +15,19 @@ pub struct RootApp {
     pressed: bool,
 
     #[serde(skip)]
+    sequencer: MidiSequencer,
+
+    #[serde(skip)]
     domikView: DomikView,
 }
 
 impl Default for RootApp {
     fn default() -> Self {
-        Self {txt:"<empty>".to_owned(), pressed:false, domikView: DomikView::new() }
+        Self {
+            txt:"<empty>".to_owned(), pressed:false, 
+            sequencer: MidiSequencer::new(),
+            domikView: DomikView::new()
+        }
     }
 }
 
@@ -42,7 +52,7 @@ impl eframe::App for RootApp {
     fn update( &mut self, ctx: &egui::Context, _frame: &mut eframe::Frame ) {
 
         egui::Window::new(self.domikView.title.clone()).show( ctx, |ui| {
-            self.domikView.updateUI( ui );
+            self.domikView.updateUI( ui, &mut self.sequencer );
         });
 
         egui::Window::new("tst wnd").show( ctx, |ui| {
