@@ -1,3 +1,23 @@
+struct DomikView {
+    title: String,
+}
+impl Default for DomikView {
+    fn default() -> Self {
+        Self{ title: "simple DoMiKkk".to_owned() }
+    }
+}
+impl DomikView {
+    pub fn new() -> Self {
+        Default::default()
+    }
+    pub fn updateUI(&mut self, ui: &mut egui::Ui ) {
+            ui.label("WWWapp Template v2.00");
+            let btn = ui.button( "try to save TEXT" );
+            if btn.clicked(){
+                println!("clicked simple!");
+            }
+    }
+}
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
@@ -6,11 +26,14 @@ pub struct RootApp {
 
     #[serde(skip)]
     pressed: bool,
+
+    #[serde(skip)]
+    domikView: DomikView,
 }
 
 impl Default for RootApp {
     fn default() -> Self {
-        Self {txt:"<empty>".to_owned(), pressed:false}
+        Self {txt:"<empty>".to_owned(), pressed:false, domikView: DomikView::new() }
     }
 }
 
@@ -33,8 +56,12 @@ impl eframe::App for RootApp {
     }
 
     fn update( &mut self, ctx: &egui::Context, _frame: &mut eframe::Frame ) {
+
+        egui::Window::new("simple DoMiKkkk").show( ctx, |ui| {
+            self.domikView.updateUI( ui );
+        });
+
         egui::Window::new("tst wnd").show( ctx, |ui| {
-            ui.label("WWWapp Template v1.07");
             ui.horizontal( |ui| {
                 let btn = ui.button( "try to save TEXT" );
                 ui.label( format!(" <{}>", self.pressed) );
