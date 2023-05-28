@@ -4,12 +4,14 @@ binname="webapp"
 help:
 	@echo 'there is no help.. yet'
 
-edit:
+editmidi:
+	@nvim ./src/root_app/midi_sequencer.rs
+editdomik:
 	@nvim ./src/root_app/domik_view.rs
-edit_main:
-	@nvim ./src/main.rs
-edit_domik:
+editapp:
 	@nvim ./src/root_app.rs
+editmain:
+	@nvim ./src/main.rs
 
 savetogit:
 	@git add . && git commit -m 'saving' && git push
