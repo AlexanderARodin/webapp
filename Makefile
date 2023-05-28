@@ -39,3 +39,4 @@ size:
 
 clean:
 	@cargo clean
+	@trunk clean
