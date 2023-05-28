@@ -3,7 +3,6 @@ use crate::root_app::midi_sequencer;
 
 pub struct DomikView {
     pub title: String,
-
 }
 impl Default for DomikView {
     fn default() -> Self {
