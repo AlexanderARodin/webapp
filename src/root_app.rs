@@ -1,5 +1,4 @@
 
-
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
 pub struct RootApp {
