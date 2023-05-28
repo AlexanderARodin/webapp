@@ -6,6 +6,7 @@ use crate::root_app::midi_sequencer::*;
 mod domik_view;
 use crate::root_app::domik_view::*;
 
+
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
 pub struct RootApp {

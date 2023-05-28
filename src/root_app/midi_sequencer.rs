@@ -1,7 +1,8 @@
-use std::thread;
+use std::error::Error;
+
 
 pub struct MidiSequencer {
-    audio_thread: Thread,
+    audio: Result< Box<dyn BaseAudioOutputDevice>, Box<dyn Error> >,
 }
 
 impl MidiSequencer {
@@ -16,9 +17,7 @@ impl MidiSequencer {
 impl Default for MidiSequencer {
     fn default() -> Self {
         Self{ 
-            audio_thread: thread::Builder::new()
-                .name("audio thread".to_string())
-                .spawn( move ||  enter_audio_thread() )
+            audio: create_audio()
         }
     }
 }
@@ -28,18 +27,19 @@ impl Default for MidiSequencer {
 
 use tinyaudio::prelude::*;
 
-fn enter_audio_thread() {
-    //std::thread::sleep(std::time::Duration::from_secs(1));
-    println!("!!!!!!");
-    return;
+
+fn create_audio() -> Result< Box<dyn BaseAudioOutputDevice>, Box<dyn Error> > {
     
+    println!("^^^^^");
+    return Err( "rrr".to_string().into() );
+
     let params = OutputDeviceParameters {
         channels_count: 2,
         sample_rate: 44100,
         channel_sample_count: 4410,
     };
 
-    let _device = run_output_device(params, {
+    let device = run_output_device(params, {
         let mut clock = 0f32;
         move |data| {
             for samples in data.chunks_mut(params.channels_count) {
@@ -51,9 +51,8 @@ fn enter_audio_thread() {
                 }
             }
         }
-    })
-    .unwrap();
-    
-    std::thread::sleep(std::time::Duration::from_secs(5));
+    });
+    return device;
+    //std::thread::sleep(std::time::Duration::from_secs(5));
     //
 }
