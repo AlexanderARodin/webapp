@@ -27,6 +27,10 @@ impl Default for MidiSequencer {
 use tinyaudio::prelude::*;
 
 fn tst_internal() {
+    //std::thread::sleep(std::time::Duration::from_secs(1));
+    println!("!!!!!!");
+    return;
+    
     let params = OutputDeviceParameters {
         channels_count: 2,
         sample_rate: 44100,
