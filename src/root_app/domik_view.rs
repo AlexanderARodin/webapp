@@ -1,6 +1,7 @@
 //
 pub struct DomikView {
     pub title: String,
+
 }
 impl Default for DomikView {
     fn default() -> Self {
@@ -13,6 +14,7 @@ impl DomikView {
     }
     pub fn updateUI(&mut self, ui: &mut egui::Ui ) {
             ui.label("WWWapp Template v2.00");
+            ui.separator();
             let btn = ui.button( "try to save TEXT" );
             if btn.clicked(){
                 println!("clicked simple!");
