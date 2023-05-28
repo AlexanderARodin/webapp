@@ -1,7 +1,7 @@
 use std::thread;
 
 pub struct MidiSequencer {
-    //
+    audio_thread: Thread,
 }
 
 impl MidiSequencer {
@@ -9,15 +9,17 @@ impl MidiSequencer {
        Default::default() 
     }
     pub fn tst(&mut self){
-        thread::spawn( move || {
-            tst_internal();
-        } );
+        println!("no yet");
     }
 }
 
 impl Default for MidiSequencer {
     fn default() -> Self {
-        Self{  }
+        Self{ 
+            audio_thread: thread::Builder::new()
+                .name("audio thread".to_string())
+                .spawn( move ||  enter_audio_thread() )
+        }
     }
 }
 
@@ -26,7 +28,7 @@ impl Default for MidiSequencer {
 
 use tinyaudio::prelude::*;
 
-fn tst_internal() {
+fn enter_audio_thread() {
     //std::thread::sleep(std::time::Duration::from_secs(1));
     println!("!!!!!!");
     return;
