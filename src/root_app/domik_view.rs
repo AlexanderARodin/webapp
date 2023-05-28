@@ -13,7 +13,7 @@ impl DomikView {
         Default::default()
     }
     pub fn updateUI(&mut self, ui: &mut egui::Ui ) {
-            ui.label("WWWapp Template v2.00");
+            ui.label("WWWapp Template v3.00");
             ui.separator();
             let btn = ui.button( "try to save TEXT" );
             if btn.clicked(){
