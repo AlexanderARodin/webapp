@@ -1,4 +1,4 @@
-# wwwapp-template
+# webapp
 CroossWebPlatformAssembly
 
 # ToDo
