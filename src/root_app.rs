@@ -35,7 +35,6 @@ impl Default for RootApp {
 impl RootApp {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         if let Some(storage) = cc.storage {
-            println!("tryin to load..");
             return eframe::get_value(storage, eframe::APP_KEY).unwrap_or_default();
         }
         Default::default()
@@ -45,9 +44,7 @@ impl RootApp {
 
 impl eframe::App for RootApp {
     fn save(&mut self, storage: &mut dyn eframe::Storage) {
-        println!("saving..");
         eframe::set_value(storage, eframe::APP_KEY, self);
-        println!("..saved");
     }
 
     fn update( &mut self, ctx: &egui::Context, _frame: &mut eframe::Frame ) {
