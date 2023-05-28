@@ -14,7 +14,7 @@ fn main() -> Result<(), eframe::Error> {
     };
 
     eframe::run_native(
-        "some text 1",
+        "egui CrossApp",
         options,
         Box::new( |cc| Box::new(RootApp::new(cc)) )
    )
@@ -24,9 +24,7 @@ fn main() -> Result<(), eframe::Error> {
 #[ cfg(target_arch = "wasm32") ]
 fn main() {
     println!("in WASM doen't work..");
-
     console_error_panic_hook::set_once();
-
     tracing_wasm::set_as_global_default();
 
     let options = eframe::WebOptions::default();

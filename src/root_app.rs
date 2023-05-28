@@ -16,11 +16,6 @@ impl Default for RootApp {
 
 impl RootApp {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
-        // This is also where you can customize the look and feel of egui using
-        // `cc.egui_ctx.set_visuals` and `cc.egui_ctx.set_fonts`.
-
-        // Load previous app state (if any).
-        // Note that you must enable the `persistence` feature for this to work.
         if let Some(storage) = cc.storage {
             println!("tryin to load..");
             return eframe::get_value(storage, eframe::APP_KEY).unwrap_or_default();
@@ -37,8 +32,6 @@ impl eframe::App for RootApp {
         println!("..saved");
     }
 
-    /// Called each time the UI needs repainting, which may be many times per second.
-    /// Put your widgets into a `SidePanel`, `TopPanel`, `CentralPanel`, `Window` or `Area`.
     fn update( &mut self, ctx: &egui::Context, _frame: &mut eframe::Frame ) {
         egui::Window::new("tst wnd").show( ctx, |ui| {
             ui.label("WWWapp Template v1.07");
