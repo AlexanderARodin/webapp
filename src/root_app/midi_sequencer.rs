@@ -2,7 +2,7 @@ use std::error::Error;
 
 
 pub struct MidiSequencer {
-//    audio: Result< Box<dyn BaseAudioOutputDevice>, Box<dyn Error> >,
+    audio: Result< Box<dyn BaseAudioOutputDevice>, Box<dyn Error> >,
 }
 
 impl MidiSequencer {
@@ -17,7 +17,7 @@ impl MidiSequencer {
 impl Default for MidiSequencer {
     fn default() -> Self {
         Self{ 
-//            audio: create_audio()
+            audio: create_audio()
         }
     }
 }
