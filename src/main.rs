@@ -13,11 +13,13 @@ fn main() -> Result<(), eframe::Error> {
         ..Default::default()
     };
 
-    eframe::run_native(
-        "egui CrossApp",
-        options,
-        Box::new( |cc| Box::new(RootApp::new(cc)) )
-   )
+    {
+        eframe::run_native(
+            "egui CrossApp",
+            options,
+            Box::new( |cc| Box::new(RootApp::new(cc)) )
+        )
+    }
 }
 
 
