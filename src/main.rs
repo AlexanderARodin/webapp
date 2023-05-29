@@ -7,6 +7,7 @@ use crate::root_app::*;
 #[ cfg(not(target_arch = "wasm32")) ]
 fn main() -> Result<(), eframe::Error> {
     println!("MAIN has beed entered..");
+    appendInterLog("NORM pseudo log:");
 
     let options = eframe::NativeOptions {
         initial_window_size: Some(egui::vec2(200., 300.)),
@@ -26,6 +27,8 @@ fn main() -> Result<(), eframe::Error> {
 #[ cfg(target_arch = "wasm32") ]
 fn main() {
     println!("in WASM doen't work..");
+    appendInterLog("WASM pseudo log:");
+
     console_error_panic_hook::set_once();
     tracing_wasm::set_as_global_default();
 
