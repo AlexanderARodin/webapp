@@ -1,11 +1,5 @@
 #![allow(non_snake_case)]
 
-//mod midi_sequencer;
-use midi_sequencer::*;
-
-//mod domik_view;
-use domik_view::*;
-
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
