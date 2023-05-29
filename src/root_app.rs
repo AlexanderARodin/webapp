@@ -4,7 +4,7 @@
 //use midi_sequencer::*;
 
 //mod domik_view;
-use domik_view::*;
+//use domik_view::*;
 
 
 #[derive(serde::Deserialize, serde::Serialize)]
