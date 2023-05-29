@@ -7,7 +7,6 @@ pub fn getLog() -> String {
     res.clone()
 }
 pub fn log(status: Status){
-    let mut log = INTER_LOG.lock().unwrap();
     let newItem: String = match status {
         Simple(msg) =>       format!("> {msg}"),
         New(name) =>         format!("[+ {name}]"),
@@ -15,6 +14,7 @@ pub fn log(status: Status){
         Infor(name, info) => format!("[  {name}]: {info}"),
         Error(name, error) => format!("[E {name}]: {error}"),
     }
+    let mut log = INTER_LOG.lock().unwrap();
     *log = format!( "\n{}\n{}",log, newItem );
 }
 
