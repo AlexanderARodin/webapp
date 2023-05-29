@@ -7,16 +7,16 @@ pub mod log {
         super::add_log_line( format!( "> {msg}") );
     }
     pub fn create(name: &str){
-        super::add_log_line( format!( "[+ {name}]") );
+        super::add_log_line( format!( "+[{name}]") );
     }
     pub fn drop(name: &str){
-        super::add_log_line( format!( "[- {name}]") );
+        super::add_log_line( format!( "-[{name}]") );
     }
     pub fn error(name: &str, error: &str){
-        super::add_log_line( format!( "[E {name}]: {error}") );
+        super::add_log_line( format!( "E[{name}]: {error}") );
     }
     pub fn info(name: &str, info: &str){
-        super::add_log_line( format!( "[. {name}]: {info}") );
+        super::add_log_line( format!( " [{name}]: {info}") );
     }
     
     pub fn get() -> String {
