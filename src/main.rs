@@ -1,16 +1,12 @@
 #![allow(non_snake_case)]
 
+mod midi_sequencer;
+mod domik_view;
 mod root_app;
 use root_app::{RootApp};
 
-mod midi_sequencer;
-//use midi_sequencer::*;
-
-mod domik_view;
-//use domik_view::*;
-
 mod dbg_utils;
-use dbg_utils::{appendInterLog, getInterLog};
+use dbg_utils::{appendInterLog};
 
 
 #[ cfg(not(target_arch = "wasm32")) ]

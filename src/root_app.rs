@@ -1,5 +1,7 @@
 #![allow(non_snake_case)]
 
+use crate::domik_view::*;
+use crate::midi_sequencer::*;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
