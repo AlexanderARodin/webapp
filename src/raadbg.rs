@@ -13,10 +13,10 @@ pub mod log {
         super::add_log_line( format!( "[- {name}]") );
     }
     pub fn error(name: &str, error: &str){
-        super::add_log_line( format!( "[! {name}] E: {error}") );
+        super::add_log_line( format!( "[E {name}]: {error}") );
     }
     pub fn info(name: &str, info: &str){
-        super::add_log_line( format!( "[  {name}]: {info}") );
+        super::add_log_line( format!( "[. {name}]: {info}") );
     }
     
     pub fn get() -> String {
