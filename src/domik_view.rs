@@ -1,4 +1,4 @@
-const annot: &str = "v5.21";
+const annot: &str = "v6.01";
 
 use crate::raadbg::log;
 use crate::midi_sequencer::{AudioDevice};
