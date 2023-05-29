@@ -6,16 +6,6 @@ use crate::root_app::midi_sequencer::*;
 mod domik_view;
 use crate::root_app::domik_view::*;
 
-use std::sync::Mutex;
-static interLog: Mutex<String> = Mutex::new( String::new() );
-pub fn getInterLog() -> String {
-    let res = interLog.lock().unwrap();
-    res.clone()
-}
-pub fn appendInterLog(str: &str){
-    let mut log = interLog.lock().unwrap();
-    *log = format!( "\n{}\n{}",log,str );
-}
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
