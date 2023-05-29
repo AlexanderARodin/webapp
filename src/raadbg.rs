@@ -4,7 +4,7 @@ static INTER_LOG: Mutex<String> = Mutex::new( String::new() );
 
 pub mod log {
     pub fn simple(msg: &str){
-        add_log_line( format!( "> {msg}") );
+        super::add_log_line( format!( "> {msg}") );
     }
     pub fn create(strct: &str){
     }
