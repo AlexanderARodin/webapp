@@ -3,6 +3,8 @@ const annot: &str = "v5.21";
 use crate::root_app::midi_sequencer;
 use crate::*;
 
+mod dbg_utils;
+use dbg_utils::{getInterLog};
 
 pub struct DomikView {
     pub title: String,
