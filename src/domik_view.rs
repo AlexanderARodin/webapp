@@ -1,6 +1,6 @@
 const annot: &str = "v5.21";
 
-use crate::raadbg::log::get as log::get;
+use crate::raadbg::log;
 use crate::midi_sequencer::{AudioDevice};
 
 pub struct DomikView {
