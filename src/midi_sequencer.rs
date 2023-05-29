@@ -40,7 +40,7 @@ impl AudioDevice{
             match dev {
                 Err(e) => {
                     let errmsg = format!("{:?}",e);
-                    log::error("AudioDevice", errmsg);
+                    log::error("AudioDevice", &errmsg);
                     return Err(e)
                 },
                 Ok(running_dev) => self.device = Some(running_dev),
