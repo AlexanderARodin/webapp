@@ -7,7 +7,7 @@ pub fn getLog() -> String {
     res.clone()
 }
 pub fn log(status: Status){
-    let newItem: &str = match status {
+    let newItem: String = match status {
         Simple(msg) =>       format!("> {msg}"),
         New(name) =>         format!("[+ {name}]"),
         Drop(name) =>        format!("[- {name}]"),
