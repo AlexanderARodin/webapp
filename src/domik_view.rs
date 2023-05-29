@@ -1,4 +1,4 @@
-const annot: &str = "v6.01";
+const VERS: &str = "v6.02";
 
 use crate::raadbg::log;
 use crate::midi_sequencer::{AudioDevice};
@@ -17,7 +17,7 @@ impl DomikView {
     }
     pub fn updateUI(&mut self, ui: &mut egui::Ui, 
                     audio_device: &mut AudioDevice) {
-            ui.label( format!("WWWapp Template {}", annot) );
+            ui.label( format!("WWWapp Template {}", VERS) );
             ui.separator();
             let btn = ui.button( format!("audio status = {}", audio_device.is_started()) );
             if btn.clicked(){
