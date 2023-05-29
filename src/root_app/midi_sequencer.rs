@@ -68,11 +68,6 @@ impl Drop for AudioDevice {
 
 
 
-
-
-
-
-
 fn gogo(params: OutputDeviceParameters, clock: &mut f32, data: &mut [f32] ) {
         for samples in data.chunks_mut(params.channels_count) {
             *clock = (*clock + 1.0) % params.sample_rate as f32;
