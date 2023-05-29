@@ -4,6 +4,7 @@ static INTER_LOG: Mutex<String> = Mutex::new( String::new() );
 
 pub mod log {
     pub fn simple(msg: &str){
+        add_log_line( format!( "> {msg}") );
     }
     pub fn create(strct: &str){
     }
@@ -20,7 +21,7 @@ pub mod log {
     }
 }
 
-fn add_log_line(line: &str) {
+fn add_log_line(line: String) {
     let mut log = INTER_LOG.lock().unwrap();
     *log += line;
     println!("{line}");
