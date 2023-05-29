@@ -1,5 +1,7 @@
 const annot: &str = "v5.21";
 
+use dbg_utils::{appendInterLog, getInterLog};
+
 
 pub struct DomikView {
     pub title: String,
