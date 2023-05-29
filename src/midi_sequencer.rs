@@ -83,7 +83,7 @@ fn gogo(params: OutputDeviceParameters, clock: &mut f32, data: &mut [f32] ) {
 
 pub fn tst() {
     return;
-
+/*
     let params = OutputDeviceParameters {
         channels_count: 2,
         sample_rate: 44100,
@@ -105,4 +105,5 @@ pub fn tst() {
     .unwrap();
     
     std::thread::sleep(std::time::Duration::from_secs(2));
+*/
 }
