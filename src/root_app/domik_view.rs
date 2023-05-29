@@ -1,4 +1,4 @@
-const annot: &str = "v5.20";
+const annot: &str = "v5.21";
 
 use crate::root_app::midi_sequencer;
 
