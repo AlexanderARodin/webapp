@@ -1,6 +1,6 @@
 const annot: &str = "v5.21";
 
-use crate::dbg_utils::{getInterLog};
+use crate::raadbg::log::get as log::get;
 use crate::midi_sequencer::{AudioDevice};
 
 pub struct DomikView {
@@ -29,7 +29,7 @@ impl DomikView {
                 audio_device.stop();
             }
             ui.separator();
-            ui.label( getInterLog() );
+            ui.label( log::get() );
     }
 }
 

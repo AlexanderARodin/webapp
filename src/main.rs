@@ -6,13 +6,13 @@ mod root_app;
 use root_app::{RootApp};
 
 mod raadbg;
-use raadbg::{log, Status};
+use raadbg::log;
 
 
 #[ cfg(not(target_arch = "wasm32")) ]
 fn main() -> Result<(), eframe::Error> {
     println!("MAIN has beed entered..");
-    log(Status::Simple("NORM pseudo log:") );
+    log::simple("NORM pseudo log:");
 
     let options = eframe::NativeOptions {
         initial_window_size: Some(egui::vec2(200., 300.)),
@@ -32,7 +32,7 @@ fn main() -> Result<(), eframe::Error> {
 #[ cfg(target_arch = "wasm32") ]
 fn main() {
     println!("in WASM doen't work..");
-    appendInterLog("WASM pseudo log:");
+    log::simple("WASM pseudo log:");
 
     console_error_panic_hook::set_once();
     tracing_wasm::set_as_global_default();
