@@ -1,6 +1,7 @@
 const annot: &str = "v5.21";
 
 use crate::root_app::midi_sequencer;
+use crate::*;
 
 
 pub struct DomikView {
@@ -28,6 +29,8 @@ impl DomikView {
             if btnStop.clicked(){
                 audio_device.stop();
             }
+            ui.separator();
+            ui.label( getInterLog() );
     }
 }
 
