@@ -81,7 +81,7 @@ fn gogo(params: OutputDeviceParameters, clock: &mut f32, data: &mut [f32] ) {
 }
 
 
-fn tst() {
+pub fn tst() {
     let params = OutputDeviceParameters {
         channels_count: 2,
         sample_rate: 44100,
