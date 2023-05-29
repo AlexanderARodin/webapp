@@ -6,6 +6,8 @@ help:
 
 edit:
 	@nvim ./src/midi_sequencer.rs
+edit2:
+	@nvim ./src/audio_device.rs
 editview:
 	@nvim ./src/domik_view.rs
 editapp:
