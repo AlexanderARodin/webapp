@@ -11,7 +11,7 @@ pub fn log(status: Status){
         Simple(msg) =>       format!("> {msg}"),
         New(name) =>         format!("[+ {name}]"),
         Drop(name) =>        format!("[- {name}]"),
-        Infor(name, info) => format!("[  {name}]: {info}"),
+        Info(name, info) => format!("[  {name}]: {info}"),
         Error(name, error) => format!("[E {name}]: {error}"),
     }
     let mut log = INTER_LOG.lock().unwrap();
