@@ -6,6 +6,9 @@ use root_app::{RootApp};
 mod midi_sequencer;
 use midi_sequencer::*;
 
+mod domik_view;
+use domik_view::*;
+
 mod dbg_utils;
 use dbg_utils::{appendInterLog};
 
