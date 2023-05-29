@@ -5,14 +5,14 @@ mod domik_view;
 mod root_app;
 use root_app::{RootApp};
 
-mod dbg_utils;
-use dbg_utils::{appendInterLog};
+mod raadbg;
+use raadbg::{log, Status};
 
 
 #[ cfg(not(target_arch = "wasm32")) ]
 fn main() -> Result<(), eframe::Error> {
     println!("MAIN has beed entered..");
-    appendInterLog("NORM pseudo log:");
+    log(Status::Simple("NORM pseudo log:") );
 
     let options = eframe::NativeOptions {
         initial_window_size: Some(egui::vec2(200., 300.)),
