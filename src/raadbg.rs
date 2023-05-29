@@ -20,7 +20,7 @@ pub mod log {
     }
     
     pub fn tick(){
-        let mut log = INTER_LOG.lock().unwrap();
+        let mut log = super::INTER_LOG.lock().unwrap();
         *log += ".";
         print!(".");
     }
