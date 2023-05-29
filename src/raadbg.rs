@@ -6,13 +6,14 @@ pub mod log {
     pub fn simple(msg: &str){
         super::add_log_line( format!( "> {msg}") );
     }
-    pub fn create(strct: &str){
+    pub fn create(name: &str){
+        super::add_log_line( format!( "[+ {name}]") );
     }
-    pub fn drop(strct: &str){
+    pub fn drop(name: &str){
     }
-    pub fn info(strct: &str, info: &str){
+    pub fn info(name: &str, info: &str){
     }
-    pub fn error(strct: &str, error: &str){
+    pub fn error(name: &str, error: &str){
     }
     
     pub fn get() -> String {
