@@ -15,7 +15,7 @@ pub mod log {
     }
     
     pub fn get() -> String {
-        let res = INTER_LOG.lock().unwrap();
+        let res = supe::INTER_LOG.lock().unwrap();
         res.clone()
     }
 }
