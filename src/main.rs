@@ -1,7 +1,10 @@
 #![allow(non_snake_case)]
 
 mod root_app;
-use crate::root_app::{RootApp};
+use root_app::{RootApp};
+
+mod midi_sequencer;
+use midi_sequencer::*;
 
 mod dbg_utils;
 use dbg_utils::{appendInterLog};
