@@ -17,15 +17,16 @@ impl AudioDevice{
             sample_rate: sample_rate,
             channel_sample_count: channel_sample_count
         };
-        println!("[+AudioDevice]");
+        log::create("AudioDevice");
         AudioDevice{ 
             parameters: init_params,
             device: None
         }
     }
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
-        println!("[ AudioDevice] start..");
+        log::info("AudioDevice", "start..");
         if self.is_started() {
+            log::error("AudioDevice", "Device is still active!");
             Err("[ AudioDevice] E: device still active!".to_string().into() )
         }else{
             let params = self.parameters.clone();
@@ -44,7 +45,7 @@ impl AudioDevice{
     }
     pub fn stop(&mut self) {
         self.device = None;
-        println!("[ AudioDevice] stop!");
+        log::info("AudioDevice", "stop!");
     }
     pub fn is_started(&self) -> bool {
         match self.device {
@@ -62,7 +63,7 @@ impl Default for AudioDevice{
 impl Drop for AudioDevice {
     fn drop(&mut self) {
         self.stop();
-        println!("[-AudioDevice]");
+        log::drop("AudioDevice");;
     }
 }
 
