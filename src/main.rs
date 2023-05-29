@@ -2,15 +2,12 @@
 
 mod root_app;
 use root_app::{RootApp};
-<<<<<<< HEAD
-=======
 
 mod midi_sequencer;
 use midi_sequencer::*;
 
 mod domik_view;
 use domik_view::*;
->>>>>>> refs/remotes/origin/main
 
 mod dbg_utils;
 use dbg_utils::{appendInterLog};
