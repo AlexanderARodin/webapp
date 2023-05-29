@@ -10,7 +10,7 @@ mod domik_view;
 use domik_view::*;
 
 mod dbg_utils;
-use dbg_utils::{appendInterLog};
+use dbg_utils::{appendInterLog, getInterLog};
 
 
 #[ cfg(not(target_arch = "wasm32")) ]
