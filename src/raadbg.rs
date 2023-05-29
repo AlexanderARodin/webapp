@@ -2,11 +2,6 @@ use std::sync::Mutex;
 
 static INTER_LOG: Mutex<String> = Mutex::new( String::new() );
 
-pub fn getLog() -> String {
-    let res = INTER_LOG.lock().unwrap();
-    res.clone()
-}
-
 pub mod log {
     pub fn simple(msg: &str){
     }
@@ -17,6 +12,11 @@ pub mod log {
     pub fn info(strct: &str, info: &str){
     }
     pub fn error(strct: &str, error: &str){
+    }
+    
+    pub fn get() -> String {
+        let res = INTER_LOG.lock().unwrap();
+        res.clone()
     }
 }
 
