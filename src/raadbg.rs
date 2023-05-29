@@ -19,6 +19,12 @@ pub mod log {
         super::add_log_line( format!( " [{name}]: {info}") );
     }
     
+    pub fn tick(){
+        let mut log = INTER_LOG.lock().unwrap();
+        *log += ".";
+        print!(".");
+    }
+    
     pub fn get() -> String {
         let res = super::INTER_LOG.lock().unwrap();
         res.clone()
