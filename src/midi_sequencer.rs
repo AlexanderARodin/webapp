@@ -25,11 +25,11 @@ impl AudioDevice{
         }
     }
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
-        log::info("AudioDevice", "start..");
         if self.is_started() {
             log::error("AudioDevice", "Device is still active!");
             Err("[ AudioDevice] E: device still active!".to_string().into() )
         }else{
+            log::info("AudioDevice", "start..");
             let params = self.parameters.clone();
             let dev = run_output_device( params, {
                 let mut clock = 0f32;
@@ -38,7 +38,10 @@ impl AudioDevice{
                 }
             });
             match dev {
-                Err(e) => return Err(e),
+                Err(e) => {
+                    log::error("AudioDevice", e);
+                    return Err(e)
+                },
                 Ok(running_dev) => self.device = Some(running_dev),
             }
             Ok(())
