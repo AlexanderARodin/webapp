@@ -1,4 +1,4 @@
-const VERS: &str = "v6.02";
+const VERS: &str = "v6.03";
 
 use crate::raadbg::log;
 use crate::midi_sequencer::{AudioDevice};

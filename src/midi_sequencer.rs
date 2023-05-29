@@ -61,8 +61,7 @@ impl AudioDevice{
 }
 impl Default for AudioDevice{
     fn default() -> Self {
-        //Self::new( 2, 44100, 4410 )
-        Self::new( 2, 100, 10 )
+        Self::new( 2, 44100, 4410 )
     }
 }
 impl Drop for AudioDevice {
