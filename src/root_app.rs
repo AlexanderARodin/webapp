@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
 use crate::domik_view::*;
-use crate::midi_sequencer::*;
+use crate::audio_device::{AudioDevice};
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]

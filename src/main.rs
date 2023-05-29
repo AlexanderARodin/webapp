@@ -1,9 +1,11 @@
 #![allow(non_snake_case)]
 
-mod midi_sequencer;
 mod domik_view;
 mod root_app;
 use root_app::{RootApp};
+
+mod audio_device;
+mod midi_sequencer;
 
 mod raadbg;
 use raadbg::log;

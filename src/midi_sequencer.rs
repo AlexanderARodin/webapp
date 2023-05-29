@@ -2,98 +2,60 @@ use std::error::Error;
 
 use crate::raadbg::log;
 
-use tinyaudio::prelude::*;
+use rustysynth::*;
 
-// tinyaudio wrapper
-pub struct AudioDevice{
-    parameters: OutputDeviceParameters,
-    device: Option< Box<dyn BaseAudioOutputDevice> >,
+// rustysynth wrapper
+pub struct MIDISequencer{
+    parameters: SynthesizerSettings,
+    left_buf: Vec<f32>,
+    right_buf: Vec<f32>,
+    synth: Option< Box<Synthesizer> >,
 }
 
 //
-impl Default for AudioDevice{
+impl Default for MIDISequencer {
     fn default() -> Self {
         Self::new( 2, 44100, 4410 )
     }
 }
 
-impl Drop for AudioDevice {
+impl Drop for MIDISequencer {
     fn drop(&mut self) {
-        self.stop();
-        log::drop("AudioDevice");
+        log::drop("MIDISequencer");
     }
 }
 
 //
-impl AudioDevice{
+impl MIDISequencer {
 
-    pub fn new( channels_count: usize, sample_rate: usize, 
-            channel_sample_count: usize ) -> Self{
-        let init_params = OutputDeviceParameters {
-            channels_count: channels_count,
-            sample_rate: sample_rate,
-            channel_sample_count: channel_sample_count
-        };
-        log::create("AudioDevice");
-        AudioDevice{ 
+    pub fn new( sample_rate: usize, 
+                channel_sample_count: usize ) -> Self{
+        let init_params = SynthesizerSettings::new( sample_rate );
+        log::create("MIDISequencer");
+        MIDISequencer{ 
             parameters: init_params,
-            device: None
+            left_buf: vec![0_f32; channel_sample_count],
+            right_buf: vec![0_f32; channel_sample_count],
+            synth: None
         }
     }
 
-    pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
-        if self.is_started() { log::error("AudioDevice", "Device is still active!");
-            Err("[ AudioDevice] E: device still active!".to_string().into() )
-        }else{
-            log::info("AudioDevice", "start ");
-            let params = self.parameters.clone();
-            let dev = run_output_device( params, {
-                let mut clock: f32 = 0.;
-                move |data: &mut [f32]| {
-                    gogo(params, &mut clock, data);
-                }
-            });
-            match dev {
-                Err(e) => {
-                    let errmsg = format!("{:?}",e);
-                    log::error("AudioDevice", &errmsg);
-                    return Err(e)
+    pub fn load(&mut self, sound_font: &SoundFont) -> Result< (), Box<dyn Error> > {
+            log::info("MIDISequencer", "start ");
+            let new_synth = Synthesizer::new( sound_font, self.parameters );
+            match new_synth {
+                SynthesizerError => {
+                    let errmsg = format!("{:?}",SynthesizerError);
+                    log::error("MIDISequencer", &errmsg);
+                    return SynthesizerError;
                 },
-                Ok(running_dev) => self.device = Some(running_dev),
+                Ok(loaded_synth) => self.synth = Some(loaded_synth),
             }
             Ok(())
-        }
     }
 
-    pub fn stop(&mut self) {
-        self.device = None;
-        log::info("AudioDevice", "stop!");
-    }
-
-    pub fn is_started(&self) -> bool {
-        match self.device {
-            None => false,
-            _ => true
-        }
-    }
 }
 
 
 //
-
-fn gogo(params: OutputDeviceParameters, clock: &mut f32, data: &mut [f32] ) {
-    log::tick();
-        for samples in data.chunks_mut(params.channels_count) {
-            *clock = (*clock + 1.0) % params.sample_rate as f32;
-            let value = ( 
-                *clock * 440.0 * 2.0 * std::f32::consts::PI 
-                / params.sample_rate as f32
-                )
-                .sin() * 0.2;
-            for sample in samples {
-                *sample = value;
-            }
-        }
-}
-
 

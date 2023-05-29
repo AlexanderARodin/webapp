@@ -1,7 +1,7 @@
-const VERS: &str = "v6.03";
+const VERS: &str = "v6.04";
 
 use crate::raadbg::log;
-use crate::midi_sequencer::{AudioDevice};
+use crate::audio_device::{AudioDevice};
 
 pub struct DomikView {
     pub title: String,

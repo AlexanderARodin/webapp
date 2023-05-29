@@ -11,7 +11,7 @@ pub struct AudioDevice{
 }
 
 //
-impl Default for AudioDevice{
+impl Default for AudioDevice {
     fn default() -> Self {
         Self::new( 2, 44100, 4410 )
     }
