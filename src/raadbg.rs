@@ -23,7 +23,7 @@ pub mod log {
 
 fn add_log_line(line: String) {
     let mut log = INTER_LOG.lock().unwrap();
-    *log += line;
+    *log += &line;
     println!("{line}");
 }
 
