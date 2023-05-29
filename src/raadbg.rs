@@ -2,6 +2,7 @@ use std::sync::Mutex;
 
 static INTER_LOG: Mutex<String> = Mutex::new( String::new() );
 
+#[warn(dead_code)]
 pub mod log {
     pub fn simple(msg: &str){
         super::add_log_line( format!( "> {msg}") );
