@@ -1,4 +1,4 @@
-const annot: &str = "v5.05";
+const annot: &str = "v5.10";
 
 use crate::root_app::midi_sequencer;
 
@@ -16,13 +16,17 @@ impl DomikView {
         Default::default()
     }
     pub fn updateUI(&mut self, ui: &mut egui::Ui, 
-                    sequencer: &mut midi_sequencer::MidiSequencer ) {
+                    audio_device: &mut midi_sequencer::AudioDevice) {
             ui.label( format!("WWWapp Template {}", annot) );
             ui.separator();
-            let btn = ui.button( "try to save TEXT" );
+            let btn = ui.button( format!("audio status = {}", audio_device.is_started()) );
             if btn.clicked(){
-                println!("clicked simple!");
-                sequencer.tst();
+                let res = audio_device.start();
+                println!("result: {:?}", res);
+            }
+            let btnStop = ui.button( "stop" );
+            if btnStop.clicked(){
+                audio_device.stop();
             }
     }
 }

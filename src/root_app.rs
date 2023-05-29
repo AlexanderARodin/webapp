@@ -15,7 +15,7 @@ pub struct RootApp {
     pressed: bool,
 
     #[serde(skip)]
-    sequencer: MidiSequencer,
+    audio_device: AudioDevice,
     #[serde(skip)]
     domikView: DomikView,
 }
@@ -24,7 +24,7 @@ impl Default for RootApp {
     fn default() -> Self {
         Self {
             txt:"<empty>".to_owned(), pressed:false, 
-            sequencer: MidiSequencer::new(),
+            audio_device: Default::default(),
             domikView: DomikView::new()
         }
     }
@@ -48,7 +48,7 @@ impl eframe::App for RootApp {
     fn update( &mut self, ctx: &egui::Context, _frame: &mut eframe::Frame ) {
 
         egui::Window::new(self.domikView.title.clone()).show( ctx, |ui| {
-            self.domikView.updateUI( ui, &mut self.sequencer );
+            self.domikView.updateUI( ui, &mut self.audio_device );
         });
 
         egui::CentralPanel::default()
