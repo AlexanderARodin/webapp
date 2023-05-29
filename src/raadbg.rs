@@ -20,6 +20,12 @@ pub mod log {
     }
 }
 
+fn add_log_line(line: &str) {
+    let mut log = INTER_LOG.lock().unwrap();
+    *log += line;
+    println!("{line}");
+}
+
 /*pub fn log(status: Status){
     let newItem: String = match status {
         Simple(msg) =>       format!("> {msg}"),
