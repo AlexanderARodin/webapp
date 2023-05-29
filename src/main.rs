@@ -1,7 +1,10 @@
 #![allow(non_snake_case)]
 
 mod root_app;
-use crate::root_app::*;
+use crate::root_app::{RootApp};
+
+mod dbg_utils;
+use dbg_utils::{appendInterLog};
 
 
 #[ cfg(not(target_arch = "wasm32")) ]

@@ -1,10 +1,10 @@
 #![allow(non_snake_case)]
 
-mod midi_sequencer;
-use crate::root_app::midi_sequencer::*;
+//mod midi_sequencer;
+use midi_sequencer::*;
 
-mod domik_view;
-use crate::root_app::domik_view::*;
+//mod domik_view;
+use domik_view::*;
 
 
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -32,7 +32,7 @@ impl Default for RootApp {
 
 impl RootApp {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
-        tst();
+        //tst();
         
         if let Some(storage) = cc.storage {
             return eframe::get_value(storage, eframe::APP_KEY).unwrap_or_default();
