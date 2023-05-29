@@ -7,7 +7,7 @@ pub fn getLog() -> String {
     res.clone()
 }
 pub fn log(status: Status){
-    let newItem: String = match status {
+    let newItem: &str = match status {
         Simple(msg) =>       format!("> {msg}"),
         New(name) =>         format!("[+ {name}]"),
         Drop(name) =>        format!("[- {name}]"),
@@ -19,9 +19,9 @@ pub fn log(status: Status){
 }
 
 pub enum Status {
-    Simple(String),
-    New(String),
-    Drop(String),
-    Info(String, String),
-    Error(String, String),
+    Simple(&str),
+    New(&str),
+    Drop(&str),
+    Info(&str, &str),
+    Error(&str, &str),
 }
