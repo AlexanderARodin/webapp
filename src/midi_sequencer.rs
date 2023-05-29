@@ -64,7 +64,7 @@ impl Default for AudioDevice{
 impl Drop for AudioDevice {
     fn drop(&mut self) {
         self.stop();
-        log::drop("AudioDevice");;
+        log::drop("AudioDevice");
     }
 }
 
