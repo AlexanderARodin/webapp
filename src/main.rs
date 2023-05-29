@@ -11,8 +11,7 @@ use raadbg::log;
 
 #[ cfg(not(target_arch = "wasm32")) ]
 fn main() -> Result<(), eframe::Error> {
-    println!("MAIN has beed entered..");
-    log::simple("NORM pseudo log:");
+    log::simple("MAIN has beed entered..");
 
     let options = eframe::NativeOptions {
         initial_window_size: Some(egui::vec2(200., 300.)),
@@ -31,8 +30,7 @@ fn main() -> Result<(), eframe::Error> {
 
 #[ cfg(target_arch = "wasm32") ]
 fn main() {
-    println!("in WASM doen't work..");
-    log::simple("WASM pseudo log:");
+    log::simple("wasmMAIN has beed entered..");
 
     console_error_panic_hook::set_once();
     tracing_wasm::set_as_global_default();
