@@ -10,7 +10,9 @@ pub struct AudioDevice{
     device: Option< Box<dyn BaseAudioOutputDevice> >,
 }
 
-trait
+trait Render {
+    fn render(&mut self, data: &mut [f32]);
+}
 
 //
 impl Default for AudioDevice {

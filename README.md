@@ -19,6 +19,7 @@
 * __Applets__
     - [ ] basic View of base DoMiKkk excercise
     - [ ] test WASM on different platforms
+    - [ ] move DoMiKkk to separate Application
 
 ---
 > ### Powered by egui: https://github.com/emilk/egui/
