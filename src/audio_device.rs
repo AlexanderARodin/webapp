@@ -1,4 +1,5 @@
 use std::error::Error;
+use std::sync::{Arc,Mutex};
 
 use crate::raadbg::log;
 
@@ -8,9 +9,10 @@ use tinyaudio::prelude::*;
 pub struct AudioDevice{
     parameters: OutputDeviceParameters,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
+    pub render: Arc<Mutex<dyn AudioRender>>,
 }
 
-trait Render {
+pub trait AudioRender {
     fn render(&mut self, data: &mut [f32]);
 }
 
@@ -41,7 +43,8 @@ impl AudioDevice{
         log::create("AudioDevice");
         AudioDevice{ 
             parameters: init_params,
-            device: None
+            device: None,
+            render: Arc::new(Mutex::new( DefaultRender::new() ))
         }
     }
 
@@ -51,10 +54,15 @@ impl AudioDevice{
         }else{
             log::info("AudioDevice", "start ");
             let params = self.parameters.clone();
+            let render_clone = self.render.clone();
             let dev = run_output_device( params, {
-                let mut clock: f32 = 0.;
+                let render = render_clone;
                 move |data: &mut [f32]| {
-                    gogo(params, &mut clock, data);
+                    let render_lock = render.lock();
+                    //gogo(params, &mut clock, data);
+                    //if let Some(render) = self.render {
+                    //    render.render( data );
+                    //}
                 }
             });
             match dev {
@@ -84,20 +92,37 @@ impl AudioDevice{
 
 
 //
+struct DefaultRender {
+    clock: f32,
+    channels_count: usize,
+    sample_rate: usize,
+}
 
-fn gogo(params: OutputDeviceParameters, clock: &mut f32, data: &mut [f32] ) {
-    log::tick();
-        for samples in data.chunks_mut(params.channels_count) {
-            *clock = (*clock + 1.0) % params.sample_rate as f32;
+impl DefaultRender {
+    fn new() -> Self {
+        DefaultRender{
+            clock: 0.,
+            channels_count: 2,
+            sample_rate: 44100
+        }
+    }
+}
+impl AudioRender for DefaultRender {
+    fn render(&mut self, data: &mut [f32]) {
+
+        log::tick();
+
+        for samples in data.chunks_mut(self.channels_count) {
+            self.clock = (self.clock + 1.0) % self.sample_rate as f32;
             let value = ( 
-                *clock * 440.0 * 2.0 * std::f32::consts::PI 
-                / params.sample_rate as f32
+                self.clock * 440.0 * 2.0 * std::f32::consts::PI 
+                / self.sample_rate as f32
                 )
                 .sin() * 0.2;
             for sample in samples {
                 *sample = value;
             }
         }
+    }
 }
-
 
