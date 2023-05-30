@@ -1,4 +1,5 @@
 use std::error::Error;
+use std::sync::Arc;
 
 use crate::raadbg::log;
 
@@ -15,7 +16,7 @@ pub struct MIDISequencer{
 //
 impl Default for MIDISequencer {
     fn default() -> Self {
-        Self::new( 2, 44100, 4410 )
+        Self::new( 44100, 4410 )
     }
 }
 
@@ -28,7 +29,7 @@ impl Drop for MIDISequencer {
 //
 impl MIDISequencer {
 
-    pub fn new( sample_rate: usize, 
+    pub fn new( sample_rate: i32, 
                 channel_sample_count: usize ) -> Self{
         let init_params = SynthesizerSettings::new( sample_rate );
         log::create("MIDISequencer");
@@ -40,16 +41,16 @@ impl MIDISequencer {
         }
     }
 
-    pub fn load(&mut self, sound_font: &SoundFont) -> Result< (), Box<dyn Error> > {
+    pub fn load(&mut self, sound_font: SoundFont) -> Result< (), SynthesizerError > {
             log::info("MIDISequencer", "start ");
-            let new_synth = Synthesizer::new( sound_font, self.parameters );
+            let new_synth = Synthesizer::new( &Arc::new(sound_font), &self.parameters );
             match new_synth {
-                SynthesizerError => {
-                    let errmsg = format!("{:?}",SynthesizerError);
+                SynthesizerError(e) => {
+                    let errmsg = format!("SynthesizerError");
                     log::error("MIDISequencer", &errmsg);
-                    return SynthesizerError;
+                    return SynthesizerError(e);
                 },
-                Ok(loaded_synth) => self.synth = Some(loaded_synth),
+                Ok(loaded_synth) => self.synth = Some( Box::new(loaded_synth) ),
             }
             Ok(())
     }
