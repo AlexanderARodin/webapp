@@ -10,6 +10,8 @@ pub struct AudioDevice{
     device: Option< Box<dyn BaseAudioOutputDevice> >,
 }
 
+trait
+
 //
 impl Default for AudioDevice {
     fn default() -> Self {
