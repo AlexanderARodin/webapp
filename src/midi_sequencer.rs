@@ -41,28 +41,27 @@ impl MIDISequencer {
         }
     }
 
-    pub fn load(&mut self, sound_font: SoundFont) -> Result< (), SynthesizerError > {
+    pub fn load(&mut self, sound_font: &Arc<SoundFont>) -> Result< (), SynthesizerError > {
             log::info("MIDISequencer", "start ");
-            let new_synth = Synthesizer::new( &Arc::new(sound_font), &self.parameters );
+            let new_synth = Synthesizer::new( sound_font, &self.parameters );
             match new_synth {
                 Err(e) => {
                     let errmsg: String;
                     match e {
                         SynthesizerError::SampleRateOutOfRange(sample_rate) => {
-                            errmsg = format!("SynthesizerError {}", sample_rate);
+                            errmsg = format!("SynthesizerError.SampleRateOutOfRange: {}", sample_rate);
                         },
                         SynthesizerError::BlockSizeOutOfRange(size) => {
-                            errmsg = format!("SynthesizerError {}", size);
+                            errmsg = format!("SynthesizerError.BlockSizeOutOfRange: {}", size);
                         },
                         SynthesizerError::MaximumPolyphonyOutOfRange(size) => {
-                            errmsg = format!("SynthesizerError {}", size);
+                            errmsg = format!("SynthesizerError.MaximumPolyphonyOutOfRange: {}", size);
                         },
                         _ => {
-                            errmsg = format!("SynthesizerError");
+                            errmsg = format!("SynthesizerError.<unknown>");
                         },
                     }
                     log::error("MIDISequencer", &errmsg);
-                    log::error("MIDISequencer", e.description());
                     return Err(e);
                 },
                 Ok(loaded_synth) => self.synth = Some( Box::new(loaded_synth) ),
@@ -74,9 +73,11 @@ impl MIDISequencer {
 
 
 //
+
 #[cfg(test)]
 mod test {
     use super::*;
+    use std::fs::*;
     #[test]
     fn default_sample_rate() {
         let midi: MIDISequencer = Default::default();
@@ -86,6 +87,33 @@ mod test {
     fn default_none_synthesizer() {
         let midi: MIDISequencer = Default::default();
         assert!(midi.synth.is_none() );
+    }
+    #[test]
+    fn load_sound_font() {
+        let mut midi: MIDISequencer = Default::default();
+        let mut file = File::open("Horn.SF2").unwrap();
+        let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
+        let _res = midi.load( &sf );
+        assert!(midi.synth.is_some() );
+    }
+
+    #[test]
+    #[should_panic]
+    fn error_sample_rate() {
+        let mut midi = MIDISequencer::new( 0, 4410 );
+        let mut file = File::open("Horn.SF2").unwrap();
+        let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
+        let _res = midi.load( &sf );
+        assert!(midi.synth.is_some() );
+    }
+    #[test]
+    #[should_panic]
+    fn error_sample_count() {
+        let mut midi = MIDISequencer::new( 44100, 12345678901234567890 );
+        let mut file = File::open("Horn.SF2").unwrap();
+        let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
+        let _res = midi.load( &sf );
+        assert!(midi.synth.is_some() );
     }
 }
 
