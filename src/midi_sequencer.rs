@@ -45,10 +45,25 @@ impl MIDISequencer {
             log::info("MIDISequencer", "start ");
             let new_synth = Synthesizer::new( &Arc::new(sound_font), &self.parameters );
             match new_synth {
-                SynthesizerError(e) => {
-                    let errmsg = format!("SynthesizerError");
+                Err(e) => {
+                    let errmsg: String;
+                    match e {
+                        SynthesizerError::SampleRateOutOfRange(sample_rate) => {
+                            errmsg = format!("SynthesizerError {}", sample_rate);
+                        },
+                        SynthesizerError::BlockSizeOutOfRange(size) => {
+                            errmsg = format!("SynthesizerError {}", size);
+                        },
+                        SynthesizerError::MaximumPolyphonyOutOfRange(size) => {
+                            errmsg = format!("SynthesizerError {}", size);
+                        },
+                        _ => {
+                            errmsg = format!("SynthesizerError");
+                        },
+                    }
                     log::error("MIDISequencer", &errmsg);
-                    return SynthesizerError(e);
+                    log::error("MIDISequencer", e.description());
+                    return Err(e);
                 },
                 Ok(loaded_synth) => self.synth = Some( Box::new(loaded_synth) ),
             }
@@ -59,4 +74,18 @@ impl MIDISequencer {
 
 
 //
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn default_sample_rate() {
+        let midi: MIDISequencer = Default::default();
+        assert!(midi.parameters.sample_rate == 44100);
+    }
+    #[test]
+    fn default_none_synthesizer() {
+        let midi: MIDISequencer = Default::default();
+        assert!(midi.synth.is_none() );
+    }
+}
 
