@@ -72,6 +72,24 @@ impl MIDISequencer {
 }
 
 
+impl crate::audio_device::AudioRender for MIDISequencer {
+    fn render(&mut self, data: &mut [f32]) {
+
+        log::tick();
+
+        if let Some(synthesizer) = self.synth {
+            synthesizer.render(&mut self.left_buf[..], &mut self.right_buf[..]);
+        }
+        for (i, value) in interleave!(self.left_buf.iter(),self.right_buf.iter()).enumerate() {
+            data[i] = *value;
+        }
+        /*for (i, value) in self.left_buf.iter().interleave(self.right_buf.iter()).enumerate() {
+            data[i] = *value;
+        }*/
+    }
+}
+
+
 //
 
 #[cfg(test)]

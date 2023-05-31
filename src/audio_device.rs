@@ -1,9 +1,12 @@
 use std::error::Error;
+use std::fs::*;
 use std::sync::{Arc,Mutex};
 
 use crate::raadbg::log;
 
 use tinyaudio::prelude::*;
+use rustysynth::*;
+
 
 // tinyaudio wrapper
 pub struct AudioDevice{
@@ -12,7 +15,7 @@ pub struct AudioDevice{
     pub render: Arc<Mutex<dyn AudioRender>>,
 }
 
-pub trait AudioRender {
+pub trait AudioRender : Send {
     fn render(&mut self, data: &mut [f32]);
 }
 
@@ -44,7 +47,7 @@ impl AudioDevice{
         AudioDevice{ 
             parameters: init_params,
             device: None,
-            render: Arc::new(Mutex::new( DefaultRender::new() ))
+            render: Arc::new(Mutex::new( DefaultRender::new(440.) ))
         }
     }
 
@@ -58,11 +61,8 @@ impl AudioDevice{
             let dev = run_output_device( params, {
                 let render = render_clone;
                 move |data: &mut [f32]| {
-                    let render_lock = render.lock();
-                    //gogo(params, &mut clock, data);
-                    //if let Some(render) = self.render {
-                    //    render.render( data );
-                    //}
+                    let mut render_lock = render.lock().expect("panic on locking audio_render");
+                    render_lock.render(data);
                 }
             });
             match dev {
@@ -80,6 +80,11 @@ impl AudioDevice{
     pub fn stop(&mut self) {
         self.device = None;
         log::info("AudioDevice", "stop!");
+        let mut midi = crate::midi_sequencer::MIDISequencer::default();
+        let mut file = File::open("Horn.SF2").unwrap();
+        let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
+        let _res = midi.load( &sf ).unwrap();
+        self.render = Arc::new(Mutex::new(midi));
     }
 
     pub fn is_started(&self) -> bool {
@@ -94,14 +99,16 @@ impl AudioDevice{
 //
 struct DefaultRender {
     clock: f32,
+    tone_hz: f32,
     channels_count: usize,
     sample_rate: usize,
 }
 
 impl DefaultRender {
-    fn new() -> Self {
+    fn new(tone_hz: f32) -> Self {
         DefaultRender{
             clock: 0.,
+            tone_hz: tone_hz,
             channels_count: 2,
             sample_rate: 44100
         }
@@ -115,7 +122,7 @@ impl AudioRender for DefaultRender {
         for samples in data.chunks_mut(self.channels_count) {
             self.clock = (self.clock + 1.0) % self.sample_rate as f32;
             let value = ( 
-                self.clock * 440.0 * 2.0 * std::f32::consts::PI 
+                self.clock * self.tone_hz * 2.0 * std::f32::consts::PI 
                 / self.sample_rate as f32
                 )
                 .sin() * 0.2;
