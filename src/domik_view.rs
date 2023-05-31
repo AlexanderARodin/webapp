@@ -9,7 +9,7 @@ pub struct DomikView {
 }
 impl Default for DomikView {
     fn default() -> Self {
-        Self{ title: "simple DoMiKkk".to_owned(), audio: AudioDevice::new( 44100,4410) }
+        Self{ title: "simple DoMiKkk".to_owned(), audio: AudioDevice::new( 22050,4410) }
     }
 }
 impl DomikView {
