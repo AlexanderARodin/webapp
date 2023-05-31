@@ -34,7 +34,7 @@ all: release trunk-release savetogit
 
 
 test:
-	@cargo test
+	@cargo test -- --show-output
 
 size:
 	@ls -lAh ./target/release/$(binname)

@@ -7,9 +7,13 @@ use crate::raadbg::log;
 use tinyaudio::prelude::*;
 use rustysynth::*;
 
+const AUDIO_CHANNELS_COUNT: usize = 2;
 
 // tinyaudio wrapper
 pub struct AudioDevice{
+    sample_rate: usize,
+    block_size: usize,
+
     parameters: OutputDeviceParameters,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
     pub render: Arc<Mutex<dyn AudioRender>>,
