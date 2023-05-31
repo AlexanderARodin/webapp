@@ -7,14 +7,32 @@ use crate::raadbg::log;
 use tinyaudio::prelude::*;
 use rustysynth::*;
 
-const AUDIO_CHANNELS_COUNT: usize = 2;
+
+
+#[cfg(test)]
+mod test {
+//    use super::*;
+//    use std::fs::*;
+//    #[should_panic]
+
+    #[test]
+    fn basic() {
+        let mut audio_2 = super::AudioDevice::new(100,4410);
+        let mut audio = super::AudioDevice::new(44100,4410);
+        audio.start();
+        audio_2.start();
+    }
+
+}
+
+
+
 
 // tinyaudio wrapper
 pub struct AudioDevice{
     sample_rate: usize,
     block_size: usize,
 
-    parameters: OutputDeviceParameters,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
     pub render: Arc<Mutex<dyn AudioRender>>,
 }
@@ -26,7 +44,7 @@ pub trait AudioRender : Send {
 //
 impl Default for AudioDevice {
     fn default() -> Self {
-        Self::new( 2, 44100, 4410 )
+        Self::new( 44100, 4410 )
     }
 }
 
@@ -40,16 +58,11 @@ impl Drop for AudioDevice {
 //
 impl AudioDevice{
 
-    pub fn new( channels_count: usize, sample_rate: usize, 
-            channel_sample_count: usize ) -> Self{
-        let init_params = OutputDeviceParameters {
-            channels_count: channels_count,
-            sample_rate: sample_rate,
-            channel_sample_count: channel_sample_count
-        };
+    pub fn new( sample_rate: usize, block_size: usize ) -> Self {
         log::create("AudioDevice");
         AudioDevice{ 
-            parameters: init_params,
+            sample_rate: sample_rate,
+            block_size: block_size,
             device: None,
             render: Arc::new(Mutex::new( DefaultRender::new(440.) ))
         }
@@ -60,8 +73,12 @@ impl AudioDevice{
             Err("[ AudioDevice] E: device still active!".to_string().into() )
         }else{
             log::info("AudioDevice", "start ");
-            let params = self.parameters.clone();
             let render_clone = self.render.clone();
+            let params = OutputDeviceParameters{ 
+                    channels_count: 2,
+                    sample_rate: self.sample_rate,
+                    channel_sample_count: self.block_size
+                };
             let dev = run_output_device( params, {
                 let render = render_clone;
                 move |data: &mut [f32]| {

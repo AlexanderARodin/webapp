@@ -5,10 +5,11 @@ use crate::audio_device::{AudioDevice};
 
 pub struct DomikView {
     pub title: String,
+    audio: AudioDevice,
 }
 impl Default for DomikView {
     fn default() -> Self {
-        Self{ title: "simple DoMiKkk".to_owned() }
+        Self{ title: "simple DoMiKkk".to_owned(), audio: AudioDevice::new( 44100,4410) }
     }
 }
 impl DomikView {
@@ -27,6 +28,12 @@ impl DomikView {
             let btnStop = ui.button( "stop" );
             if btnStop.clicked(){
                 audio_device.stop();
+            }
+            ui.separator();
+            let alt_btn = ui.button( "alt-btn" );
+            if alt_btn.clicked(){
+                println!("-------->");
+                self.audio.start();
             }
             ui.separator();
             ui.label( log::get() );
