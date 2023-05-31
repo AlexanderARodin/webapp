@@ -16,7 +16,7 @@ pub struct MIDISequencer{
 //
 impl Default for MIDISequencer {
     fn default() -> Self {
-        Self::new( 44100, 4410 )
+        Self::new( 44100/2, 4410 )
     }
 }
 
@@ -28,6 +28,11 @@ impl Drop for MIDISequencer {
 
 //
 impl MIDISequencer {
+    pub fn tst(&mut self) {
+        if self.synth.is_some() {
+            self.synth.as_mut().unwrap().note_on(0,60,100);
+        }
+    }
 
     pub fn new( sample_rate: i32, 
                 channel_sample_count: usize ) -> Self{
@@ -77,11 +82,15 @@ impl crate::audio_device::AudioRender for MIDISequencer {
 
         log::tick();
 
-        if let Some(synthesizer) = self.synth {
-            synthesizer.render(&mut self.left_buf[..], &mut self.right_buf[..]);
+        if self.synth.is_some() {
+            self.synth.as_mut().unwrap().render(&mut self.left_buf[..], &mut self.right_buf[..]);
         }
-        for (i, value) in interleave!(self.left_buf.iter(),self.right_buf.iter()).enumerate() {
-            data[i] = *value;
+
+        for (li, lvalue) in self.left_buf.iter().enumerate() {
+            data[li * 2] = *lvalue;
+        }
+        for (ri, rvalue) in self.right_buf.iter().enumerate() {
+            data[ri * 2 + 1] = *rvalue;
         }
         /*for (i, value) in self.left_buf.iter().interleave(self.right_buf.iter()).enumerate() {
             data[i] = *value;

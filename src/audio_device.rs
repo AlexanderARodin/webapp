@@ -84,6 +84,7 @@ impl AudioDevice{
         let mut file = File::open("Horn.SF2").unwrap();
         let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
         let _res = midi.load( &sf ).unwrap();
+            midi.tst();
         self.render = Arc::new(Mutex::new(midi));
     }
 
