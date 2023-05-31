@@ -8,8 +8,6 @@ use rustysynth::*;
 // rustysynth wrapper
 pub struct MIDISequencer{
     parameters: SynthesizerSettings,
-    left_buf: Vec<f32>,
-    right_buf: Vec<f32>,
     synth: Option< Box<Synthesizer> >,
 }
 
@@ -40,8 +38,6 @@ impl MIDISequencer {
         log::create("MIDISequencer");
         MIDISequencer{ 
             parameters: init_params,
-            left_buf: vec![0_f32; channel_sample_count],
-            right_buf: vec![0_f32; channel_sample_count],
             synth: None
         }
     }
@@ -78,23 +74,21 @@ impl MIDISequencer {
 
 
 impl crate::audio_device::AudioRender for MIDISequencer {
-    fn render(&mut self, data: &mut [f32]) {
+    fn render(&mut self, data: &mut [f32], 
+              left_buf: &mut [f32], right_buf: &mut [f32] ) {
 
         log::tick();
 
         if self.synth.is_some() {
-            self.synth.as_mut().unwrap().render(&mut self.left_buf[..], &mut self.right_buf[..]);
+            self.synth.as_mut().unwrap().render(&mut left_buf[..], &mut right_buf[..]);
         }
 
-        for (li, lvalue) in self.left_buf.iter().enumerate() {
+        for (li, lvalue) in left_buf.iter().enumerate() {
             data[li * 2] = *lvalue;
         }
-        for (ri, rvalue) in self.right_buf.iter().enumerate() {
+        for (ri, rvalue) in right_buf.iter().enumerate() {
             data[ri * 2 + 1] = *rvalue;
         }
-        /*for (i, value) in self.left_buf.iter().interleave(self.right_buf.iter()).enumerate() {
-            data[i] = *value;
-        }*/
     }
 }
 

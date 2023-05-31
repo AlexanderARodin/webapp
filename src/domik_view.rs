@@ -1,15 +1,15 @@
-const VERS: &str = "v6.04";
+const VERS: &str = "v6.05";
 
 use crate::raadbg::log;
-use crate::audio_device::{AudioDevice};
+use crate::audio_device::{MidiDevice};
 
 pub struct DomikView {
     pub title: String,
-    audio: AudioDevice,
+    audio: MidiDevice,
 }
 impl Default for DomikView {
     fn default() -> Self {
-        Self{ title: "simple DoMiKkk".to_owned(), audio: AudioDevice::new( 22050,4410) }
+        Self{ title: "simple DoMiKkk".to_owned(), audio: MidiDevice::new( 22050,4410) }
     }
 }
 impl DomikView {
@@ -17,24 +17,33 @@ impl DomikView {
         Default::default()
     }
     pub fn updateUI(&mut self, ui: &mut egui::Ui, 
-                    audio_device: &mut AudioDevice) {
+                    audio_device: &mut MidiDevice) {
             ui.label( format!("WWWapp Template {}", VERS) );
             ui.separator();
             let btn = ui.button( format!("audio status = {}", audio_device.is_started()) );
             if btn.clicked(){
                 let res = audio_device.start();
-                println!("result: {:?}", res);
             }
             let btnStop = ui.button( "stop" );
             if btnStop.clicked(){
                 audio_device.stop();
             }
             ui.separator();
+
+            let btnA = ui.button( "tst A" );
+            if btnA.clicked(){
+                audio_device.tst_A();
+            }
+            let btnB = ui.button( "tst B" );
+            if btnB.clicked(){
+                audio_device.tst_B();
+            }
+            ui.separator();
             let alt_btn = ui.button( "alt-btn" );
             if alt_btn.clicked(){
-                println!("-------->");
                 self.audio.start();
             }
+
             ui.separator();
             ui.label( log::get() );
     }

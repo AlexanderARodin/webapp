@@ -17,8 +17,8 @@ mod test {
 
     #[test]
     fn basic() {
-        let mut audio_2 = super::AudioDevice::new(100,4410);
-        let mut audio = super::AudioDevice::new(44100,4410);
+        let mut audio_2 = super::MidiDevice::new(100,4410);
+        let mut audio = super::MidiDevice::new(44100,4410);
         audio.start();
         audio_2.start();
     }
@@ -29,7 +29,7 @@ mod test {
 
 
 // tinyaudio wrapper
-pub struct AudioDevice{
+pub struct MidiDevice{
     sample_rate: usize,
     block_size: usize,
 
@@ -38,29 +38,30 @@ pub struct AudioDevice{
 }
 
 pub trait AudioRender : Send {
-    fn render(&mut self, data: &mut [f32]);
+    fn render(&mut self, data: &mut [f32], 
+              left_buf: &mut [f32], right_buf: &mut [f32] );
 }
 
 //
-impl Default for AudioDevice {
+impl Default for MidiDevice {
     fn default() -> Self {
         Self::new( 44100, 4410 )
     }
 }
 
-impl Drop for AudioDevice {
+impl Drop for MidiDevice {
     fn drop(&mut self) {
         self.stop();
-        log::drop("AudioDevice");
+        log::drop("MidiDevice");
     }
 }
 
 //
-impl AudioDevice{
+impl MidiDevice{
 
     pub fn new( sample_rate: usize, block_size: usize ) -> Self {
-        log::create("AudioDevice");
-        AudioDevice{ 
+        log::create("MidiDevice");
+        MidiDevice{ 
             sample_rate: sample_rate,
             block_size: block_size,
             device: None,
@@ -69,10 +70,10 @@ impl AudioDevice{
     }
 
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
-        if self.is_started() { log::error("AudioDevice", "Device is still active!");
-            Err("[ AudioDevice] E: device still active!".to_string().into() )
+        if self.is_started() { log::error("MidiDevice", "Device is still active!");
+            Err("[ MidiDevice] E: device still active!".to_string().into() )
         }else{
-            log::info("AudioDevice", "start ");
+            log::info("MidiDevice", "start ");
             let render_clone = self.render.clone();
             let params = OutputDeviceParameters{ 
                     channels_count: 2,
@@ -81,15 +82,17 @@ impl AudioDevice{
                 };
             let dev = run_output_device( params, {
                 let render = render_clone;
+                let mut left_buf = vec![ 0f32; self.block_size];
+                let mut right_buf = vec![ 0f32; self.block_size];
                 move |data: &mut [f32]| {
                     let mut render_lock = render.lock().expect("panic on locking audio_render");
-                    render_lock.render(data);
+                    render_lock.render(data, &mut left_buf, &mut right_buf);
                 }
             });
             match dev {
                 Err(e) => {
                     let errmsg = format!("{:?}",e);
-                    log::error("AudioDevice", &errmsg);
+                    log::error("MidiDevice", &errmsg);
                     return Err(e)
                 },
                 Ok(running_dev) => self.device = Some(running_dev),
@@ -100,13 +103,7 @@ impl AudioDevice{
 
     pub fn stop(&mut self) {
         self.device = None;
-        log::info("AudioDevice", "stop!");
-        let mut midi = crate::midi_sequencer::MIDISequencer::default();
-        let mut file = File::open("Horn.SF2").unwrap();
-        let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
-        let _res = midi.load( &sf ).unwrap();
-            midi.tst();
-        self.render = Arc::new(Mutex::new(midi));
+        log::info("MidiDevice", "stop!");
     }
 
     pub fn is_started(&self) -> bool {
@@ -114,6 +111,18 @@ impl AudioDevice{
             None => false,
             _ => true
         }
+    }
+
+    pub fn tst_A(&mut self) {
+        let mut midi = crate::midi_sequencer::MIDISequencer::default();
+        let mut file = File::open("Horn.SF2").unwrap();
+        let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
+        let _res = midi.load( &sf ).unwrap();
+            midi.tst();
+        self.render = Arc::new(Mutex::new(midi));
+    }
+    pub fn tst_B(&mut self) {
+        self.render = Arc::new(Mutex::new( DefaultRender::new(880.) ));
     }
 }
 
@@ -137,7 +146,8 @@ impl DefaultRender {
     }
 }
 impl AudioRender for DefaultRender {
-    fn render(&mut self, data: &mut [f32]) {
+    fn render(&mut self, data: &mut [f32], 
+              left_buf: &mut [f32], right_buf: &mut [f32] ) {
 
         log::tick();
 

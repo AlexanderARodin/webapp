@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
 use crate::domik_view::*;
-use crate::audio_device::{AudioDevice};
+use crate::audio_device::{MidiDevice};
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
@@ -11,7 +11,7 @@ pub struct RootApp {
     pressed: bool,
 
     #[serde(skip)]
-    audio_device: AudioDevice,
+    audio_device: MidiDevice,
     #[serde(skip)]
     domikView: DomikView,
 }
