@@ -6,7 +6,7 @@ use main_app::{MainApp};
 
 mod domik_view;
 
-mod audio_device;
+mod audio;
 mod proxy_render;
 mod simple_synth;
 mod midi_sequencer;
