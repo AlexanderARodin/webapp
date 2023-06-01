@@ -33,7 +33,7 @@ impl CustSynthRender for SimpleSynth {
         log::tick();
         for samples in data.chunks_mut(2) {
             self.clck += 1.;
-            let ampl = (self.clck * 440. * 2. * std::f32::consts::PI / 44100. ).sin();
+            let ampl = (self.clck * 880. * 2. * std::f32::consts::PI / 44100. ).sin();
             for sample in samples {
                 *sample = ampl;
             }
