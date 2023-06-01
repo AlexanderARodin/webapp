@@ -2,7 +2,7 @@ use std::sync::{Arc,Mutex};
 
 use crate::raadbg::log;
 
-use crate::simple_render::SimpleRender;
+use crate::simple_render::*;
 
 
 pub struct ProxyRender {
@@ -17,7 +17,7 @@ impl Drop for ProxyRender{
 impl Default for ProxyRender {
     fn default() -> Self {
         Self::new(SynthRender::NoRender);
-        Self::new( SimpleRender::default() )
+        Self::new( SimpleSynth::default() )
     }
 }
 impl ProxyRender {
