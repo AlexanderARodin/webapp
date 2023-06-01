@@ -4,11 +4,8 @@ use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
 
 use tinyaudio::prelude::*;
-use rustysynth::*;
+//use rustysynth::*;
 
-//mod proxy_render;
-//mod simple_synth;
-//mod midi_sequencer;
 use crate::audio::proxy_render::*;
 
 
@@ -18,9 +15,9 @@ pub struct AudioDevice{
     sample_rate: usize,
     block_size: usize,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
-
     pub proxy_render: Arc<Mutex<ProxyRender>>,
 }
+
 impl Default for AudioDevice {
     fn default() -> Self {
         Self::new( 44100, 441*2 )
@@ -44,19 +41,6 @@ impl AudioDevice {
         }
     }
 }
-
-
-
-/////
-
-
-
-pub trait AudioRender : Send {
-    fn render(&mut self, data: &mut [f32], 
-              left_buf: &mut [f32], right_buf: &mut [f32] );
-}
-
-//
 
 //
 impl AudioDevice{
