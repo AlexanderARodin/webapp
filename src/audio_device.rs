@@ -7,8 +7,9 @@ use crate::raadbg::log;
 use tinyaudio::prelude::*;
 use rustysynth::*;
 
-//static SF_FILE: &'static [u8] = include_bytes!("./String Collection.SF2");
-static SF_FILE: &'static [u8] = include_bytes!("../String Collection.SF2");
+static SF_PIANO:   &'static [u8] = include_bytes!("../SoundFonts/Piano Grand.SF2");
+static SF_STRINGS: &'static [u8] = include_bytes!("../SoundFonts/String Marcato.SF2");
+static SF_ORGAN:   &'static [u8] = include_bytes!("../SoundFonts/Organ Chorus.SF2");
 
 #[cfg(test)]
 mod test {
@@ -116,7 +117,7 @@ impl MidiDevice{
 
     pub fn tst_A(&mut self) {
         let mut midi = crate::midi_sequencer::MIDISequencer::default();
-        let mut fl = SF_FILE.clone();
+        let mut fl = SF_PIANO.clone();
         let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
         let _res = midi.load( &sf ).unwrap();
             midi.tst();
