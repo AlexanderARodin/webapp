@@ -1,6 +1,6 @@
 
 use crate::raadbg::log;
-
+use crate::audio_device::CustSynthRender;
 
 
 pub struct SimpleSynth{
