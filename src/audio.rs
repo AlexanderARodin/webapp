@@ -1,9 +1,9 @@
 
 pub mod audio_device;
-mod proxy_render;
-mod simple_synth;
-mod midi_controller;
-mod midi_sequencer;
+    mod proxy_render;
+    mod simple_synth;
+pub mod midi_controller;
+    mod midi_sequencer;
 
 
 static SF_PIANO:   &'static [u8] = include_bytes!("../SoundFonts/Piano Grand.SF2");
