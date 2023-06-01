@@ -18,8 +18,8 @@ mod test {
 
     #[test]
     fn basic() {
-        let mut audio_2 = super::MidiDevice::new(100,4410);
-        let mut audio = super::MidiDevice::new(44100,4410);
+        let mut audio_2 = super::AudioDevice::new(100,4410);
+        let mut audio = super::AudioDevice::new(44100,4410);
         audio.start();
         audio_2.start();
     }
@@ -38,7 +38,7 @@ mod test {
 
 
 // tinyaudio wrapper
-pub struct MidiDevice{
+pub struct AudioDevice{
     sample_rate: usize,
     block_size: usize,
 
@@ -78,13 +78,13 @@ pub trait AudioRender : Send {
 }
 
 //
-impl Default for MidiDevice {
+impl Default for AudioDevice {
     fn default() -> Self {
         Self::new( 44100, 441*2 )
     }
 }
 
-impl Drop for MidiDevice {
+impl Drop for AudioDevice {
     fn drop(&mut self) {
         self.stop();
         log::drop("MidiDevice");
@@ -92,11 +92,11 @@ impl Drop for MidiDevice {
 }
 
 //
-impl MidiDevice{
+impl AudioDevice{
 
     pub fn new( sample_rate: usize, block_size: usize ) -> Self {
         log::create("MidiDevice");
-        MidiDevice{ 
+        Self{ 
             sample_rate: sample_rate,
             block_size: block_size,
             device: None,
@@ -106,8 +106,8 @@ impl MidiDevice{
     }
 
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
-        if self.is_started() { log::error("MidiDevice", "Device is still active!");
-            Err("[ MidiDevice] E: device still active!".to_string().into() )
+        if self.is_started() { log::error("AudioDevice", "Device is still active!");
+            Err("[ AudioDevice] E: device still active!".to_string().into() )
         }else{
             log::info("MidiDevice", "start ");
             let render_clone = self.render.clone();
@@ -128,7 +128,7 @@ impl MidiDevice{
             match dev {
                 Err(e) => {
                     let errmsg = format!("{:?}",e);
-                    log::error("MidiDevice", &errmsg);
+                    log::error("AudioDevice", &errmsg);
                     return Err(e)
                 },
                 Ok(running_dev) => self.device = Some(running_dev),
@@ -139,7 +139,7 @@ impl MidiDevice{
 
     pub fn stop(&mut self) {
         self.device = None;
-        log::info("MidiDevice", "stop!");
+        log::info("AudioDevice", "stop!");
     }
 
     pub fn is_started(&self) -> bool {
