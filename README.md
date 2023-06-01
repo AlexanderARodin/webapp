@@ -14,7 +14,7 @@
     - [x] apply wraper for **TinyAudio**
     - [x] apply wraper for **RustySynth**
     - [ ] apply connection trait between the wrapers
-    - [ ] apply storage for SoundFonts in WASM
+    - [x] apply storage for SoundFonts into WASM
 
 * __Applets__
     - [ ] basic View of base DoMiKkk excercise
