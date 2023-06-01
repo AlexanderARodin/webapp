@@ -9,7 +9,7 @@ use rustysynth::*;
 //mod proxy_render;
 //mod simple_synth;
 //mod midi_sequencer;
-//use crate::proxy_render::*;
+use crate::proxy_render::*;
 
 static SF_PIANO:   &'static [u8] = include_bytes!("../SoundFonts/Piano Grand.SF2");
 //static SF_STRINGS: &'static [u8] = include_bytes!("../SoundFonts/String Marcato.SF2");
