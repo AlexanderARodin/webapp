@@ -11,6 +11,9 @@ pub struct MainApp {
     pressed: bool,
 
     #[serde(skip)]
+    log_view: LogView,
+    
+    #[serde(skip)]
     audio_device: MidiDevice,
     #[serde(skip)]
     domikView: DomikView,
@@ -42,6 +45,10 @@ impl eframe::App for MainApp {
     }
 
     fn update( &mut self, ctx: &egui::Context, _frame: &mut eframe::Frame ) {
+
+        egui::Window::new(self.domikView.title.clone()).show( ctx, |ui| {
+            self.domikView.updateUI( ui, &mut self.audio_device );
+        });
 
         egui::Window::new(self.domikView.title.clone()).show( ctx, |ui| {
             self.domikView.updateUI( ui, &mut self.audio_device );
