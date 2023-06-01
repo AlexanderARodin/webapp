@@ -81,7 +81,7 @@ impl MIDISequencer {
 }
 
 
-impl crate::audio::audio_device::AudioRender for MIDISequencer {
+impl AudioRender for MIDISequencer {
     fn render(&mut self, data: &mut [f32], 
               left_buf: &mut [f32], right_buf: &mut [f32] ) {
 
