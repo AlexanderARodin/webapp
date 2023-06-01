@@ -47,6 +47,33 @@ pub struct AudioDevice{
     pub proxy_render: Arc<Mutex<ProxyRender>>,
     pub render: Arc<Mutex<dyn AudioRender>>,
 }
+impl Default for AudioDevice {
+    fn default() -> Self {
+        Self::new( 44100, 441*2 )
+    }
+}
+impl Drop for AudioDevice {
+    fn drop(&mut self) {
+        self.stop();
+        log::drop("MidiDevice");
+    }
+}
+impl AudioDevice {
+    pub fn new( sample_rate: usize, block_size: usize ) -> Self {
+        log::create("MidiDevice");
+        Self{ 
+            sample_rate: sample_rate,
+            block_size: block_size,
+            device: None,
+            proxy_render: Arc::new(Mutex::new( ProxyRender::new() )),
+            render: Arc::new(Mutex::new( DefaultRender::new(440.) ))
+        }
+    }
+}
+
+
+
+/////
 
 pub struct ProxyRender {
     render: SynthRender,
@@ -78,32 +105,9 @@ pub trait AudioRender : Send {
 }
 
 //
-impl Default for AudioDevice {
-    fn default() -> Self {
-        Self::new( 44100, 441*2 )
-    }
-}
-
-impl Drop for AudioDevice {
-    fn drop(&mut self) {
-        self.stop();
-        log::drop("MidiDevice");
-    }
-}
 
 //
 impl AudioDevice{
-
-    pub fn new( sample_rate: usize, block_size: usize ) -> Self {
-        log::create("MidiDevice");
-        Self{ 
-            sample_rate: sample_rate,
-            block_size: block_size,
-            device: None,
-            proxy_render: Arc::new(Mutex::new( ProxyRender::new() )),
-            render: Arc::new(Mutex::new( DefaultRender::new(440.) ))
-        }
-    }
 
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
         if self.is_started() { log::error("AudioDevice", "Device is still active!");
