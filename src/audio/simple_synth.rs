@@ -5,7 +5,9 @@ use crate::audio::proxy_render::*;
 const PI2: f32 = 2. * std::f32::consts::PI;
 
 pub struct SimpleSynth{
+    sample_rate: f32,
     clck: f32,
+    pub tone_hz: f32
 }
 impl Default for SimpleSynth {
     fn default() -> Self {
@@ -19,10 +21,12 @@ impl Drop for SimpleSynth {
     }
 }
 impl SimpleSynth {
-    pub fn new(  ) -> Self {
+    pub fn new( sample_rate: usize ) -> Self {
         log::create("SimpleSynth");
-        Self{ 
-            clck: 0_f32
+        Self{
+            sample_rate: sample_rate as f32,
+            clck: 0_f32,
+            tone_hz: 440.
         }
     }
 }
@@ -33,13 +37,13 @@ impl CustSynthRender for SimpleSynth {
     fn render(&mut self, data: &mut [f32]) {
         
         log::tick();
-        
+        let mult = self.tone_hz * PI2 / self.sample_rate;
         for samples in data.chunks_mut(2) {
-            self.clck += 1.;
-            let ampl = (self.clck * 440. * PI2 / 44100. ).sin();
+            let ampl = (self.clck * mult ).sin();
             for sample in samples {
                 *sample = ampl;
             }
+            self.clck += 1.;
         }
     }
 }
