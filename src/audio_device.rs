@@ -45,7 +45,7 @@ pub trait AudioRender : Send {
 //
 impl Default for MidiDevice {
     fn default() -> Self {
-        Self::new( 44100, 882 )
+        Self::new( 44100, 441*2 )
     }
 }
 
@@ -115,7 +115,7 @@ impl MidiDevice{
 
     pub fn tst_A(&mut self) {
         let mut midi = crate::midi_sequencer::MIDISequencer::default();
-        let mut file = File::open("Horn.SF2").unwrap();
+        let mut file = File::open("String Collection.SF2").unwrap();
         let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
         let _res = midi.load( &sf ).unwrap();
             midi.tst();
