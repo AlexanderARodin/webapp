@@ -1,6 +1,5 @@
-const VERS: &str = "v6.05";
+const VERS: &str = "v7.01";
 
-use crate::raadbg::log;
 use crate::audio_device::{MidiDevice};
 
 pub struct DomikView {
@@ -43,9 +42,6 @@ impl DomikView {
             if alt_btn.clicked(){
                 let _ = self.audio.start();
             }
-
-            ui.separator();
-            ui.label( log::get() );
     }
 }
 

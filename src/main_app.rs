@@ -1,5 +1,6 @@
 #![allow(non_snake_case)]
 
+use crate::log_view::LogView;
 use crate::domik_view::*;
 use crate::audio_device::{MidiDevice};
 
@@ -23,6 +24,7 @@ impl Default for MainApp {
     fn default() -> Self {
         Self {
             txt:"<empty>".to_owned(), pressed:false, 
+            log_view: LogView::new(),
             audio_device: Default::default(),
             domikView: DomikView::new()
         }
@@ -47,7 +49,7 @@ impl eframe::App for MainApp {
     fn update( &mut self, ctx: &egui::Context, _frame: &mut eframe::Frame ) {
 
         egui::Window::new("logs").show( ctx, |ui| {
-            self.LogView.updateUI( ui );
+            self.log_view.updateUI( ui );
         });
 
         egui::Window::new(self.domikView.title.clone()).show( ctx, |ui| {

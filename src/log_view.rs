@@ -4,7 +4,7 @@ pub struct LogView {
 }
 
 impl LogView {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {}
     }
 

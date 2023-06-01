@@ -11,7 +11,7 @@ edit2:
 editview:
 	@nvim ./src/domik_view.rs
 editapp:
-	@nvim ./src/root_app.rs
+	@nvim ./src/main_app.rs
 editmain:
 	@nvim ./src/main.rs
 
