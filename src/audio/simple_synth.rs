@@ -11,7 +11,7 @@ pub struct SimpleSynth{
 }
 impl Default for SimpleSynth {
     fn default() -> Self {
-        Self::new(  )
+        Self::new( 44100 )
     }
 }
 impl Drop for SimpleSynth {
