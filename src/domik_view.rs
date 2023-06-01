@@ -40,7 +40,7 @@ impl DomikView {
             }
             let btnB = ui.button( "tst B" );
             if btnB.clicked(){
-                audio_device.note_off(2,0,0);
+                audio_device.note_off(2,0);
             }
             ui.separator();
             let alt_btn = ui.button( "alt-btn" );
