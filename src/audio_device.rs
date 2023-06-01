@@ -7,41 +7,14 @@ use tinyaudio::prelude::*;
 use rustysynth::*;
 
 static SF_PIANO:   &'static [u8] = include_bytes!("../SoundFonts/Piano Grand.SF2");
-static SF_STRINGS: &'static [u8] = include_bytes!("../SoundFonts/String Marcato.SF2");
-static SF_ORGAN:   &'static [u8] = include_bytes!("../SoundFonts/Organ Chorus.SF2");
-
-#[cfg(test)]
-mod test {
-//    use super::*;
-//    use std::fs::*;
-//    #[should_panic]
-
-    #[test]
-    fn basic() {
-        let mut audio_2 = super::AudioDevice::new(100,4410);
-        let mut audio = super::AudioDevice::new(44100,4410);
-        audio.start();
-        audio_2.start();
-    }
-    #[test]
-    fn load_internal_sf2() {
-        assert!(false);
-    }
-    #[test]
-    #[should_panic]
-    fn error_load_internal_sf2() {
-    }
-
-}
-
-
+//static SF_STRINGS: &'static [u8] = include_bytes!("../SoundFonts/String Marcato.SF2");
+//static SF_ORGAN:   &'static [u8] = include_bytes!("../SoundFonts/Organ Chorus.SF2");
 
 
 // tinyaudio wrapper
 pub struct AudioDevice{
     sample_rate: usize,
     block_size: usize,
-
     device: Option< Box<dyn BaseAudioOutputDevice> >,
 
     pub proxy_render: Arc<Mutex<ProxyRender>>,
@@ -55,12 +28,12 @@ impl Default for AudioDevice {
 impl Drop for AudioDevice {
     fn drop(&mut self) {
         self.stop();
-        log::drop("MidiDevice");
+        log::drop("AudioDevice");
     }
 }
 impl AudioDevice {
     pub fn new( sample_rate: usize, block_size: usize ) -> Self {
-        log::create("MidiDevice");
+        log::create("AudioDevice");
         Self{ 
             sample_rate: sample_rate,
             block_size: block_size,
@@ -76,11 +49,48 @@ impl AudioDevice {
 /////
 
 pub struct ProxyRender {
+    clck: f32,
     render: SynthRender,
+}
+impl Drop for ProxyRender{
+    fn drop(&mut self) {
+        log::drop("ProxyRender");
+    }
+}
+impl Default for ProxyRender {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 impl ProxyRender {
     fn new() -> Self {
-        Self{ render: SynthRender::NoRender }
+        log::create("ProxyRender");
+        Self{ 
+            clck: 0_f32,
+            render: SynthRender::NoRender 
+        }
+    }
+
+    fn render(&mut self, data: &mut [f32]) {
+        match &self.render {
+            SynthRender::NoRender => {
+                log::tick();
+                for samples in data.chunks_mut(2) {
+                    self.clck += 1.;
+                    let ampl = (self.clck * 440. * 2. * std::f32::consts::PI / 44100. ).sin();
+                    for sample in samples {
+                        *sample = ampl;
+                    }
+                }
+            },
+            SynthRender::CustomSynth(cust_render) => {
+                for sample in data {
+                }
+            },
+            _ => {
+                panic!("in progress");
+            }
+        }
     }
 }
 
@@ -88,12 +98,12 @@ impl ProxyRender {
 
 enum SynthRender {
     NoRender,
-    RustySynth( rustysynth::Synthesizer ),
+    RustySynth( Arc< rustysynth::Synthesizer > ),
     CustomSynth( Arc<dyn CustSynthRender> ),
 }
 
 
-pub trait CustSynthRender: Send {
+pub trait CustSynthRender: Sync + Send {
     fn render(&mut self, data: &mut [f32], 
               left_buf: &mut [f32], right_buf: &mut [f32] );
 }
@@ -110,23 +120,30 @@ pub trait AudioRender : Send {
 impl AudioDevice{
 
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
-        if self.is_started() { log::error("AudioDevice", "Device is still active!");
+        if self.is_started() {
+            log::error("AudioDevice", "Device is still active!");
             Err("[ AudioDevice] E: device still active!".to_string().into() )
         }else{
-            log::info("MidiDevice", "start ");
+            log::info("AudioDevice", "start ");
             let render_clone = self.render.clone();
+            let proxy_render_clone = self.proxy_render.clone();
+
             let params = OutputDeviceParameters{ 
                     channels_count: 2,
                     sample_rate: self.sample_rate,
                     channel_sample_count: self.block_size
                 };
+
             let dev = run_output_device( params, {
                 let render = render_clone;
-                let mut left_buf = vec![ 0f32; self.block_size];
-                let mut right_buf = vec![ 0f32; self.block_size];
+                let proxy_render = proxy_render_clone;
+                let mut left_buf  = vec![ 0_f32; self.block_size];
+                let mut right_buf = vec![ 0_f32; self.block_size];
                 move |data: &mut [f32]| {
                     let mut render_lock = render.lock().expect("panic on locking audio_render");
-                    render_lock.render(data, &mut left_buf, &mut right_buf);
+                    //render_lock.render(data, &mut left_buf, &mut right_buf);
+                    let mut proxy_render_lock = proxy_render.lock().expect("panic on locking PROXY_audio_render");
+                    proxy_render_lock.render( data );
                 }
             });
             match dev {
@@ -204,4 +221,33 @@ impl AudioRender for DefaultRender {
         }
     }
 }
+
+
+
+
+#[cfg(test)]
+mod test {
+//    use super::*;
+//    use std::fs::*;
+//    #[should_panic]
+
+    #[test]
+    fn basic() {
+        let mut audio_2 = super::AudioDevice::new(100,4410);
+        let mut audio = super::AudioDevice::new(44100,4410);
+        audio.start();
+        audio_2.start();
+    }
+    #[test]
+    fn load_internal_sf2() {
+        assert!(false);
+    }
+    #[test]
+    #[should_panic]
+    fn error_load_internal_sf2() {
+    }
+
+}
+
+
 
