@@ -20,7 +20,6 @@ pub struct AudioDevice{
     device: Option< Box<dyn BaseAudioOutputDevice> >,
 
     pub proxy_render: Arc<Mutex<ProxyRender>>,
-    //pub render: Arc<Mutex<dyn AudioRender>>,
 }
 impl Default for AudioDevice {
     fn default() -> Self {
@@ -68,7 +67,6 @@ impl AudioDevice{
             Err("[ AudioDevice] E: device still active!".to_string().into() )
         }else{
             log::info("AudioDevice", "start ");
-            //let render_clone = self.render.clone();
             let proxy_render_clone = self.proxy_render.clone();
 
             let params = OutputDeviceParameters{ 
@@ -78,13 +76,10 @@ impl AudioDevice{
                 };
 
             let dev = run_output_device( params, {
-                //let render = render_clone;
                 let proxy_render = proxy_render_clone;
-                let mut left_buf  = vec![ 0_f32; self.block_size];
-                let mut right_buf = vec![ 0_f32; self.block_size];
+                //let mut left_buf  = vec![ 0_f32; self.block_size];
+                //let mut right_buf = vec![ 0_f32; self.block_size];
                 move |data: &mut [f32]| {
-                    //let mut render_lock = render.lock().expect("panic on locking audio_render");
-                    //render_lock.render(data, &mut left_buf, &mut right_buf);
                     let mut proxy_render_lock = proxy_render.lock().expect("panic on locking PROXY_audio_render");
                     proxy_render_lock.render( data );
                 }
