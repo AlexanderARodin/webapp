@@ -1,6 +1,6 @@
 
 use crate::raadbg::log;
-use crate::proxy_render::*;
+use crate::audio::proxy_render::*;
 
 
 pub struct SimpleSynth{
