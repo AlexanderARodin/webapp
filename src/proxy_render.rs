@@ -43,12 +43,12 @@ impl ProxyRender {
 
 //
 
+#[allow(dead_code)]
 enum SynthRender {
     NoRender,
     CustomSynth( Arc<Mutex<dyn CustSynthRender>> ),
 }
 
-#[allow(dead_code)]
 pub trait CustSynthRender: Sync + Send {
     fn render(&mut self, data: &mut [f32]);
 }
