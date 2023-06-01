@@ -6,9 +6,9 @@ use crate::raadbg::log;
 use tinyaudio::prelude::*;
 use rustysynth::*;
 
-mod proxy_render;
-mod simple_synth;
-mod midi_sequencer;
+//mod proxy_render;
+//mod simple_synth;
+//mod midi_sequencer;
 use crate::proxy_render::*;
 
 static SF_PIANO:   &'static [u8] = include_bytes!("../SoundFonts/Piano Grand.SF2");
