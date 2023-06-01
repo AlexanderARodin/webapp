@@ -1,22 +1,22 @@
 const VERS: &str = "v7.01";
 
-use crate::audio_device::{MidiDevice};
+use crate::audio_device::{AudioDevice};
 
 pub struct DomikView {
     pub title: String,
-    audio: MidiDevice,
+    audio: AudioDevice,
 }
 impl Default for DomikView {
     fn default() -> Self {
-        Self{ title: "simple DoMiKkk".to_owned(), audio: MidiDevice::new( 22050,4410) }
+        Self::new()
     }
 }
 impl DomikView {
     pub fn new() -> Self {
-        Default::default()
+        Self{ title: "simple DoMiKkk".to_owned(), audio: AudioDevice::new( 22050,4410) }
     }
     pub fn updateUI(&mut self, ui: &mut egui::Ui, 
-                    audio_device: &mut MidiDevice) {
+                    audio_device: &mut AudioDevice) {
             ui.label( format!("WWWapp Template {}", VERS) );
             ui.separator();
             let btn = ui.button( format!("audio status = {}", audio_device.is_started()) );
