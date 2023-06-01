@@ -9,7 +9,7 @@ use rustysynth::*;
 //mod proxy_render;
 //mod simple_synth;
 //mod midi_sequencer;
-use crate::proxy_render::*;
+use crate::audio::proxy_render::*;
 
 
 
