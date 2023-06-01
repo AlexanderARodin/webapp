@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
 
 mod domik_view;
-mod root_app;
-use root_app::{RootApp};
+mod main_app;
+use main_app::{MainApp};
 
 mod audio_device;
 mod midi_sequencer;
@@ -24,7 +24,7 @@ fn main() -> Result<(), eframe::Error> {
         eframe::run_native(
             "egui CrossApp",
             options,
-            Box::new( |cc| Box::new(RootApp::new(cc)) )
+            Box::new( |cc| Box::new(MainApp::new(cc)) )
         )
     }
 }
@@ -43,11 +43,9 @@ fn main() {
         eframe::start_web(
             "raa_canvas_id",
             options,
-            Box::new( |cc| Box::new(RootApp::new(cc)) ),
+            Box::new( |cc| Box::new(MainApp::new(cc)) ),
         )
         .await
         .expect("failure with starting EFRAME");
     });
 }
-
-
