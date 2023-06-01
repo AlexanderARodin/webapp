@@ -26,7 +26,7 @@ impl ProxyRender {
         }
     }
 
-    fn render(&mut self, data: &mut [f32]) {
+    pub fn render(&mut self, data: &mut [f32]) {
         match &self.render {
             SynthRender::NoRender => {
                     log::tick();
