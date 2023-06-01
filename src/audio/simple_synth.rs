@@ -1,7 +1,8 @@
-
 use crate::raadbg::log;
+
 use crate::audio::proxy_render::*;
 
+const PI2: f32 = 2. * std::f32::consts::PI;
 
 pub struct SimpleSynth{
     clck: f32,
