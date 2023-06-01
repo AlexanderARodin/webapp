@@ -46,8 +46,8 @@ impl eframe::App for MainApp {
 
     fn update( &mut self, ctx: &egui::Context, _frame: &mut eframe::Frame ) {
 
-        egui::Window::new(self.domikView.title.clone()).show( ctx, |ui| {
-            self.domikView.updateUI( ui, &mut self.audio_device );
+        egui::Window::new("logs").show( ctx, |ui| {
+            self.LogView.updateUI( ui );
         });
 
         egui::Window::new(self.domikView.title.clone()).show( ctx, |ui| {
