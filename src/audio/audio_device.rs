@@ -48,6 +48,14 @@ impl AudioDevice {
 impl MidiController for AudioDevice {
     fn reset(&mut self) {
         log::info("AudioDevice", "midi.RESET");
+        let mut proxy_lock = proxy_render.lock().expect("can't lock proxy_render");
+        match proxy_lock.render {
+            NoRender => {
+                let simsyn = SimpleSynth::new( self.sample_rate );
+            },
+            _ => {
+            }
+        }
     }
     fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
         log::info("AudioDevice", "midi.NoteOn");
@@ -75,13 +83,11 @@ impl AudioDevice{
         }else{
             log::info("AudioDevice", "start ");
             let proxy_render_clone = self.proxy_render.clone();
-
             let params = OutputDeviceParameters{ 
                     channels_count: 2,
                     sample_rate: self.sample_rate,
                     channel_sample_count: self.channel_sample_count
                 };
-
             let dev = run_output_device( params, {
                 let proxy_render = proxy_render_clone;
                 //let mut left_buf  = vec![ 0_f32; self.block_size];
@@ -115,17 +121,14 @@ impl AudioDevice{
         }
     }
 
-    pub fn tst_AB(&mut self) {
-        let mut midi = crate::audio::midi_sequencer::MIDISequencer::default();
-        let mut fl = super::SF_PIANO.clone();
-        let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
-        let _res = midi.load( &sf ).unwrap();
-            midi.tst();
-        //self.render = Arc::new(Mutex::new(midi));
-    }
-    pub fn tst_BB(&mut self) {
-        //self.render = Arc::new(Mutex::new( DefaultRender::new(880.) ));
-    }
+//    pub fn tst_AB(&mut self) {
+//        let mut midi = crate::audio::midi_sequencer::MIDISequencer::default();
+//        let mut fl = super::SF_PIANO.clone();
+//        let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
+//        let _res = midi.load( &sf ).unwrap();
+//            midi.tst();
+//        //self.render = Arc::new(Mutex::new(midi));
+//    }
 }
 
 
