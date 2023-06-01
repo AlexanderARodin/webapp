@@ -13,7 +13,7 @@ impl Default for SimpleSynth {
 }
 impl Drop for SimpleSynth {
     fn drop(&mut self) {
-        self.stop();
+        //self.stop();
         log::drop("SimpleSynth");
     }
 }
