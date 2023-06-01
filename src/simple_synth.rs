@@ -8,7 +8,7 @@ pub struct SimpleSynth{
 }
 impl Default for SimpleSynth {
     fn default() -> Self {
-        Self::new( 44100, 441*2 )
+        Self::new(  )
     }
 }
 impl Drop for SimpleSynth {
@@ -18,7 +18,7 @@ impl Drop for SimpleSynth {
     }
 }
 impl SimpleSynth {
-    pub fn new( sample_rate: usize, block_size: usize ) -> Self {
+    pub fn new(  ) -> Self {
         log::create("SimpleSynth");
         Self{ 
             clck: 0_f32
