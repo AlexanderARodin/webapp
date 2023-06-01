@@ -5,7 +5,7 @@ use crate::audio_device::{MidiDevice};
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
-pub struct RootApp {
+pub struct MainApp {
     txt: String,
     #[serde(skip)]
     pressed: bool,
@@ -16,7 +16,7 @@ pub struct RootApp {
     domikView: DomikView,
 }
 
-impl Default for RootApp {
+impl Default for MainApp {
     fn default() -> Self {
         Self {
             txt:"<empty>".to_owned(), pressed:false, 
@@ -26,7 +26,7 @@ impl Default for RootApp {
     }
 }
 
-impl RootApp {
+impl MainApp {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         if let Some(storage) = cc.storage {
             return eframe::get_value(storage, eframe::APP_KEY).unwrap_or_default();
@@ -36,7 +36,7 @@ impl RootApp {
 }
 
 
-impl eframe::App for RootApp {
+impl eframe::App for MainApp {
     fn save(&mut self, storage: &mut dyn eframe::Storage) {
         eframe::set_value(storage, eframe::APP_KEY, self);
     }
