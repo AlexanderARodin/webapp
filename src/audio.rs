@@ -1,6 +1,7 @@
 
 mod audio_device;
 mod proxy_render;
+mod simple_synth;
 
 
 static SF_PIANO:   &'static [u8] = include_bytes!("../SoundFonts/Piano Grand.SF2");
