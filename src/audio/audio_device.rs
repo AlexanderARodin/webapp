@@ -42,6 +42,12 @@ impl AudioDevice {
 }
 
 //
+
+impl MidiController for AudioDevice {
+}
+
+
+//
 impl AudioDevice{
     pub fn get_params(&self) -> OutputDeviceParameters  {
         OutputDeviceParameters {
