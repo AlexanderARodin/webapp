@@ -15,7 +15,7 @@ pub struct MainApp {
     log_view: LogView,
     
     #[serde(skip)]
-    audio_device: MidiDevice,
+    audio_device: AuioDevice,
     #[serde(skip)]
     domikView: DomikView,
 }
