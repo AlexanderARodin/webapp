@@ -18,7 +18,7 @@ pub struct AudioDevice{
     device: Option< Box<dyn BaseAudioOutputDevice> >,
 
     pub proxy_render: Arc<Mutex<ProxyRender>>,
-    pub render: Arc<Mutex<dyn AudioRender>>,
+    //pub render: Arc<Mutex<dyn AudioRender>>,
 }
 impl Default for AudioDevice {
     fn default() -> Self {
@@ -38,8 +38,8 @@ impl AudioDevice {
             sample_rate: sample_rate,
             block_size: block_size,
             device: None,
-            proxy_render: Arc::new(Mutex::new( ProxyRender::new() )),
-            render: Arc::new(Mutex::new( DefaultRender::new(440.) ))
+            proxy_render: Arc::new(Mutex::new( ProxyRender::default() )),
+            //render: Arc::new(Mutex::new( DefaultRender::new(440.) ))
         }
     }
 }
@@ -59,15 +59,15 @@ impl Drop for ProxyRender{
 }
 impl Default for ProxyRender {
     fn default() -> Self {
-        Self::new()
+        Self::new(SynthRender::NoRender)
     }
 }
 impl ProxyRender {
-    fn new() -> Self {
+    fn new( a_render: SynthRender ) -> Self {
         log::create("ProxyRender");
         Self{ 
             clck: 0_f32,
-            render: SynthRender::NoRender 
+            render: a_render
         }
     }
 
@@ -84,8 +84,8 @@ impl ProxyRender {
                 }
             },
             SynthRender::CustomSynth(cust_render) => {
-                for sample in data {
-                }
+                let mut cust_render_lock = cust_render.lock().expect("can't lock CustomSynth");
+                cust_render_lock.render(data);
             },
             _ => {
                 panic!("in progress");
@@ -99,13 +99,12 @@ impl ProxyRender {
 enum SynthRender {
     NoRender,
     RustySynth( Arc< rustysynth::Synthesizer > ),
-    CustomSynth( Arc<dyn CustSynthRender> ),
+    CustomSynth( Arc<Mutex<dyn CustSynthRender>> ),
 }
 
 
 pub trait CustSynthRender: Sync + Send {
-    fn render(&mut self, data: &mut [f32], 
-              left_buf: &mut [f32], right_buf: &mut [f32] );
+    fn render(&mut self, data: &mut [f32]);
 }
 
 
@@ -125,7 +124,7 @@ impl AudioDevice{
             Err("[ AudioDevice] E: device still active!".to_string().into() )
         }else{
             log::info("AudioDevice", "start ");
-            let render_clone = self.render.clone();
+            //let render_clone = self.render.clone();
             let proxy_render_clone = self.proxy_render.clone();
 
             let params = OutputDeviceParameters{ 
@@ -135,12 +134,12 @@ impl AudioDevice{
                 };
 
             let dev = run_output_device( params, {
-                let render = render_clone;
+                //let render = render_clone;
                 let proxy_render = proxy_render_clone;
                 let mut left_buf  = vec![ 0_f32; self.block_size];
                 let mut right_buf = vec![ 0_f32; self.block_size];
                 move |data: &mut [f32]| {
-                    let mut render_lock = render.lock().expect("panic on locking audio_render");
+                    //let mut render_lock = render.lock().expect("panic on locking audio_render");
                     //render_lock.render(data, &mut left_buf, &mut right_buf);
                     let mut proxy_render_lock = proxy_render.lock().expect("panic on locking PROXY_audio_render");
                     proxy_render_lock.render( data );
@@ -176,10 +175,10 @@ impl AudioDevice{
         let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
         let _res = midi.load( &sf ).unwrap();
             midi.tst();
-        self.render = Arc::new(Mutex::new(midi));
+        //self.render = Arc::new(Mutex::new(midi));
     }
     pub fn tst_B(&mut self) {
-        self.render = Arc::new(Mutex::new( DefaultRender::new(880.) ));
+        //self.render = Arc::new(Mutex::new( DefaultRender::new(880.) ));
     }
 }
 
