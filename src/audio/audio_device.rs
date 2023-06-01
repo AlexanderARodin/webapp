@@ -7,6 +7,7 @@ use tinyaudio::prelude::*;
 use rustysynth::SoundFont;
 
 use crate::audio::proxy_render::*;
+use crate::audio::midi_controller::*;
 
 
 // TinyAudio wrapper
