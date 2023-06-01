@@ -109,8 +109,8 @@ impl AudioDevice{
     }
 
     pub fn tst_A(&mut self) {
-        let mut midi = crate::midi_sequencer::MIDISequencer::default();
-        let mut fl = SF_PIANO.clone();
+        let mut midi = crate::audio::midi_sequencer::MIDISequencer::default();
+        let mut fl = super::SF_PIANO.clone();
         let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
         let _res = midi.load( &sf ).unwrap();
             midi.tst();
