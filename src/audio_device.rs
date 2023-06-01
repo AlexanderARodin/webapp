@@ -74,8 +74,8 @@ impl ProxyRender {
     fn render(&mut self, data: &mut [f32]) {
         match &self.render {
             SynthRender::NoRender => {
-                for sample in data {
                     log::tick();
+                for sample in data {
                     *sample = 0_f32;
                 }
                 //log::tick();
