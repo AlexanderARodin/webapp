@@ -110,10 +110,6 @@ impl AudioDevice{
 
 #[cfg(test)]
 mod test {
-//    use super::*;
-//    use std::fs::*;
-//    #[should_panic]
-
     #[test]
     fn basic() {
         let mut audio_2 = super::AudioDevice::new(100,4410);
