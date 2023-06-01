@@ -3,7 +3,7 @@
 use crate::log_view::LogView;
 use crate::domik_view::*;
 //use crate::audio::audio_device::{AudioDevice};
-use crate::audio;
+use crate::audio::audio_device;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
