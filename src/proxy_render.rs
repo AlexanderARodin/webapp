@@ -2,6 +2,8 @@ use std::sync::{Arc,Mutex};
 
 use crate::raadbg::log;
 
+use crate::simple_render::SimpleRender;
+
 
 pub struct ProxyRender {
     clck: f32,
