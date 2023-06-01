@@ -43,8 +43,12 @@ impl AudioDevice {
 
 //
 impl AudioDevice{
-    pub fn get_params(&self) -> ( usize, usize ) {
-        (self.sample_rate, self.channel_sample_count)
+    pub fn get_params(&self) -> OutputDeviceParameters  {
+        OutputDeviceParameters {
+            sample_rate: self.sample_rate, 
+            channels_count: 2,
+            channel_sample_count: self.channel_sample_count
+        }
     }
 
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
