@@ -34,16 +34,18 @@ impl DomikView {
 
             let btnA = ui.button( "tst A" );
             if btnA.clicked(){
-                audio_device.tst_A();
+                //audio_device.tst_A();
+                audio_device.note_on(0,0,0);
             }
             let btnB = ui.button( "tst B" );
             if btnB.clicked(){
-                audio_device.tst_B();
+                audio_device.note_off(2,0,0);
             }
             ui.separator();
             let alt_btn = ui.button( "alt-btn" );
             if alt_btn.clicked(){
                 //let _ = self.audio.start();
+                audio_device.reset();
             }
     }
 }
