@@ -43,7 +43,7 @@ impl AudioDevice {
 
 //
 impl AudioDevice{
-    pub fn get_params(&self) -> (sample_rate: usize, channel_sample_count: usize) {
+    pub fn get_params(&self) -> ( usize, usize ) {
         (self.sample_rate, self.channel_sample_count)
     }
 
