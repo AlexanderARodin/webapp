@@ -50,7 +50,7 @@ impl MidiController for AudioDevice {
     fn reset(&mut self) {
         log::info("AudioDevice", "midi.RESET");
         let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
-        match proxy_lock.render {
+        match &proxy_lock.render {
             NoRender => {
                 let simsyn = SimpleSynth::new( self.sample_rate );
             },
