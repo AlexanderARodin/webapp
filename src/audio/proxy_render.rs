@@ -44,7 +44,7 @@ impl ProxyRender {
 //
 
 #[allow(dead_code)]
-enum SynthRender {
+pub enum SynthRender {
     NoRender,
     CustomSynth( Arc<Mutex<dyn CustSynthRender>> ),
 }
