@@ -2,6 +2,7 @@
 pub mod audio_device;
 mod proxy_render;
 mod simple_synth;
+mod midi_controller;
 mod midi_sequencer;
 
 
