@@ -46,6 +46,15 @@ impl AudioDevice {
 //
 
 impl MidiController for AudioDevice {
+    fn reset(&mut self) {
+        log::info("AudioDevice", "midi.RESET");
+    }
+    fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
+        log::info("AudioDevice", "midi.NoteOn");
+    }
+    fn note_off(&mut self, channel: i32, key: i32) {
+        log::info("AudioDevice", "midi.NoteOff");
+    }
 }
 
 
@@ -106,7 +115,7 @@ impl AudioDevice{
         }
     }
 
-    pub fn tst_A(&mut self) {
+    pub fn tst_AB(&mut self) {
         let mut midi = crate::audio::midi_sequencer::MIDISequencer::default();
         let mut fl = super::SF_PIANO.clone();
         let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
@@ -114,7 +123,7 @@ impl AudioDevice{
             midi.tst();
         //self.render = Arc::new(Mutex::new(midi));
     }
-    pub fn tst_B(&mut self) {
+    pub fn tst_BB(&mut self) {
         //self.render = Arc::new(Mutex::new( DefaultRender::new(880.) ));
     }
 }
