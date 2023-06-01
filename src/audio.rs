@@ -1,5 +1,5 @@
 
-mod audio_device;
+pub mod audio_device;
 mod proxy_render;
 mod simple_synth;
 mod midi_sequencer;
