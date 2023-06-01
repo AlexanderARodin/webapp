@@ -1,7 +1,7 @@
 use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
 
-use crate::simple_synth::*;
+use crate::audio::simple_synth::*;
 
 pub struct ProxyRender {
     render: SynthRender,
