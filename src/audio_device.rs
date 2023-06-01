@@ -123,45 +123,6 @@ impl AudioDevice{
 
 
 //
-struct DefaultRender {
-    clock: f32,
-    tone_hz: f32,
-    channels_count: usize,
-    sample_rate: usize,
-}
-
-impl DefaultRender {
-    fn new(tone_hz: f32) -> Self {
-        DefaultRender{
-            clock: 0.,
-            tone_hz: tone_hz,
-            channels_count: 2,
-            sample_rate: 44100
-        }
-    }
-}
-impl AudioRender for DefaultRender {
-    fn render(&mut self, data: &mut [f32], 
-              _left_buf: &mut [f32], _right_buf: &mut [f32] ) {
-
-        log::tick();
-
-        for samples in data.chunks_mut(self.channels_count) {
-            self.clock = (self.clock + 1.0) % self.sample_rate as f32;
-            let value = ( 
-                self.clock * self.tone_hz * 2.0 * std::f32::consts::PI 
-                / self.sample_rate as f32
-                )
-                .sin() * 0.2;
-            for sample in samples {
-                *sample = value;
-            }
-        }
-    }
-}
-
-
-
 
 #[cfg(test)]
 mod test {
