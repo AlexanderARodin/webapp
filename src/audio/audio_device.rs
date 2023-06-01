@@ -9,13 +9,10 @@ use rustysynth::SoundFont;
 use crate::audio::proxy_render::*;
 
 
-
-
-
-// tinyaudio wrapper
+// TinyAudio wrapper
 pub struct AudioDevice{
     sample_rate: usize,
-    block_size: usize,
+    channel_sample_count: usize,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
     pub proxy_render: Arc<Mutex<ProxyRender>>,
 }
@@ -32,11 +29,11 @@ impl Drop for AudioDevice {
     }
 }
 impl AudioDevice {
-    pub fn new( sample_rate: usize, block_size: usize ) -> Self {
+    pub fn new( sample_rate: usize, channel_sample_count: usize ) -> Self {
         log::create("AudioDevice");
         Self{ 
             sample_rate: sample_rate,
-            block_size: block_size,
+            channel_sample_count: channel_sample_count,
             device: None,
             proxy_render: Arc::new(Mutex::new( ProxyRender::default() )),
             //render: Arc::new(Mutex::new( DefaultRender::new(440.) ))
@@ -46,6 +43,9 @@ impl AudioDevice {
 
 //
 impl AudioDevice{
+    pub fn get_params(&self) -> (sample_rate: usize, channel_sample_count: usize) {
+        (self.sample_rate, self.channel_sample_count)
+    }
 
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
         if self.is_started() {
@@ -58,7 +58,7 @@ impl AudioDevice{
             let params = OutputDeviceParameters{ 
                     channels_count: 2,
                     sample_rate: self.sample_rate,
-                    channel_sample_count: self.block_size
+                    channel_sample_count: self.channel_sample_count
                 };
 
             let dev = run_output_device( params, {
