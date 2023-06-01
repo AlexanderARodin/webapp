@@ -17,10 +17,19 @@ impl Default for MIDISequencer {
         Self::new( 44100 )
     }
 }
-
 impl Drop for MIDISequencer {
     fn drop(&mut self) {
         log::drop("MIDISequencer");
+    }
+}
+impl MIDISequencer {
+    pub fn new( sample_rate: i32 ) -> Self{
+        let mut init_params = SynthesizerSettings::new( sample_rate );
+        log::create("MIDISequencer");
+        MIDISequencer{ 
+            parameters: init_params,
+            synth: None
+        }
     }
 }
 
@@ -29,15 +38,6 @@ impl MIDISequencer {
     pub fn tst(&mut self) {
         if self.synth.is_some() {
             self.synth.as_mut().unwrap().note_on(0,60,100);
-        }
-    }
-
-    pub fn new( sample_rate: i32 ) -> Self{
-        let mut init_params = SynthesizerSettings::new( sample_rate );
-        log::create("MIDISequencer");
-        MIDISequencer{ 
-            parameters: init_params,
-            synth: None
         }
     }
 
