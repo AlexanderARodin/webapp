@@ -74,14 +74,18 @@ impl ProxyRender {
     fn render(&mut self, data: &mut [f32]) {
         match &self.render {
             SynthRender::NoRender => {
-                log::tick();
-                for samples in data.chunks_mut(2) {
-                    self.clck += 1.;
-                    let ampl = (self.clck * 440. * 2. * std::f32::consts::PI / 44100. ).sin();
-                    for sample in samples {
-                        *sample = ampl;
-                    }
+                for sample in data {
+                    log::tick();
+                    *sample = 0_f32;
                 }
+                //log::tick();
+               // for samples in data.chunks_mut(2) {
+               //     self.clck += 1.;
+               //     let ampl = (self.clck * 440. * 2. * std::f32::consts::PI / 44100. ).sin();
+                //    for sample in samples {
+                //        *sample = ampl;
+                 //   }
+                //}
             },
             SynthRender::CustomSynth(cust_render) => {
                 let mut cust_render_lock = cust_render.lock().expect("can't lock CustomSynth");
