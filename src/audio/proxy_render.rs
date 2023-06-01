@@ -4,7 +4,7 @@ use crate::raadbg::log;
 use crate::audio::simple_synth::*;
 
 pub struct ProxyRender {
-    render: SynthRender,
+    pub render: SynthRender,
 }
 impl Drop for ProxyRender{
     fn drop(&mut self) {
