@@ -5,6 +5,15 @@ use crate::raadbg::log;
 
 use rustysynth::*;
 
+
+pub trait AudioRender : Send {
+    fn render(&mut self, data: &mut [f32], 
+              left_buf: &mut [f32], right_buf: &mut [f32] );
+}
+
+
+
+
 // rustysynth wrapper
 pub struct MIDISequencer{
     parameters: SynthesizerSettings,
