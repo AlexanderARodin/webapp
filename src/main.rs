@@ -6,6 +6,7 @@ use main_app::{MainApp};
 
 mod domik_view;
 mod audio_device;
+mod simple_synth;
 mod midi_sequencer;
 
 mod raadbg;
