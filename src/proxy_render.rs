@@ -17,7 +17,7 @@ impl Drop for ProxyRender{
 impl Default for ProxyRender {
     fn default() -> Self {
         Self::new(SynthRender::NoRender);
-        Self::new( SimpleSynth::default() )
+        Self::new( SynthRender::CustomSynth( SimpleSynth::default() )) )
     }
 }
 impl ProxyRender {
