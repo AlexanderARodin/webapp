@@ -4,7 +4,7 @@ use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
 
 use tinyaudio::prelude::*;
-//use rustysynth::*;
+use rustysynth::SoundFont;
 
 use crate::audio::proxy_render::*;
 
