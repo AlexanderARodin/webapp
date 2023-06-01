@@ -45,7 +45,7 @@ pub trait AudioRender : Send {
 //
 impl Default for MidiDevice {
     fn default() -> Self {
-        Self::new( 44100, 4410 )
+        Self::new( 44100, 882 )
     }
 }
 

@@ -14,7 +14,7 @@ pub struct MIDISequencer{
 //
 impl Default for MIDISequencer {
     fn default() -> Self {
-        Self::new( 44100/2, 4410 )
+        Self::new( 44100 )
     }
 }
 
@@ -32,9 +32,8 @@ impl MIDISequencer {
         }
     }
 
-    pub fn new( sample_rate: i32, 
-                channel_sample_count: usize ) -> Self{
-        let init_params = SynthesizerSettings::new( sample_rate );
+    pub fn new( sample_rate: i32 ) -> Self{
+        let mut init_params = SynthesizerSettings::new( sample_rate );
         log::create("MIDISequencer");
         MIDISequencer{ 
             parameters: init_params,
@@ -83,11 +82,9 @@ impl crate::audio_device::AudioRender for MIDISequencer {
             self.synth.as_mut().unwrap().render(&mut left_buf[..], &mut right_buf[..]);
         }
 
-        for (li, lvalue) in left_buf.iter().enumerate() {
-            data[li * 2] = *lvalue;
-        }
-        for (ri, rvalue) in right_buf.iter().enumerate() {
-            data[ri * 2 + 1] = *rvalue;
+        for (i, lvalue) in left_buf.iter().enumerate() {
+            data[i * 2] = *lvalue;
+            data[i * 2 + 1] = right_buf[i];
         }
     }
 }
@@ -121,16 +118,7 @@ mod test {
     #[test]
     #[should_panic]
     fn error_sample_rate() {
-        let mut midi = MIDISequencer::new( 0, 4410 );
-        let mut file = File::open("Horn.SF2").unwrap();
-        let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
-        let _res = midi.load( &sf );
-        assert!(midi.synth.is_some() );
-    }
-    #[test]
-    #[should_panic]
-    fn error_sample_count() {
-        let mut midi = MIDISequencer::new( 44100, 12345678901234567890 );
+        let mut midi = MIDISequencer::new( 0 );
         let mut file = File::open("Horn.SF2").unwrap();
         let sf = Arc::new( SoundFont::new(&mut file).unwrap() );
         let _res = midi.load( &sf );

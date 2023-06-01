@@ -22,7 +22,7 @@ impl DomikView {
             ui.separator();
             let btn = ui.button( format!("audio status = {}", audio_device.is_started()) );
             if btn.clicked(){
-                let res = audio_device.start();
+                let _res = audio_device.start();
             }
             let btnStop = ui.button( "stop" );
             if btnStop.clicked(){
@@ -41,7 +41,7 @@ impl DomikView {
             ui.separator();
             let alt_btn = ui.button( "alt-btn" );
             if alt_btn.clicked(){
-                self.audio.start();
+                let _ = self.audio.start();
             }
 
             ui.separator();
