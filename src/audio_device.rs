@@ -1,5 +1,4 @@
 use std::error::Error;
-use std::fs::*;
 use std::sync::{Arc,Mutex};
 
 use crate::raadbg::log;
@@ -24,6 +23,14 @@ mod test {
         audio.start();
         audio_2.start();
     }
+    #[test]
+    fn load_internal_sf2() {
+        assert!(false);
+    }
+    #[test]
+    #[should_panic]
+    fn error_load_internal_sf2() {
+    }
 
 }
 
@@ -36,8 +43,34 @@ pub struct MidiDevice{
     block_size: usize,
 
     device: Option< Box<dyn BaseAudioOutputDevice> >,
+
+    pub proxy_render: Arc<Mutex<ProxyRender>>,
     pub render: Arc<Mutex<dyn AudioRender>>,
 }
+
+pub struct ProxyRender {
+    render: SynthRender,
+}
+impl ProxyRender {
+    fn new() -> Self {
+        Self{ render: SynthRender::NoRender }
+    }
+}
+
+
+
+enum SynthRender {
+    NoRender,
+    RustySynth( rustysynth::Synthesizer ),
+    CustomSynth( Arc<dyn CustSynthRender> ),
+}
+
+
+pub trait CustSynthRender: Send {
+    fn render(&mut self, data: &mut [f32], 
+              left_buf: &mut [f32], right_buf: &mut [f32] );
+}
+
 
 pub trait AudioRender : Send {
     fn render(&mut self, data: &mut [f32], 
@@ -67,6 +100,7 @@ impl MidiDevice{
             sample_rate: sample_rate,
             block_size: block_size,
             device: None,
+            proxy_render: Arc::new(Mutex::new( ProxyRender::new() )),
             render: Arc::new(Mutex::new( DefaultRender::new(440.) ))
         }
     }
