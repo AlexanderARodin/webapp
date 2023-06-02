@@ -19,7 +19,7 @@ pub struct AudioDevice{
     sample_rate: usize,
     channel_sample_count: usize,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
-    pub proxy_render: Arc<Mutex<ProxyRender>>,
+    proxy_render: Arc<Mutex<ProxyRender>>,
 }
 
 impl Default for AudioDevice {
