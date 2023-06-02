@@ -90,7 +90,7 @@ impl SimpleSynth {
         if norm <= 0. {
             0.
         }else{
-            norm.log(VELO_PAR)
+            norm.log(VELO_PAR) + 1.
         }
     }
 }
