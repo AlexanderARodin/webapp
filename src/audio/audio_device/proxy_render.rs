@@ -13,17 +13,17 @@ impl Drop for ProxyRender{
         log::drop("ProxyRender");
     }
 }
-impl Default for ProxyRender {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+//impl Default for ProxyRender {
+//    fn default() -> Self {
+//        Self::new()
+//    }
+//}
 impl ProxyRender {
-    fn new() -> Self {
+    fn new() -> Arc<Mutex<Self>> {
         log::create("ProxyRender");
-        Self{ 
+        Arc::new(Mutex::new(Self{ 
             render_wrapper: None
-        }
+        }))
     }
 
     pub fn render(&mut self, data: &mut [f32]) {
