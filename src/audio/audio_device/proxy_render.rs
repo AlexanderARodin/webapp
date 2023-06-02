@@ -42,9 +42,3 @@ impl ProxyRender {
     }
 }
 
-//  //  //  //  //  //  //  //  //
-pub trait SoundRender: Sync + Send + MidiReceiver {
-    fn render(&mut self, data: &mut [f32]);
-}
-
-
