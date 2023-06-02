@@ -35,7 +35,7 @@ impl DomikView {
                     if btnStop.clicked(){
                         audio_device.stop();
                     }
-                })
+                });
             ui.separator();
             ui.horizontal( |ui| {
                     let btnA = ui.button( "note ON" );
@@ -50,7 +50,7 @@ impl DomikView {
                     if btnB.clicked(){
                         audio_device.invoke_note_off(1,60);
                     }
-                })
+                });
             ui.separator();
             let alt_btn = ui.button( "invoke RESET" );
             if alt_btn.clicked(){
