@@ -78,6 +78,10 @@ impl SimpleSynth {
         self.amplitude = 0_f32;
         self.counter = 0_f32;
     }
+    
+    fn frequencyFrom( key: i32 ) -> f32 {
+        440. * 2.0.power( ((key as f32) - 69.)/12. )
+    }
 }
 //
 //
