@@ -4,7 +4,7 @@ use crate::audio::proxy_render::*;
 use crate::audio::midi_rx_tx::*;
 
 const PI2: f32 = 2. * std::f32::consts::PI;
-
+const VELO_PAR: f32 = 1.;
 pub struct SimpleSynth{
     sample_rate: f32,
     counter: f32,
@@ -84,7 +84,8 @@ impl SimpleSynth {
         440. * 2_f32.powf( ((key as f32) - 69.)/12. )
     }
     fn amplitudeFrom( velocity: i32 ) -> f32 {
-        (velocity as f32) / 127_f32
+        let norm = (velocity as f32) / 127_f32;
+        norm / 2_f32.powf(norm * VELO_PAR)
     }
 }
 //
