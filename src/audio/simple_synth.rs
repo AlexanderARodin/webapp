@@ -1,7 +1,7 @@
 use crate::raadbg::log;
 
 use super::audio_device::SoundRender;
-use super::midi_rx_tx::*;
+use super::midi_rx_tx::MidiReceiver;
 
 const PI2: f32 = 2. * std::f32::consts::PI;
 const VELO_PAR: f32 = 2.;
