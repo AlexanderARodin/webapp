@@ -33,7 +33,7 @@ impl SimpleSynth {
 
 //
 //
-impl CustSynthRender for SimpleSynth {
+impl RenderWrapper for SimpleSynth {
     fn render(&mut self, data: &mut [f32]) {
         
         log::tick();
