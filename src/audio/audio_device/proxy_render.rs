@@ -6,7 +6,7 @@ use crate::raadbg::log;
 
 
 pub struct ProxyRender {
-    pub render_wrapper: Option< Arc<Mutex<dyn super::SoundRender>> >,
+    pub(crate) render_wrapper: Option< Arc<Mutex<dyn super::SoundRender>> >,
 }
 impl Drop for ProxyRender{
     fn drop(&mut self) {
