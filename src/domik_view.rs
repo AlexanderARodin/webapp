@@ -40,11 +40,11 @@ impl DomikView {
             ui.horizontal( |ui| {
                     let btnA = ui.button( "note ON" );
                     if btnA.clicked(){
-                        audio_device.invoke_note_on(1,60,0);
+                        audio_device.invoke_note_on(1,60,127);
                     }
                     let btnA2 = ui.button( "note ON2" );
                     if btnA2.clicked(){
-                        audio_device.invoke_note_on(1,72,0);
+                        audio_device.invoke_note_on(1,72,50);
                     }
                     let btnB = ui.button( "note OFF" );
                     if btnB.clicked(){
