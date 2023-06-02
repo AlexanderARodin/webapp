@@ -9,7 +9,7 @@ use rustysynth::SoundFont;
 mod proxy_render;
 use proxy_render::*;
 
-use crate::audio::midi_rx_tx::*;
+use midi_rx_tx::*;
 use crate::audio::simple_synth::*;
 
 
