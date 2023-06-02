@@ -76,6 +76,7 @@ impl SimpleSynth {
     pub fn note_off(&mut self, channel: i32, key: i32) {
         log::info("SimpleSynth", "note OFF");
         self.amplitude = 0_f32;
+        self.counter = 0_f32;
     }
 }
 //
