@@ -1,18 +1,105 @@
-//use std::error::Error;
-use std::sync::Arc;
+use rustysynth::*;
+//  //  //  //  //  //  //
 
 use crate::raadbg::log;
 
-use rustysynth::*;
+use super::audio_device::SoundRender;
+use super::midi_rx_tx::MidiReceiver;
+//  //  //  //  //  //  //
 
+pub struct RustySynthWrapper{
+    parameters: SynthesizerSettings,
+    synth: Synthesizer,
+}
+impl Drop for RustySynthWrapper {
+    fn drop(&mut self) {
+        self.reset();
+        log::drop("RustySynthWrapper");
+    }
+}
+impl RustySynthWrapper {
+    pub fn new( sample_rate: usize ) -> Self {
+        log::create("RustySynthWrapper");
+        let mut init_params = SynthesizerSettings::new( sample_rate );
+        Self{
+            parameters: init_params,
+            synth: None
+        }
+    }
+    pub fn new( sample_rate: i32 ) -> Self{
+        log::create("MIDISequencer");
+        MIDISequencer{ 
+            parameters: init_params,
+            synth: None
+        }
+    }
+}
 
-pub trait AudioRender : Send {
-    fn render(&mut self, data: &mut [f32], 
-              left_buf: &mut [f32], right_buf: &mut [f32] );
+//
+//
+impl SoundRender for RustySynthWrapper {
+    fn render(&mut self, data: &mut [f32]) {
+        //log::tick();
+        let mult = self.frequency * PI2 / self.sample_rate;
+        for samples in data.chunks_mut(2) {
+            let ampl = self.amplitude*(self.counter * mult ).sin();
+            for sample in samples {
+                *sample = ampl;
+            }
+            self.counter += 1.;
+        }
+    }
 }
 
 
+//
+//
+impl MidiReceiver for RustySynthWrapper {
+    fn reset(&mut self) {
+        log::info("SimpleSynth", "reset");
+    }
+    fn process_midi_command(&mut self, 
+                            channel: i32, command: i32, 
+                            data1: i32, data2: i32) 
+    {
+        match command {
+            0x80 => self.note_off(channel, data1),       // Note Off
+            0x90 => self.note_on(channel, data1, data2), // Note On
+            _ => log::info("SimpleSynth", "W: unknown midi command")
+        }
+    }
+}
 
+//
+//
+impl RustySynthWrapper {
+    pub fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
+        log::info("SimpleSynth", "note ON");
+        self.amplitude = 0.999*SimpleSynth::amplitudeFrom( velocity );
+        self.frequency = SimpleSynth::frequencyFrom( key );
+    }
+    pub fn note_off(&mut self, channel: i32, key: i32) {
+        log::info("SimpleSynth", "note OFF");
+        self.amplitude = 0_f32;
+        self.counter = 0_f32;
+    }
+    
+    fn frequencyFrom( key: i32 ) -> f32 {
+        440. * 2_f32.powf( ((key as f32) - 69.)/12. )
+    }
+    fn amplitudeFrom( velocity: i32 ) -> f32 {
+        let norm = (velocity as f32) / 127_f32;
+        (VELO_PAR).powf( norm - 1. ) * norm
+    }
+}
+//
+//
+//
+//
+
+
+
+/*
 
 // rustysynth wrapper
 pub struct MIDISequencer{
@@ -21,16 +108,6 @@ pub struct MIDISequencer{
 }
 
 //
-impl Default for MIDISequencer {
-    fn default() -> Self {
-        Self::new( 44100 )
-    }
-}
-impl Drop for MIDISequencer {
-    fn drop(&mut self) {
-        log::drop("MIDISequencer");
-    }
-}
 impl MIDISequencer {
     pub fn new( sample_rate: i32 ) -> Self{
         let mut init_params = SynthesizerSettings::new( sample_rate );
@@ -135,3 +212,4 @@ mod test {
     }
 }
 
+*/
