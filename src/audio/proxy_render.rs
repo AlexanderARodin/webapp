@@ -7,7 +7,7 @@ use crate::audio::simple_synth::*;
 
 
 pub struct ProxyRender {
-    pub render: Option< Arc<Mutex<dyn RenderWrapper>> >
+    pub render: Option< Arc<Mutex<dyn RenderWrapper>> >,
     
     pub trait RenderWrapper: Sync + Send {
         fn render(&mut self, data: &mut [f32]);
