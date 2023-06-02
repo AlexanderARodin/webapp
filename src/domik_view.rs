@@ -68,8 +68,8 @@ impl DomikView {
                         let simsyn = SimpleSynth::new( settings.sample_rate );
                         let mut dt: [f32; 10] = [0_f32; 10];
                         simsyn.render(&mut dt);
-                        let simsyn_wrapper = Some(Arc::new(Mutex::new( simsyn as dyn SoundRender )));
-                        audio_device.set_soundrender(simsyn_wrapper);
+                        let simsyn_wrapper: Arc<Mutex = Arc::new(Mutex::new( simsyn ));
+                        audio_device.set_soundrender( Some(simsyn_wrapper) );
                     }
                     let btnRA = ui.button( "RustySynt - A" );
                     if btnRA.clicked(){
