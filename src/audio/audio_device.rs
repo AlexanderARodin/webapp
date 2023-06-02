@@ -79,14 +79,6 @@ impl MidiSender for AudioDevice {
 
 //
 impl AudioDevice{
-    pub fn get_params(&self) -> OutputDeviceParameters  {
-        OutputDeviceParameters {
-            sample_rate: self.sample_rate, 
-            channels_count: 2,
-            channel_sample_count: self.channel_sample_count
-        }
-    }
-
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
         if self.is_started() {
             log::error("AudioDevice", "Device is still active!");
@@ -129,6 +121,14 @@ impl AudioDevice{
         match self.device {
             None => false,
             _ => true
+        }
+    }
+
+    pub fn get_params(&self) -> OutputDeviceParameters  {
+        OutputDeviceParameters {
+            sample_rate: self.sample_rate, 
+            channels_count: 2,
+            channel_sample_count: self.channel_sample_count
         }
     }
 
