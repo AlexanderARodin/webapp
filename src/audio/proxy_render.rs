@@ -5,6 +5,7 @@ use crate::audio::simple_synth::*;
 
 pub struct ProxyRender {
     pub render: SynthRender,
+    rrrender: Option< Arc<Mutex<dyn CustSynthRender>> >
 }
 impl Drop for ProxyRender{
     fn drop(&mut self) {
@@ -21,7 +22,8 @@ impl ProxyRender {
     fn new( a_render: SynthRender ) -> Self {
         log::create("ProxyRender");
         Self{ 
-            render: a_render
+            render: a_render,
+            rrrender: None
         }
     }
 
