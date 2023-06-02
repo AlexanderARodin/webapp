@@ -1,11 +1,10 @@
-const VERS: &str = "v7.02";
+const VERS: &str = "v8.01";
 
 use crate::audio::audio_device::{AudioDevice};
 use crate::audio::midi_rx_tx::*;
 
 pub struct DomikView {
     pub title: String,
-    //audio: AudioDevice,
 }
 impl Default for DomikView {
     fn default() -> Self {
@@ -16,7 +15,6 @@ impl DomikView {
     pub fn new() -> Self {
         Self{ 
             title: "simple DoMiKkk".to_owned(), 
-            //audio: AudioDevice::new( 22050,4410) 
         }
     }
     pub fn updateUI(&mut self, ui: &mut egui::Ui, 
@@ -54,7 +52,6 @@ impl DomikView {
             ui.separator();
             let alt_btn = ui.button( "invoke RESET" );
             if alt_btn.clicked(){
-                //let _ = self.audio.start();
                 audio_device.invoke_reset();
             }
     }
