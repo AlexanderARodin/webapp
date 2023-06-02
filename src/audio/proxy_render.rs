@@ -4,7 +4,6 @@ use crate::raadbg::log;
 use crate::audio::simple_synth::*;
 
 pub struct ProxyRender {
-    pub rrender: SynthRender,
     pub rrrender: Option< Arc<Mutex<dyn CustSynthRender>> >
 }
 impl Drop for ProxyRender{
@@ -44,12 +43,6 @@ impl ProxyRender {
 
 
 //
-
-#[allow(dead_code)]
-pub enum SynthRender {
-    NoRender,
-    CustomSynth( Arc<Mutex<dyn CustSynthRender>> ),
-}
 
 pub trait CustSynthRender: Sync + Send {
     fn render(&mut self, data: &mut [f32]);
