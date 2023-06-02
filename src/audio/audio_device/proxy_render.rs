@@ -6,11 +6,11 @@ use std::sync::{Arc,Mutex};
 pub struct ProxyRender {
     pub(crate) sound_render: Option< Arc<Mutex<dyn super::SoundRender>> >,
 }
-//impl Drop for ProxyRender{
-//    fn drop(&mut self) {
+impl Drop for ProxyRender{
+    fn drop(&mut self) {
 //        log::drop("ProxyRender");
-//    }
-//}
+    }
+}
 impl ProxyRender {
     pub fn new_arc_mutex() -> Arc<Mutex<Self>> {
         Arc::new(Mutex::new( Self::new() ))
