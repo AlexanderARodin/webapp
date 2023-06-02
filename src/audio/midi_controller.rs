@@ -13,7 +13,7 @@ pub trait MidiSender {
         self.invoke_midi_command( channel, 0x90, key, velocity  );
     }
     fn invoke_note_off(&mut self, channel: i32, key: i32) {
-        self.invoke_midi_command( channel, 0x80, key );
+        self.invoke_midi_command( channel, 0x80, key, -1 );
     }
 }
 
