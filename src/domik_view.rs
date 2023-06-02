@@ -4,7 +4,7 @@ use std::sync::{Mutex,Arc};
 
 use crate::audio::audio_device::{AudioDevice};
 use crate::audio::simple_synth::{SimpleSynth};
-use crate::audio::midi_rx_tx::*;
+use crate::audio::midi_rx_tx::MidiSender;
 
 pub struct DomikView {
     pub title: String,
