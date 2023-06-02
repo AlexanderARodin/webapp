@@ -1,6 +1,6 @@
 
 pub mod audio_device;
-    mod simple_synth;
+pub mod simple_synth;
 pub mod midi_rx_tx;
     mod midi_sequencer;
 
