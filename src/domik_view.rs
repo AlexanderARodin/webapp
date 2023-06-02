@@ -1,7 +1,7 @@
 const VERS: &str = "v7.02";
 
 use crate::audio::audio_device::{AudioDevice};
-use crate::audio::midi_controller::*;
+use crate::audio::midi_rx_tx::*;
 
 pub struct DomikView {
     pub title: String,
