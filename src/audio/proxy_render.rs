@@ -34,7 +34,7 @@ impl ProxyRender {
                     *sample = 0_f32;
                 }
             },
-            CustomSynth(cust_render) => {
+            Some(cust_render) => {
                 let mut cust_render_lock = cust_render.lock().expect("can't lock CustomSynth");
                 cust_render_lock.render(data);
             }
