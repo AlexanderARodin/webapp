@@ -5,12 +5,13 @@ use crate::raadbg::log;
 
 use tinyaudio::prelude::*;
 use rustysynth::SoundFont;
-
+//  //  //  //  //  //  //
 mod proxy_render;
 use proxy_render::*;
 
-use midi_rx_tx::*;
-use crate::audio::simple_synth::*;
+use super::midi_rx_tx::*;
+use super::simple_synth::*;
+//  //  //  //  //  //  //
 
 
 // TinyAudio wrapper
