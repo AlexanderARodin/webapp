@@ -93,8 +93,6 @@ impl AudioDevice{
                 };
             let dev = run_output_device( params, {
                 let proxy_render = proxy_render_clone;
-                //let mut left_buf  = vec![ 0_f32; self.block_size];
-                //let mut right_buf = vec![ 0_f32; self.block_size];
                 move |data: &mut [f32]| {
                     let mut proxy_render_lock = proxy_render.lock().expect("panic on locking PROXY_audio_render");
                     proxy_render_lock.render( data );
