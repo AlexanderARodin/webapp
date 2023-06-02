@@ -66,7 +66,7 @@ impl DomikView {
                     let btnS = ui.button( "SimpleSynth" );
                     if btnS.clicked(){
                         let simsyn = SimpleSynth::new( settings.sample_rate );
-                        let mut dt = [10: 0_f32];
+                        let mut dt = [f32; 10];
                         simsyn.render(&mut dt);
                         let simsyn_wrapper = Some(Arc::new(Mutex::new( simsyn )));
                         audio_device.set_soundrender(simsyn_wrapper);
