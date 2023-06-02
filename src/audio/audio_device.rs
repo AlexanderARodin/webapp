@@ -55,22 +55,22 @@ impl MidiSender for AudioDevice {
         match &proxy_lock.render_wrapper {
             None => {
                 let simsyn = SimpleSynth::new( self.sample_rate );
-                proxy_lock.render_wrapper = Some(Arc::new(Mutex::new( simsyn )));
+                proxy_lock.sound_render = Some(Arc::new(Mutex::new( simsyn )));
             },
-            Some(_render_wrapper) => {
-                proxy_lock.render_wrapper = None;
+            Some(_rsound_render) => {
+                proxy_lock.sound_render = None;
             }
         }
     }
     fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
         //log::info("AudioDevice", "midi.invoke_midi_command");
         let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
-        match &proxy_lock.render_wrapper {
+        match &proxy_lock.sound_render {
             None => {
             },
-            Some(render_wrapper) => {
-                let mut render_wrapper_lock = render_wrapper.lock().expect("panic on locking Some(render_wrapper)");
-                render_wrapper_lock.process_midi_command( channel, command, data1, data2 );
+            Some(sound_render) => {
+                let mut sound_render_lock = sound_render.lock().expect("panic on locking Some(render_wrapper)");
+                sound_render_lock.process_midi_command( channel, command, data1, data2 );
           }
         }
     }
