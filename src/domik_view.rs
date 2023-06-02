@@ -55,21 +55,21 @@ impl DomikView {
                 });
             ui.separator();
             ui.horizontal( |ui| {
-                    let btnA = ui.button( "note ON" );
-                    if btnA.clicked(){
-                        audio_device.invoke_note_on(1,60,127);
+                    let btnN = ui.button( "None" );
+                    if btnN.clicked(){
+                        audio_device.set_soundrender(None) );
                     }
-                    let btnA1 = ui.button( "note ON2" );
-                    if btnA1.clicked(){
-                        audio_device.invoke_note_on(1,60,64);
+                    let btnS = ui.button( "SimpleSynth" );
+                    if btnS.clicked(){
+                        audio_device.set_soundrender(None) );
                     }
-                    let btnA2 = ui.button( "note ON2" );
-                    if btnA2.clicked(){
-                        audio_device.invoke_note_on(1,72,1);
+                    let btnRA = ui.button( "RustySynt - A" );
+                    if btnRA.clicked(){
+                        audio_device.set_soundrender(None) );
                     }
-                    let btnB = ui.button( "note OFF" );
-                    if btnB.clicked(){
-                        audio_device.invoke_note_off(1,60);
+                    let btnRB = ui.button( "RustySynt - B" );
+                    if btnRB.clicked(){
+                        audio_device.set_soundrender(None) );
                     }
                 });
     }
