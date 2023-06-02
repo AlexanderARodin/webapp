@@ -66,9 +66,8 @@ impl MidiSender for AudioDevice {
         match &proxy_lock.render_wrapper {
             None => {
             },
-            Some(_render_wrapper) => {
-                let simsyn = SimpleSynth::new( self.sample_rate );
-                proxy_lock.render_wrapper = Some(Arc::new(Mutex::new( simsyn )));
+            Some(render_wrapper) => {
+                render_wrapper.process_midi_command( channel, command, data1, data2 );
           }
         }
     }
