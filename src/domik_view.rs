@@ -54,10 +54,24 @@ impl DomikView {
                     }
                 });
             ui.separator();
-            let alt_btn = ui.button( "invoke RESET" );
-            if alt_btn.clicked(){
-                audio_device.invoke_reset();
-            }
+            ui.horizontal( |ui| {
+                    let btnA = ui.button( "note ON" );
+                    if btnA.clicked(){
+                        audio_device.invoke_note_on(1,60,127);
+                    }
+                    let btnA1 = ui.button( "note ON2" );
+                    if btnA1.clicked(){
+                        audio_device.invoke_note_on(1,60,64);
+                    }
+                    let btnA2 = ui.button( "note ON2" );
+                    if btnA2.clicked(){
+                        audio_device.invoke_note_on(1,72,1);
+                    }
+                    let btnB = ui.button( "note OFF" );
+                    if btnB.clicked(){
+                        audio_device.invoke_note_off(1,60);
+                    }
+                });
     }
 }
 
