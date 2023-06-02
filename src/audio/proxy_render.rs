@@ -29,7 +29,7 @@ impl ProxyRender {
 
     pub fn render(&mut self, data: &mut [f32]) {
         match &self.rrrender {
-            SynthRender::None => {
+            None => {
                 for sample in data {
                     *sample = 0_f32;
                 }
