@@ -58,13 +58,23 @@ impl MidiReceiver for SimpleSynth {
         log::info("SimpleSynth", "reset");
     }
     fn process_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
-        log::info("SimpleSynth", "invoke_midi_command");
+        match command {
+            0x80 => self.note_off(channel, data1),       // Note Off
+            0x90 => self.note_on(channel, data1, data2), // Note On
+            _ => log::info("SimpleSynth", "W: unknown midi command")
+        }
     }
 }
 
 //
 //
 impl SimpleSynth {
+    pub fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
+        log::info("SimpleSynth", "note ON");
+    }
+    pub fn note_off(&mut self, channel: i32, key: i32) {
+        log::info("SimpleSynth", "note OFF");
+    }
 }
 //
 //
