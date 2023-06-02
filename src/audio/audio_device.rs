@@ -56,7 +56,7 @@ impl MidiController for AudioDevice {
                 proxy_lock.rrrender = Some(Arc::new(Mutex::new( simsyn )));
             },
             Some(rr) => {
-                proxy_lock.render = SynthRender::NoRender;
+                proxy_lock.rrrender = None;
             }
         }
     }
