@@ -13,11 +13,15 @@ pub struct ProxyRender {
 //}
 impl ProxyRender {
     pub fn new_arc_mutex() -> Arc<Mutex<Self>> {
-//        log::create("ProxyRender");
-        Arc::new(Mutex::new(Self{ 
-            sound_render: None
-        }))
+        Arc::new(Mutex::new( Self::new() ))
     }
+    pub fn new() -> Self {
+//        log::create("ProxyRender");
+        Self{ 
+            sound_render: None
+        }
+    }
+    
     pub fn render(&mut self, data: &mut [f32]) {
         match &self.sound_render {
             None => {
