@@ -61,13 +61,13 @@ impl MidiSender for AudioDevice {
         }
     }
     fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
-        log::info("AudioDevice", "midi.invoke_midi_command");
+        //log::info("AudioDevice", "midi.invoke_midi_command");
         let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
         match &proxy_lock.render_wrapper {
             None => {
             },
             Some(render_wrapper) => {
-                let mut render_wrapper_lock = render_wrapper.lock().expect("panic on locking render_wrapper");
+                let mut render_wrapper_lock = render_wrapper.lock().expect("panic on locking Some(render_wrapper)");
                 render_wrapper_lock.process_midi_command( channel, command, data1, data2 );
           }
         }
