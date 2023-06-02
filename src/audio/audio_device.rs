@@ -50,18 +50,27 @@ impl MidiController for AudioDevice {
     fn reset(&mut self) {
         log::info("AudioDevice", "midi.RESET");
         let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
-        match &proxy_lock.render {
-            SynthRender::NoRender => {
+        match &proxy_lock.rrrender {
+            None => {
                 let simsyn = SimpleSynth::new( self.sample_rate );
                 proxy_lock.render = SynthRender::CustomSynth(Arc::new(Mutex::new( simsyn )));
             },
-            _ => {
+            Some(rr) => {
                 proxy_lock.render = SynthRender::NoRender;
             }
         }
     }
     fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
         log::info("AudioDevice", "midi.NoteOn");
+        let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
+        match &proxy_lock.render {
+            CustomSynth(cust_render) => {
+                let mut cust_render_lock = cust_render.lock().expect("can't lock CustomSynth");
+                cust_render_lock.;
+            },
+            _ => {
+            }
+        }
     }
     fn note_off(&mut self, channel: i32, key: i32) {
         log::info("AudioDevice", "midi.NoteOff");
