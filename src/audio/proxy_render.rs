@@ -28,13 +28,13 @@ impl ProxyRender {
     }
 
     pub fn render(&mut self, data: &mut [f32]) {
-        match &self.render {
-            SynthRender::NoRender => {
+        match &self.rrrender {
+            SynthRender::None => {
                 for sample in data {
                     *sample = 0_f32;
                 }
             },
-            SynthRender::CustomSynth(cust_render) => {
+            CustomSynth(cust_render) => {
                 let mut cust_render_lock = cust_render.lock().expect("can't lock CustomSynth");
                 cust_render_lock.render(data);
             }
