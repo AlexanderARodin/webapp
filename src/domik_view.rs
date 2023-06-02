@@ -2,7 +2,7 @@ const VERS: &str = "v8.01";
 
 use std::sync::{Mutex,Arc};
 
-use crate::audio::audio_device::{AudioDevice};
+use crate::audio::audio_device::{AudioDevice, SoundRender};
 use crate::audio::simple_synth::{SimpleSynth};
 use crate::audio::midi_rx_tx::MidiSender;
 
@@ -68,7 +68,7 @@ impl DomikView {
                         let simsyn = SimpleSynth::new( settings.sample_rate );
                         let mut dt: [f32; 10] = [0_f32; 10];
                         simsyn.render(&mut dt);
-                        let simsyn_wrapper = Some(Arc::new(Mutex::new( simsyn as SoundRender )));
+                        let simsyn_wrapper = Some(Arc::new(Mutex::new( simsyn )));
                         audio_device.set_soundrender(simsyn_wrapper);
                     }
                     let btnRA = ui.button( "RustySynt - A" );
