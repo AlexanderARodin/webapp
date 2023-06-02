@@ -19,7 +19,7 @@ impl Drop for ProxyRender{
 //    }
 //}
 impl ProxyRender {
-    fn new() -> Arc<Mutex<Self>> {
+    pub fn new() -> Arc<Mutex<Self>> {
         log::create("ProxyRender");
         Arc::new(Mutex::new(Self{ 
             render_wrapper: None
