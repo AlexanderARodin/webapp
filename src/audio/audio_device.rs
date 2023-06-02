@@ -52,7 +52,7 @@ impl MidiSender for AudioDevice {
     fn invoke_reset(&mut self) {
         log::info("AudioDevice", "midi.RESET");
         let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
-        match &proxy_lock.sound_render_lock {
+        match &proxy_lock.sound_render {
             None => {
                 let simsyn = SimpleSynth::new( self.sample_rate );
                 proxy_lock.sound_render = Some(Arc::new(Mutex::new( simsyn )));
