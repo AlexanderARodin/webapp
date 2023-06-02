@@ -5,6 +5,8 @@ use crate::audio::midi_rx_tx::*;
 
 const PI2: f32 = 2. * std::f32::consts::PI;
 const VELO_PAR: f32 = 1.;
+//  //  //  //  //  //  //
+
 pub struct SimpleSynth{
     sample_rate: f32,
     counter: f32,
@@ -71,7 +73,7 @@ impl MidiReceiver for SimpleSynth {
 impl SimpleSynth {
     pub fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
         log::info("SimpleSynth", "note ON");
-        self.amplitude = SimpleSynth::amplitudeFrom( velocity );
+        self.amplitude = SimpleSynth::amplitudeFrom( velocity*0. );
         self.frequency = SimpleSynth::frequencyFrom( key );
     }
     pub fn note_off(&mut self, channel: i32, key: i32) {
