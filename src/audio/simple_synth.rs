@@ -54,8 +54,10 @@ impl RenderWrapper for SimpleSynth {
 //
 impl MidiReceiver for SimpleSynth {
     fn reset(&mut self) {
+        log::info("SimpleSynth", "midi.reset");
     }
     fn process_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
+        log::info("SimpleSynth", "midi.invoke_midi_command");
     }
 }
 
