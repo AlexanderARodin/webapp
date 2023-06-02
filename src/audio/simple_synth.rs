@@ -28,8 +28,8 @@ impl SimpleSynth {
         Self{
             sample_rate: sample_rate as f32,
             counter: 0_f32,
-            frequency: 440.,
-            amplitude: 1.
+            frequency: 1_f32,
+            amplitude: 0_f32
         }
     }
 }
@@ -71,7 +71,7 @@ impl MidiReceiver for SimpleSynth {
 impl SimpleSynth {
     pub fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
         log::info("SimpleSynth", "note ON");
-        self.amplitude = 1_f32;
+        self.amplitude = SimpleSynth::frequencyFrom( velocity );
         self.frequency = SimpleSynth::frequencyFrom( key );
     }
     pub fn note_off(&mut self, channel: i32, key: i32) {
@@ -82,6 +82,9 @@ impl SimpleSynth {
     
     fn frequencyFrom( key: i32 ) -> f32 {
         440. * 2_f32.powf( ((key as f32) - 69.)/12. )
+    }
+    fn amplitudeFrom( velocity: i32 ) -> f32 {
+        (velocity as f32) / 127_f32
     }
 }
 //
