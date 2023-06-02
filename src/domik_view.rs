@@ -57,19 +57,19 @@ impl DomikView {
             ui.horizontal( |ui| {
                     let btnN = ui.button( "None" );
                     if btnN.clicked(){
-                        audio_device.set_soundrender(None) );
+                        audio_device.set_soundrender(None);
                     }
                     let btnS = ui.button( "SimpleSynth" );
                     if btnS.clicked(){
-                        audio_device.set_soundrender(None) );
+                        audio_device.set_soundrender(None);
                     }
                     let btnRA = ui.button( "RustySynt - A" );
                     if btnRA.clicked(){
-                        audio_device.set_soundrender(None) );
+                        audio_device.set_soundrender(None);
                     }
                     let btnRB = ui.button( "RustySynt - B" );
                     if btnRB.clicked(){
-                        audio_device.set_soundrender(None) );
+                        audio_device.set_soundrender(None);
                     }
                 });
     }
