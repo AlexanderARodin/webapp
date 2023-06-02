@@ -4,7 +4,7 @@ use crate::raadbg::log;
 use crate::audio::simple_synth::*;
 
 pub struct ProxyRender {
-    pub render: Option< Arc<Mutex<dyn CustSynthRender>> >
+    pub render: Option< Arc<Mutex<dyn RenderWrapper>> >
 }
 impl Drop for ProxyRender{
     fn drop(&mut self) {
@@ -17,7 +17,7 @@ impl Default for ProxyRender {
     }
 }
 impl ProxyRender {
-    fn new( render: Option< Arc<Mutex<dyn CustSynthRender>> > ) -> Self {
+    fn new( render: Option< Arc<Mutex<dyn RenderWrapper>> > ) -> Self {
         log::create("ProxyRender");
         Self{ 
             render: render
@@ -32,7 +32,7 @@ impl ProxyRender {
                 }
             },
             Some(cust_render) => {
-                let mut cust_render_lock = cust_render.lock().expect("can't lock CustomSynth");
+                let mut cust_render_lock = cust_render.lock().expect("can't lock RenderWrapper");
                 cust_render_lock.render(data);
             }
         }
@@ -42,7 +42,7 @@ impl ProxyRender {
 
 //
 
-pub trait CustSynthRender: Sync + Send {
+pub trait RenderWrapper: Sync + Send {
     fn render(&mut self, data: &mut [f32]);
 }
 
