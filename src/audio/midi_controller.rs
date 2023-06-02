@@ -2,7 +2,6 @@
 
 pub trait MidiController {
     fn reset(&mut self) {}
-    fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {}
-    fn note_off(&mut self, channel: i32, key: i32) {}
+    pub fn process_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {}
 }
 
