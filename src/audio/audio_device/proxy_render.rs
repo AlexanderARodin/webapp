@@ -15,14 +15,14 @@ impl Drop for ProxyRender{
 }
 impl Default for ProxyRender {
     fn default() -> Self {
-        Self::new(None)
+        Self::new()//None)
     }
 }
 impl ProxyRender {
-    fn new( render_wrapper: Option< Arc<Mutex<dyn super::SoundRender>> > ) -> Self {
+    fn new( /*render_wrapper: Option< Arc<Mutex<dyn super::SoundRender>> >*/ ) -> Self {
         log::create("ProxyRender");
         Self{ 
-            render_wrapper: render_wrapper
+            render_wrapper: None //render_wrapper
         }
     }
 
