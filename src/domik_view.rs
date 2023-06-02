@@ -20,7 +20,7 @@ impl DomikView {
         }
     }
     pub fn updateUI(&mut self, ui: &mut egui::Ui, 
-                    audio_device: &mut MidiSender ) {
+                    audio_device: &mut dyn MidiSender ) {
             ui.label( format!("WWWapp Template {}", VERS) );
             ui.separator();
             let btn = ui.button( format!("audio status = {}", audio_device.is_started()) );
