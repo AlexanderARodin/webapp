@@ -53,10 +53,10 @@ impl MidiController for AudioDevice {
         match &proxy_lock.render_wrapper {
             None => {
                 let simsyn = SimpleSynth::new( self.sample_rate );
-                proxy_lock.render = Some(Arc::new(Mutex::new( simsyn )));
+                proxy_lock.render_wrapper = Some(Arc::new(Mutex::new( simsyn )));
             },
             Some(_render_wrapper) => {
-                proxy_lock.render = None;
+                proxy_lock.render_wrapper = None;
             }
         }
     }
