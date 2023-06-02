@@ -130,14 +130,7 @@ impl AudioDevice{
         }
     }
 
-//    pub fn tst_AB(&mut self) {
-//        let mut midi = crate::audio::midi_sequencer::MIDISequencer::default();
-//        let mut fl = super::SF_PIANO.clone();
-//        let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
-//        let _res = midi.load( &sf ).unwrap();
-//            midi.tst();
-//        //self.render = Arc::new(Mutex::new(midi));
-//    }
+    //pub fn 
 }
 
 
@@ -165,3 +158,11 @@ mod test {
 
 
 
+//    pub fn tst_AB(&mut self) {
+//        let mut midi = crate::audio::midi_sequencer::MIDISequencer::default();
+//        let mut fl = super::SF_PIANO.clone();
+//        let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
+//        let _res = midi.load( &sf ).unwrap();
+//            midi.tst();
+//        //self.render = Arc::new(Mutex::new(midi));
+//    }
