@@ -80,7 +80,7 @@ impl SimpleSynth {
     }
     
     fn frequencyFrom( key: i32 ) -> f32 {
-        440. * 2.0.pow( ((key as f32) - 69.)/12. )
+        440. * (2.).pow( ((key as f32) - 69.)/12. )
     }
 }
 //
