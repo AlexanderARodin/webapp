@@ -17,7 +17,7 @@ impl Default for ProxyRender {
     }
 }
 impl ProxyRender {
-    fn new( render: Option< Arc<Mutex<dyn CustSynthRender>> ) -> Self {
+    fn new( render: Option< Arc<Mutex<dyn CustSynthRender>> > ) -> Self {
         log::create("ProxyRender");
         Self{ 
             rrrender: render
