@@ -84,7 +84,7 @@ impl SimpleSynth {
         440. * 2_f32.powf( ((key as f32) - 69.)/12. )
     }
     fn amplitudeFrom( velocity: i32 ) -> f32 {
-        (velocity as f32) / 127_f32
+        (velocity as f32) / 128_f32
     }
 }
 //
