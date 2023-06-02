@@ -62,9 +62,10 @@ impl DomikView {
                     if btnN.clicked(){
                         audio_device.set_soundrender(None);
                     }
+                    let settings = audio_device.get_params();
                     let btnS = ui.button( "SimpleSynth" );
                     if btnS.clicked(){
-                        let simsyn = SimpleSynth::new( self.sample_rate );
+                        let simsyn = SimpleSynth::new( settings.sample_rate );
                         let simsyn_wrapper = Some(Arc::new(Mutex::new( simsyn )));
                         audio_device.set_soundrender(simsyn_wrapper);
                     }
