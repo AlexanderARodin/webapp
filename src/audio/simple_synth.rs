@@ -52,7 +52,8 @@ impl RenderWrapper for SimpleSynth {
 
 //
 //
-//impl MidiReceiver for SimpleSynth
+impl MidiReceiver for SimpleSynth {
+}
 
 //
 //
