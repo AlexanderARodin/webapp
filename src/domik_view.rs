@@ -1,6 +1,9 @@
 const VERS: &str = "v8.01";
 
+use std::sync::{Mutex,Arc};
+
 use crate::audio::audio_device::{AudioDevice};
+use crate::audio::simple_synth::{SimpleSynth};
 use crate::audio::midi_rx_tx::*;
 
 pub struct DomikView {
