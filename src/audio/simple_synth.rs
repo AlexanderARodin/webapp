@@ -13,11 +13,6 @@ pub struct SimpleSynth{
     frequency: f32,
     amplitude: f32,
 }
-impl Default for SimpleSynth {
-    fn default() -> Self {
-        Self::new( 44100 )
-    }
-}
 impl Drop for SimpleSynth {
     fn drop(&mut self) {
         self.reset();
