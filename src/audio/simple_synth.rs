@@ -71,7 +71,7 @@ impl MidiReceiver for SimpleSynth {
 impl SimpleSynth {
     pub fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
         log::info("SimpleSynth", "note ON");
-        self.amplitude = SimpleSynth::frequencyFrom( velocity );
+        self.amplitude = SimpleSynth::amplitudeFrom( velocity );
         self.frequency = SimpleSynth::frequencyFrom( key );
     }
     pub fn note_off(&mut self, channel: i32, key: i32) {
@@ -84,7 +84,7 @@ impl SimpleSynth {
         440. * 2_f32.powf( ((key as f32) - 69.)/12. )
     }
     fn amplitudeFrom( velocity: i32 ) -> f32 {
-        (velocity as f32) / 128_f32
+        (velocity as f32) / 127_f32
     }
 }
 //
