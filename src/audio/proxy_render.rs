@@ -7,7 +7,7 @@ use crate::audio::midi_rx_tx::*;
 
 
 pub struct ProxyRender {
-    pub render_wrapper: Option< Arc<Mutex<dyn RenderWrapper>> >,
+    pub render_wrapper: Option< Arc<Mutex<dyn SoundRender>> >,
 }
 impl Drop for ProxyRender{
     fn drop(&mut self) {
@@ -20,7 +20,7 @@ impl Default for ProxyRender {
     }
 }
 impl ProxyRender {
-    fn new( render_wrapper: Option< Arc<Mutex<dyn RenderWrapper>> > ) -> Self {
+    fn new( render_wrapper: Option< Arc<Mutex<dyn SoundRender>> > ) -> Self {
         log::create("ProxyRender");
         Self{ 
             render_wrapper: render_wrapper
@@ -43,7 +43,7 @@ impl ProxyRender {
 }
 
 //  //  //  //  //  //  //  //  //
-pub trait RenderWrapper: Sync + Send + MidiReceiver {
+pub trait SoundRender: Sync + Send + MidiReceiver {
     fn render(&mut self, data: &mut [f32]);
 }
 
