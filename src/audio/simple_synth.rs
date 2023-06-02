@@ -20,7 +20,10 @@ impl Drop for SimpleSynth {
     }
 }
 impl SimpleSynth {
-    pub fn new( sample_rate: usize ) -> Self {
+    pub fn new_arc_mutex() -> Arc<Mutex<Self>> {
+        Arc::new(Mutex::new( Self::new() ))
+    }
+    fn new( sample_rate: usize ) -> Self {
         log::create("SimpleSynth");
         Self{
             sample_rate: sample_rate as f32,
