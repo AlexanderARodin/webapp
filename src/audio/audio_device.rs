@@ -7,7 +7,7 @@ use tinyaudio::prelude::*;
 use rustysynth::SoundFont;
 
 mod proxy_render;
-use crate::audio::proxy_render::*;
+use crate::audio::audio_device::proxy_render::*;
 
 use crate::audio::midi_rx_tx::*;
 use crate::audio::simple_synth::*;
