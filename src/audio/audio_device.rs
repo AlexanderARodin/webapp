@@ -69,7 +69,7 @@ impl MidiSender for AudioDevice {
             None => {
             },
             Some(sound_render) => {
-                let mut sound_render_lock = sound_render.lock().expect("panic on locking Some(render_wrapper)");
+                let mut sound_render_lock = sound_render.lock().expect("panic on locking Some(sound_render)");
                 sound_render_lock.process_midi_command( channel, command, data1, data2 );
           }
         }
@@ -132,7 +132,10 @@ impl AudioDevice{
         }
     }
 
-    //pub fn 
+    pub fn set_soundrender(&mut self, new_soundrender: Option<Arc<Mutex<dyn SoundRender>>>) {
+        let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
+        proxy_lock.sound_render = new_soundrender;
+    }
 }
 
 
