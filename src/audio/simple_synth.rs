@@ -4,7 +4,7 @@ use crate::audio::proxy_render::*;
 use crate::audio::midi_rx_tx::*;
 
 const PI2: f32 = 2. * std::f32::consts::PI;
-const VELO_PAR: f32 = 10.;
+const VELO_PAR: f32 = 2.;
 //  //  //  //  //  //  //
 
 pub struct SimpleSynth{
@@ -59,7 +59,10 @@ impl MidiReceiver for SimpleSynth {
     fn reset(&mut self) {
         log::info("SimpleSynth", "reset");
     }
-    fn process_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
+    fn process_midi_command(&mut self, 
+                            channel: i32, command: i32, 
+                            data1: i32, data2: i32) 
+    {
         match command {
             0x80 => self.note_off(channel, data1),       // Note Off
             0x90 => self.note_on(channel, data1, data2), // Note On
@@ -73,7 +76,7 @@ impl MidiReceiver for SimpleSynth {
 impl SimpleSynth {
     pub fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
         log::info("SimpleSynth", "note ON");
-        self.amplitude = SimpleSynth::amplitudeFrom( velocity );
+        self.amplitude = 0.999*SimpleSynth::amplitudeFrom( velocity );
         self.frequency = SimpleSynth::frequencyFrom( key );
     }
     pub fn note_off(&mut self, channel: i32, key: i32) {
@@ -87,11 +90,7 @@ impl SimpleSynth {
     }
     fn amplitudeFrom( velocity: i32 ) -> f32 {
         let norm = (velocity as f32) / 127_f32;
-        if norm <= 0. {
-            0.
-        }else{
-            norm.log(VELO_PAR) + 1.
-        }
+        (VELO_PAR).powf( norm - 1. ) * norm
     }
 }
 //
@@ -99,6 +98,32 @@ impl SimpleSynth {
 //
 //
 #[cfg(test)]
-mod test {
+mod test_velocity {
+    #[test]
+    fn velocity_127() {
+        let velocity = 127;
+        let ampl = super::SimpleSynth::amplitudeFrom( velocity );
+        println!("velocity: {velocity} -> {ampl}");
+        assert!(ampl == 1.);
+    }
+    #[test]
+    fn velocity_0() {
+        let velocity = 0;
+        let ampl = super::SimpleSynth::amplitudeFrom( velocity );
+        println!("velocity: {velocity} -> {ampl}");
+        assert!(ampl == 0.);
+    }
+    #[test]
+    fn velocity_64() {
+        let velocity = 64;
+        let ampl = super::SimpleSynth::amplitudeFrom( velocity );
+        println!("velocity: {velocity} -> {ampl}");
+    }
+    #[test]
+    fn velocity_1() {
+        let velocity = 1;
+        let ampl = super::SimpleSynth::amplitudeFrom( velocity );
+        println!("velocity: {velocity} -> {ampl}");
+    }
 }
 
