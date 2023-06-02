@@ -4,7 +4,7 @@ use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
 
 use tinyaudio::prelude::*;
-use rustysynth::SoundFont;
+//use rustysynth::SoundFont;
 //  //  //  //  //  //  //
 mod proxy_render;
 use proxy_render::*;
@@ -52,12 +52,12 @@ impl MidiSender for AudioDevice {
     fn invoke_reset(&mut self) {
         log::info("AudioDevice", "midi.RESET");
         let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
-        match &proxy_lock.render_wrapper {
+        match &proxy_lock.sound_render_lock {
             None => {
                 let simsyn = SimpleSynth::new( self.sample_rate );
                 proxy_lock.sound_render = Some(Arc::new(Mutex::new( simsyn )));
             },
-            Some(_rsound_render) => {
+            Some(_sound_render) => {
                 proxy_lock.sound_render = None;
             }
         }
