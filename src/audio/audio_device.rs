@@ -67,7 +67,8 @@ impl MidiSender for AudioDevice {
             None => {
             },
             Some(render_wrapper) => {
-                render_wrapper.process_midi_command( channel, command, data1, data2 );
+                let mut render_wrapper_lock = render_wrapper.lock().expect("panic on locking render_wrapper");
+                render_wrapper_lock.process_midi_command( channel, command, data1, data2 );
           }
         }
     }
