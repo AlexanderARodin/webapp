@@ -5,11 +5,7 @@ mod main_app;
 use main_app::{MainApp};
 
 mod domik_view;
-
 mod audio;
-//mod proxy_render;
-//mod simple_synth;
-//mod midi_sequencer;
 
 mod raadbg;
 use raadbg::log;
