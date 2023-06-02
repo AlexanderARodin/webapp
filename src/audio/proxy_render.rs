@@ -13,15 +13,14 @@ impl Drop for ProxyRender{
 }
 impl Default for ProxyRender {
     fn default() -> Self {
-        Self::new(SynthRender::NoRender)
-        //Self::new( SynthRender::CustomSynth(Arc::new(Mutex::new( SimpleSynth::default() ))) )
+        Self::new(None)
     }
 }
 impl ProxyRender {
-    fn new( a_render: SynthRender ) -> Self {
+    fn new( render: Option< Arc<Mutex<dyn CustSynthRender>> ) -> Self {
         log::create("ProxyRender");
         Self{ 
-            rrrender: None
+            rrrender: render
         }
     }
 
