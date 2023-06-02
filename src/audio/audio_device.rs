@@ -46,7 +46,7 @@ impl AudioDevice {
 
 //
 
-impl MidiController for AudioDevice {
+impl MidiSender for AudioDevice {
     fn reset(&mut self) {
         log::info("AudioDevice", "midi.RESET");
         let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
@@ -60,8 +60,8 @@ impl MidiController for AudioDevice {
             }
         }
     }
-    fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
-        log::info("AudioDevice", "midi.NoteOn");
+    fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
+        log::info("AudioDevice", "midi.invoke_midi_command");
         let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
         match &proxy_lock.render_wrapper {
             None => {
@@ -71,9 +71,6 @@ impl MidiController for AudioDevice {
                 proxy_lock.render_wrapper = Some(Arc::new(Mutex::new( simsyn )));
           }
         }
-    }
-    fn note_off(&mut self, channel: i32, key: i32) {
-        log::info("AudioDevice", "midi.NoteOff");
     }
 }
 
