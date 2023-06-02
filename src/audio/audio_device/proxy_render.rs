@@ -4,7 +4,7 @@ use std::sync::{Arc,Mutex};
 
 
 pub struct ProxyRender {
-    pub(crate) render_wrapper: Option< Arc<Mutex<dyn super::SoundRender>> >,
+    pub(crate) sound_render: Option< Arc<Mutex<dyn super::SoundRender>> >,
 }
 //impl Drop for ProxyRender{
 //    fn drop(&mut self) {
@@ -15,11 +15,11 @@ impl ProxyRender {
     pub fn new() -> Arc<Mutex<Self>> {
 //        log::create("ProxyRender");
         Arc::new(Mutex::new(Self{ 
-            render_wrapper: None
+            sound_render: None
         }))
     }
     pub fn render(&mut self, data: &mut [f32]) {
-        match &self.render_wrapper {
+        match &self.sound_render {
             None => {
                 for sample in data {
                     *sample = 0_f32;
