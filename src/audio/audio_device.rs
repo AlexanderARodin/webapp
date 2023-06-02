@@ -41,7 +41,7 @@ impl AudioDevice {
             sample_rate: sample_rate,
             channel_sample_count: channel_sample_count,
             device: None,
-            proxy_render: ProxyRender::new(),
+            proxy_render: ProxyRender::new_arc_mutex(),
         }
     }
 }
