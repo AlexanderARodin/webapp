@@ -21,7 +21,6 @@ impl ProxyRender {
     fn new( a_render: SynthRender ) -> Self {
         log::create("ProxyRender");
         Self{ 
-            render: a_render,
             rrrender: None
         }
     }
