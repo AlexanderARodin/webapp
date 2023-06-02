@@ -47,7 +47,7 @@ impl AudioDevice {
 //
 
 impl MidiSender for AudioDevice {
-    fn reset(&mut self) {
+    fn invoke_reset(&mut self) {
         log::info("AudioDevice", "midi.RESET");
         let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
         match &proxy_lock.render_wrapper {
