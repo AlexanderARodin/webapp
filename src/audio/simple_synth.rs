@@ -4,7 +4,7 @@ use crate::audio::proxy_render::*;
 use crate::audio::midi_rx_tx::*;
 
 const PI2: f32 = 2. * std::f32::consts::PI;
-const VELO_PAR: f32 = 2.;
+const VELO_PAR: f32 = 10.;
 //  //  //  //  //  //  //
 
 pub struct SimpleSynth{
