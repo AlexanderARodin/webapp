@@ -26,7 +26,7 @@ impl ProxyRender {
                 }
             },
             Some(sound_render) => {
-                let mut sound_render_lock = render_wrapper.lock().expect("FATAL: can't lock SoundRender!");
+                let mut sound_render_lock = sound_render.lock().expect("FATAL: can't lock SoundRender!");
                 sound_render_lock.render(data);
             }
         }
