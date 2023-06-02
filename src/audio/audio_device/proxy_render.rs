@@ -20,7 +20,7 @@ impl Default for ProxyRender {
     }
 }
 impl ProxyRender {
-    fn new( render_wrapper: Option< Arc<Mutex<dyn SoundRender>> > ) -> Self {
+    fn new( render_wrapper: Option< Arc<Mutex<dyn super::SoundRender>> > ) -> Self {
         log::create("ProxyRender");
         Self{ 
             render_wrapper: render_wrapper
