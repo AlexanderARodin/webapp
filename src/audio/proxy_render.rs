@@ -6,7 +6,7 @@ use crate::audio::simple_synth::*;
 
 
 pub struct ProxyRender {
-    pub render: Option< Arc<Mutex<dyn RenderWrapper>> >,
+    pub render_wrapper: Option< Arc<Mutex<dyn RenderWrapper>> >,
 }
 impl Drop for ProxyRender{
     fn drop(&mut self) {
@@ -19,23 +19,23 @@ impl Default for ProxyRender {
     }
 }
 impl ProxyRender {
-    fn new( render: Option< Arc<Mutex<dyn RenderWrapper>> > ) -> Self {
+    fn new( render_wrapper: Option< Arc<Mutex<dyn RenderWrapper>> > ) -> Self {
         log::create("ProxyRender");
         Self{ 
-            render: render
+            render_wrapper: render_wrapper
         }
     }
 
     pub fn render(&mut self, data: &mut [f32]) {
-        match &self.render {
+        match &self.render_wrapper {
             None => {
                 for sample in data {
                     *sample = 0_f32;
                 }
             },
-            Some(cust_render) => {
-                let mut cust_render_lock = cust_render.lock().expect("can't lock RenderWrapper");
-                cust_render_lock.render(data);
+            Some(render_wrapper) => {
+                let mut render_wrapper_lock = render_wrapper.lock().expect("can't lock RenderWrapper");
+                render_wrapper_lock.render(data);
             }
         }
     }
