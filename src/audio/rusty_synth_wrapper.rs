@@ -1,16 +1,14 @@
 use std::sync::Arc;
-
 use rustysynth::*;
 //  //  //  //  //  //  //
 
 use crate::raadbg::log;
-
 use super::audio_device::SoundRender;
 use super::midi_rx_tx::MidiReceiver;
 //  //  //  //  //  //  //
 
+
 pub struct RustySynthWrapper{
-    //parameters: SynthesizerSettings,
     left_buf:  Vec<f32>,
     right_buf: Vec<f32>,
     synth: Synthesizer,
@@ -27,11 +25,12 @@ impl RustySynthWrapper {
         let init_params = SynthesizerSettings::new( sample_rate );
         let mut file = super::SF_PIANO.clone();
         let snd_fnt = Arc::new( SoundFont::new(&mut file).unwrap() );
+        let new_synth = Synthesizer::new(&snd_fnt, &init_params).unwrap();
         Self{
             //parameters: init_params.clone(),
             left_buf:  vec![ 0_f32; channel_sample_count],
             right_buf: vec![ 0_f32; channel_sample_count],
-            synth: Synthesizer::new(&snd_fnt, &init_params).unwrap()
+            synth: new_synth
         }
     }
 }
