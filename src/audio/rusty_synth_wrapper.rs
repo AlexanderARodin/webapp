@@ -64,7 +64,7 @@ impl RustySynthWrapper {
 //
 impl SoundRender for RustySynthWrapper {
     fn render(&mut self, data: &mut [f32]) {
-        //log::tick();
+        log::tick();
         self.synth.render(&mut self.left_buf[..], &mut self.right_buf[..]);
         for (i, l_value) in self.left_buf.iter().enumerate() {
             data[i*2] = *l_value;
