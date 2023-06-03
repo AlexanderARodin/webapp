@@ -2,7 +2,7 @@
 
 mod log_view;
 mod main_app;
-use main_app::{MainApp};
+use main_app::MainApp;
 
 mod domik_view;
 mod audio;

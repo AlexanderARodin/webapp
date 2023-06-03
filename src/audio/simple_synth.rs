@@ -74,7 +74,7 @@ impl SimpleSynth {
         self.amplitude = 0.999*SimpleSynth::amplitudeFrom( velocity );
         self.frequency = SimpleSynth::frequencyFrom( key );
     }
-    pub fn note_off(&mut self, _channel: i32, key: i32) {
+    pub fn note_off(&mut self, _channel: i32, _key: i32) {
         log::info("SimpleSynth", "note OFF");
         self.amplitude = 0_f32;
         self.counter = 0_f32;
