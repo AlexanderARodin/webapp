@@ -54,7 +54,7 @@ impl SoundRender for RustySynthWrapper {
         self.synth.render(&mut self.left_buf[..], &mut self.right_buf[..]);
         for (i, l_value) in self.left_buf.iter() {
             data[i*2] = *l_value;
-            data[i*2+1] = right_buf[i];
+            data[i*2+1] = self.right_buf[i];
         }
     }
 }
