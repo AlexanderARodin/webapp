@@ -20,10 +20,13 @@ impl Drop for RustySynthWrapper {
     }
 }
 impl RustySynthWrapper {
-    pub fn new( sample_rate: i32, channel_sample_count: usize ) -> Result<Self, SynthesizerError> {
+    pub fn new( sample_rate: i32, channel_sample_count: usize, font_type: bool ) -> Result<Self, SynthesizerError> {
         log::create("RustySynthWrapper");
         let init_params = SynthesizerSettings::new( sample_rate );
-        let mut file = super::SF_PIANO.clone();
+        let mut file = match font_type {
+            true => super::SF_PIANO.clone(),
+            false => super::SF_STRINGS.clone()
+        }
         let snd_fnt = Arc::new( SoundFont::new(&mut file).unwrap() );
         let new_synth = Synthesizer::new(&snd_fnt, &init_params);
         match new_synth {
