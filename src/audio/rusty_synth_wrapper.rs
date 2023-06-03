@@ -20,17 +20,37 @@ impl Drop for RustySynthWrapper {
     }
 }
 impl RustySynthWrapper {
-    pub fn new( sample_rate: i32, channel_sample_count: usize ) -> Self {
+    pub fn new( sample_rate: i32, channel_sample_count: usize ) -> Rsult<Self, SynthesizerError> {
         log::create("RustySynthWrapper");
         let init_params = SynthesizerSettings::new( sample_rate );
         let mut file = super::SF_PIANO.clone();
         let snd_fnt = Arc::new( SoundFont::new(&mut file).unwrap() );
         let new_synth = Synthesizer::new(&snd_fnt, &init_params).unwrap();
-        Self{
-            //parameters: init_params.clone(),
-            left_buf:  vec![ 0_f32; channel_sample_count],
-            right_buf: vec![ 0_f32; channel_sample_count],
-            synth: new_synth
+        match new_synth {
+            Err(e) => {
+                let errmsg: String;
+                match e {
+                    SynthesizerError::SampleRateOutOfRange(sample_rate) => {
+                        errmsg = format!("SynthesizerError.SampleRateOutOfRange: {}", sample_rate);
+                    },
+                    SynthesizerError::BlockSizeOutOfRange(size) => {
+                        errmsg = format!("SynthesizerError.BlockSizeOutOfRange: {}", size);
+                    },
+                    SynthesizerError::MaximumPolyphonyOutOfRange(size) => {
+                        errmsg = format!("SynthesizerError.MaximumPolyphonyOutOfRange: {}", size);
+                    },
+                    _ => {
+                        errmsg = format!("SynthesizerError.<unknown>");
+                    },
+                }
+                log::error("MIDISequencer", &errmsg);
+                Err(e)
+                },
+            Ok(loaded_synth) => Self{
+                left_buf:  vec![ 0_f32; channel_sample_count],
+                right_buf: vec![ 0_f32; channel_sample_count],
+                synth: loaded_synth
+            }
         }
     }
 }
@@ -60,7 +80,7 @@ impl MidiReceiver for RustySynthWrapper {
                             channel: i32, command: i32, 
                             data1: i32, data2: i32) 
     {
-        log::info("SimpleSynth", "process_midi_command");
+        //log::info("SimpleSynth", "process_midi_command");
         self.synth.process_midi_message(channel, command, 
                             data1, data2)
     }
