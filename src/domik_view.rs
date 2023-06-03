@@ -49,7 +49,7 @@ impl DomikView {
                     }
                     let btnA1 = ui.button( "note ON2" );
                     if btnA1.clicked(){
-                        audio_device.invoke_note_on(1,60,64);
+                        audio_device.invoke_note_on(1,72,64);
                     }
                     let btnA2 = ui.button( "note ON2" );
                     if btnA2.clicked(){
