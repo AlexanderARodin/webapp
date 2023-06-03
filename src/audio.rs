@@ -2,7 +2,7 @@
 pub mod audio_device;
 pub mod simple_synth;
 pub mod midi_rx_tx;
-    mod rusty_synth_wrapper;
+pub mod rusty_synth_wrapper;
 
 
 static SF_PIANO:   &'static [u8] = include_bytes!("../SoundFonts/Piano Grand.SF2");
