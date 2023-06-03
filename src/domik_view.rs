@@ -28,39 +28,19 @@ impl DomikView {
                     audio_device: &mut AudioDevice ) {
             ui.label( format!("WWWapp Template {}", VERS) );
             ui.separator();
+            ui.label( format!("audio device status: [active = {}]", audio_device.is_started());
             ui.horizontal( |ui| {
-                    let btn = ui.button(
-                        format!("START! [status = {}]", 
-                        audio_device.is_started()) 
-                        );
+                    let btn = ui.button("start");
                     if btn.clicked(){
                         let _res = audio_device.start();
                     }
-                    let btnStop = ui.button( "STOP" );
+                    let btnStop = ui.button( "stop" );
                     if btnStop.clicked(){
                         audio_device.stop();
                     }
                 });
             ui.separator();
-            ui.horizontal( |ui| {
-                    let btnA = ui.button( "note ON" );
-                    if btnA.clicked(){
-                        audio_device.invoke_note_on(1,60,127);
-                    }
-                    let btnA1 = ui.button( "note ON2" );
-                    if btnA1.clicked(){
-                        audio_device.invoke_note_on(1,72,64);
-                    }
-                    let btnA2 = ui.button( "note ON2" );
-                    if btnA2.clicked(){
-                        audio_device.invoke_note_on(1,72,1);
-                    }
-                    let btnB = ui.button( "note OFF" );
-                    if btnB.clicked(){
-                        audio_device.invoke_note_off(1,60);
-                    }
-                });
-            ui.separator();
+            ui.label("select synthesizer:");
             ui.horizontal( |ui| {
                     let btnN = ui.button( "None" );
                     if btnN.clicked(){
@@ -82,6 +62,27 @@ impl DomikView {
                     let btnRB = ui.button( "RustySynt - B" );
                     if btnRB.clicked(){
                         audio_device.set_soundrender(None);
+                    }
+                });
+            ui.separator();
+            ui.separator();
+            ui.label("playing notes:");
+            ui.horizontal( |ui| {
+                    let btnA = ui.button( "note ON" );
+                    if btnA.clicked(){
+                        audio_device.invoke_note_on(1,60,127);
+                    }
+                    let btnA1 = ui.button( "note ON2" );
+                    if btnA1.clicked(){
+                        audio_device.invoke_note_on(1,72,64);
+                    }
+                    let btnA2 = ui.button( "note ON2" );
+                    if btnA2.clicked(){
+                        audio_device.invoke_note_on(1,72,1);
+                    }
+                    let btnB = ui.button( "note OFF" );
+                    if btnB.clicked(){
+                        audio_device.invoke_note_off(1,60);
                     }
                 });
     }
