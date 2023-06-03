@@ -24,14 +24,14 @@ impl Drop for RustySynthWrapper {
 impl RustySynthWrapper {
     pub fn new( sample_rate: i32, channel_sample_count: usize ) -> Self {
         log::create("RustySynthWrapper");
-        let mut init_params = SynthesizerSettings::new( sample_rate );
+        let init_params = SynthesizerSettings::new( sample_rate );
         let mut file = super::SF_PIANO.clone();
         let snd_fnt = Arc::new( SoundFont::new(&mut file).unwrap() );
         Self{
             parameters: init_params,
             left_buf:  vec![ 0_f32; channel_sample_count],
             right_buf: vec![ 0_f32; channel_sample_count],
-            synth: Synthesizer::new(&snd_fnt, init_params).unwrap()
+            synth: Synthesizer::new(&snd_fnt, &init_params).unwrap()
         }
     }
 
