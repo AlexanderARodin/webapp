@@ -3,8 +3,12 @@ const VERS: &str = "v8.01";
 use std::sync::{Mutex,Arc};
 
 use crate::audio::audio_device::{AudioDevice, SoundRender};
-use crate::audio::simple_synth::{SimpleSynth};
 use crate::audio::midi_rx_tx::MidiSender;
+
+use crate::audio::simple_synth::{SimpleSynth};
+use crate::audio::rusty_synth_wrapper::{RustySynthWrapper};
+
+
 
 pub struct DomikView {
     pub title: String,
@@ -71,7 +75,9 @@ impl DomikView {
                     }
                     let btnRA = ui.button( "RustySynt - A" );
                     if btnRA.clicked(){
-                        audio_device.set_soundrender(None);
+                        let ryssyn = RustySynthWrapper::new( settings.sample_rate, 441*2 );
+                        let ryssyn_wrapper = Arc::new(Mutex::new( ryssyn ));
+                        audio_device.set_soundrender( Some(ryssyn_wrapper) );
                     }
                     let btnRB = ui.button( "RustySynt - B" );
                     if btnRB.clicked(){
