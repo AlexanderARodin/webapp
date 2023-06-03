@@ -51,7 +51,7 @@ impl RustySynthWrapper {
 impl SoundRender for RustySynthWrapper {
     fn render(&mut self, data: &mut [f32]) {
         log::tick();
-        synth.render(&mut self.left_buf[..], &mut self.right_buf[..]);
+        self.synth.render(&mut self.left_buf[..], &mut self.right_buf[..]);
     }
 }
 
