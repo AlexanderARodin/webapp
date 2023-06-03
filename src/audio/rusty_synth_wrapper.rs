@@ -9,6 +9,8 @@ use super::midi_rx_tx::MidiReceiver;
 
 pub struct RustySynthWrapper{
     parameters: SynthesizerSettings,
+    left_buf:  Vec<f32>,
+    right_buf: Vec<f32>,
     synth: Synthesizer,
 }
 impl Drop for RustySynthWrapper {
@@ -18,36 +20,35 @@ impl Drop for RustySynthWrapper {
     }
 }
 impl RustySynthWrapper {
-    pub fn new( sample_rate: usize ) -> Self {
+    pub fn new( sample_rate: usize, channel_sample_count: usize ) -> Self {
         log::create("RustySynthWrapper");
         let mut init_params = SynthesizerSettings::new( sample_rate );
+        let mut file = super::SF_PIANO.clone();
+        let snd_fnt = Arc::new( SoundFont::new(&mut file).unwrap() );
         Self{
             parameters: init_params,
-            synth: None
+            left_buf:  = vec![ 0_f32; channel_sample_count],
+            right_buf: vec![ 0_f32; channel_sample_count],
+            synth: Synthesizer::new(snd_fnt, &init_params)
         }
     }
-    pub fn new( sample_rate: i32 ) -> Self{
-        log::create("MIDISequencer");
-        MIDISequencer{ 
-            parameters: init_params,
-            synth: None
-        }
-    }
+
+
+//    pub fn tst_AB(&mut self) {
+//        let mut midi = crate::audio::midi_sequencer::MIDISequencer::default();
+//        let mut fl = super::SF_PIANO.clone();
+//        let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
+//        let _res = midi.load( &sf ).unwrap();
+//            midi.tst();
+//        //self.render = Arc::new(Mutex::new(midi));
+//    }
 }
 
 //
 //
 impl SoundRender for RustySynthWrapper {
     fn render(&mut self, data: &mut [f32]) {
-        //log::tick();
-        let mult = self.frequency * PI2 / self.sample_rate;
-        for samples in data.chunks_mut(2) {
-            let ampl = self.amplitude*(self.counter * mult ).sin();
-            for sample in samples {
-                *sample = ampl;
-            }
-            self.counter += 1.;
-        }
+        log::tick();
     }
 }
 
