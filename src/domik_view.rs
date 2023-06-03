@@ -28,7 +28,7 @@ impl DomikView {
                     audio_device: &mut AudioDevice ) {
             ui.label( format!("WWWapp Template {}", VERS) );
             ui.separator();
-            ui.label( format!("audio device status: [active = {}]", audio_device.is_started());
+            ui.label( format!("audio device status: [active = {}]", audio_device.is_started() ) );
             ui.horizontal( |ui| {
                     let btn = ui.button("start");
                     if btn.clicked(){
