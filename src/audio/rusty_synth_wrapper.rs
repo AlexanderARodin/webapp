@@ -26,7 +26,7 @@ impl RustySynthWrapper {
         let mut file = match font_type {
             true => super::SF_PIANO.clone(),
             false => super::SF_STRINGS.clone()
-        }
+        };
         let snd_fnt = Arc::new( SoundFont::new(&mut file).unwrap() );
         let new_synth = Synthesizer::new(&snd_fnt, &init_params);
         match new_synth {
