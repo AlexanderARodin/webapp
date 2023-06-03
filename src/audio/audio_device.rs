@@ -64,7 +64,7 @@ impl MidiSender for AudioDevice {
     }
     fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
         //log::info("AudioDevice", "midi.invoke_midi_command");
-        let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
+        let proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
         match &proxy_lock.sound_render {
             None => {
             },
