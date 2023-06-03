@@ -20,12 +20,12 @@ impl Drop for RustySynthWrapper {
     }
 }
 impl RustySynthWrapper {
-    pub fn new( sample_rate: i32, channel_sample_count: usize ) -> Rsult<Self, SynthesizerError> {
+    pub fn new( sample_rate: i32, channel_sample_count: usize ) -> Result<Self, SynthesizerError> {
         log::create("RustySynthWrapper");
         let init_params = SynthesizerSettings::new( sample_rate );
         let mut file = super::SF_PIANO.clone();
         let snd_fnt = Arc::new( SoundFont::new(&mut file).unwrap() );
-        let new_synth = Synthesizer::new(&snd_fnt, &init_params).unwrap();
+        let new_synth = Synthesizer::new(&snd_fnt, &init_params);
         match new_synth {
             Err(e) => {
                 let errmsg: String;
@@ -46,11 +46,13 @@ impl RustySynthWrapper {
                 log::error("MIDISequencer", &errmsg);
                 Err(e)
                 },
-            Ok(loaded_synth) => Self{
-                left_buf:  vec![ 0_f32; channel_sample_count],
-                right_buf: vec![ 0_f32; channel_sample_count],
-                synth: loaded_synth
-            }
+            Ok(loaded_synth) => Ok(
+                    Self{
+                        left_buf:  vec![ 0_f32; channel_sample_count],
+                        right_buf: vec![ 0_f32; channel_sample_count],
+                        synth: loaded_synth
+                    }
+            )
         }
     }
 }
@@ -94,42 +96,6 @@ impl MidiReceiver for RustySynthWrapper {
 
 
 /*
-
-//
-impl MIDISequencer {
-
-    pub fn load(&mut self, sound_font: &Arc<SoundFont>) -> Result< (), SynthesizerError > {
-            log::info("MIDISequencer", "start ");
-            let new_synth = Synthesizer::new( sound_font, &self.parameters );
-            match new_synth {
-                Err(e) => {
-                    let errmsg: String;
-                    match e {
-                        SynthesizerError::SampleRateOutOfRange(sample_rate) => {
-                            errmsg = format!("SynthesizerError.SampleRateOutOfRange: {}", sample_rate);
-                        },
-                        SynthesizerError::BlockSizeOutOfRange(size) => {
-                            errmsg = format!("SynthesizerError.BlockSizeOutOfRange: {}", size);
-                        },
-                        SynthesizerError::MaximumPolyphonyOutOfRange(size) => {
-                            errmsg = format!("SynthesizerError.MaximumPolyphonyOutOfRange: {}", size);
-                        },
-                        _ => {
-                            errmsg = format!("SynthesizerError.<unknown>");
-                        },
-                    }
-                    log::error("MIDISequencer", &errmsg);
-                    return Err(e);
-                },
-                Ok(loaded_synth) => self.synth = Some( Box::new(loaded_synth) ),
-            }
-            Ok(())
-    }
-
-}
-
-
-
 
 //
 

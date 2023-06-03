@@ -55,9 +55,10 @@ impl DomikView {
                     }
                     let btnRA = ui.button( "RustySynt - A" );
                     if btnRA.clicked(){
-                        let ryssyn = RustySynthWrapper::new( settings.sample_rate as i32, 441*2 );
-                        let ryssyn_wrapper = Arc::new(Mutex::new( ryssyn ));
-                        audio_device.set_soundrender( Some(ryssyn_wrapper) );
+                        if let Ok(ryssyn) = RustySynthWrapper::new( settings.sample_rate as i32, 441*2 ) {
+                            let ryssyn_wrapper = Arc::new(Mutex::new( ryssyn ));
+                            audio_device.set_soundrender( Some(ryssyn_wrapper) );
+                        }
                     }
                     let btnRB = ui.button( "RustySynt - B" );
                     if btnRB.clicked(){
