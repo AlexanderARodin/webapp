@@ -20,7 +20,7 @@ impl Drop for RustySynthWrapper {
     }
 }
 impl RustySynthWrapper {
-    pub fn new( sample_rate: usize, channel_sample_count: usize ) -> Self {
+    pub fn new( sample_rate: i32, channel_sample_count: usize ) -> Self {
         log::create("RustySynthWrapper");
         let mut init_params = SynthesizerSettings::new( sample_rate );
         let mut file = super::SF_PIANO.clone();
@@ -64,7 +64,7 @@ impl MidiReceiver for RustySynthWrapper {
                             channel: i32, command: i32, 
                             data1: i32, data2: i32) 
     {
-        self.synth.process_midi_command(channel, command, 
+        self.synth.process_midi_message(channel, command, 
                             data1, data2)
     }
 }
