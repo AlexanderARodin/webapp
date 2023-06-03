@@ -34,16 +34,6 @@ impl RustySynthWrapper {
             synth: Synthesizer::new(&snd_fnt, &init_params).unwrap()
         }
     }
-
-
-//    pub fn tst_AB(&mut self) {
-//        let mut midi = crate::audio::midi_sequencer::MIDISequencer::default();
-//        let mut fl = super::SF_PIANO.clone();
-//        let sf = Arc::new( SoundFont::new(&mut fl).unwrap() );
-//        let _res = midi.load( &sf ).unwrap();
-//            midi.tst();
-//        //self.render = Arc::new(Mutex::new(midi));
-//    }
 }
 
 //
@@ -86,31 +76,8 @@ impl MidiReceiver for RustySynthWrapper {
 
 /*
 
-// rustysynth wrapper
-pub struct MIDISequencer{
-    parameters: SynthesizerSettings,
-    synth: Option< Box<Synthesizer> >,
-}
-
 //
 impl MIDISequencer {
-    pub fn new( sample_rate: i32 ) -> Self{
-        let mut init_params = SynthesizerSettings::new( sample_rate );
-        log::create("MIDISequencer");
-        MIDISequencer{ 
-            parameters: init_params,
-            synth: None
-        }
-    }
-}
-
-//
-impl MIDISequencer {
-    pub fn tst(&mut self) {
-        if self.synth.is_some() {
-            self.synth.as_mut().unwrap().note_on(0,60,100);
-        }
-    }
 
     pub fn load(&mut self, sound_font: &Arc<SoundFont>) -> Result< (), SynthesizerError > {
             log::info("MIDISequencer", "start ");
@@ -143,22 +110,6 @@ impl MIDISequencer {
 }
 
 
-impl AudioRender for MIDISequencer {
-    fn render(&mut self, data: &mut [f32], 
-              left_buf: &mut [f32], right_buf: &mut [f32] ) {
-
-        log::tick();
-
-        if self.synth.is_some() {
-            self.synth.as_mut().unwrap().render(&mut left_buf[..], &mut right_buf[..]);
-        }
-
-        for (i, lvalue) in left_buf.iter().enumerate() {
-            data[i * 2] = *lvalue;
-            data[i * 2 + 1] = right_buf[i];
-        }
-    }
-}
 
 
 //
