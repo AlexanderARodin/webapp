@@ -27,7 +27,7 @@ impl RustySynthWrapper {
         let snd_fnt = Arc::new( SoundFont::new(&mut file).unwrap() );
         Self{
             parameters: init_params,
-            left_buf:  = vec![ 0_f32; channel_sample_count],
+            left_buf:  vec![ 0_f32; channel_sample_count],
             right_buf: vec![ 0_f32; channel_sample_count],
             synth: Synthesizer::new(snd_fnt, &init_params).unwrap()
         }
