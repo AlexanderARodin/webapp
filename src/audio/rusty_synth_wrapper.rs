@@ -51,6 +51,7 @@ impl RustySynthWrapper {
 impl SoundRender for RustySynthWrapper {
     fn render(&mut self, data: &mut [f32]) {
         log::tick();
+        synth.render(&mut self.left_buf[..], &mut self.right_buf[..]);
     }
 }
 
@@ -66,6 +67,7 @@ impl MidiReceiver for RustySynthWrapper {
                             channel: i32, command: i32, 
                             data1: i32, data2: i32) 
     {
+        log::info("SimpleSynth", "process_midi_command");
         self.synth.process_midi_message(channel, command, 
                             data1, data2)
     }
