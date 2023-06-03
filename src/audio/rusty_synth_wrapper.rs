@@ -58,41 +58,17 @@ impl SoundRender for RustySynthWrapper {
 impl MidiReceiver for RustySynthWrapper {
     fn reset(&mut self) {
         log::info("SimpleSynth", "reset");
+        self.synth.reset();
     }
     fn process_midi_command(&mut self, 
                             channel: i32, command: i32, 
                             data1: i32, data2: i32) 
     {
-        match command {
-            0x80 => self.note_off(channel, data1),       // Note Off
-            0x90 => self.note_on(channel, data1, data2), // Note On
-            _ => log::info("SimpleSynth", "W: unknown midi command")
-        }
+        self.synth.process_midi_command(channel, command, 
+                            data1, data2)
     }
 }
 
-//
-//
-impl RustySynthWrapper {
-    pub fn note_on(&mut self, channel: i32, key: i32, velocity: i32) {
-        log::info("SimpleSynth", "note ON");
-        self.amplitude = 0.999*SimpleSynth::amplitudeFrom( velocity );
-        self.frequency = SimpleSynth::frequencyFrom( key );
-    }
-    pub fn note_off(&mut self, channel: i32, key: i32) {
-        log::info("SimpleSynth", "note OFF");
-        self.amplitude = 0_f32;
-        self.counter = 0_f32;
-    }
-    
-    fn frequencyFrom( key: i32 ) -> f32 {
-        440. * 2_f32.powf( ((key as f32) - 69.)/12. )
-    }
-    fn amplitudeFrom( velocity: i32 ) -> f32 {
-        let norm = (velocity as f32) / 127_f32;
-        (VELO_PAR).powf( norm - 1. ) * norm
-    }
-}
 //
 //
 //
