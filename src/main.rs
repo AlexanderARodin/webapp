@@ -26,6 +26,7 @@ fn main() -> Result<(), eframe::Error> {
     let _device = run_output_device(params, {
         let mut clock = 0f32;
         move |data| {
+            log::tick();
             for samples in data.chunks_mut(params.channels_count) {
                 clock = (clock + 1.0) % params.sample_rate as f32;
                 let value =
@@ -66,6 +67,7 @@ fn main() {
     let _device = run_output_device(params, {
         let mut clock = 0f32;
         move |data| {
+            log::tick();
             for samples in data.chunks_mut(params.channels_count) {
                 clock = (clock + 1.0) % params.sample_rate as f32;
                 let value =
