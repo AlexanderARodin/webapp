@@ -22,8 +22,8 @@ pub mod log {
     
     pub fn tick(){
         let mut log = super::INTER_LOG.lock().unwrap();
-        *log += ".";
-        print!(".");
+        *log += "|";
+        print!("|");
     }
     
     pub fn get() -> String {
