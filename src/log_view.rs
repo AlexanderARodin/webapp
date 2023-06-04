@@ -21,7 +21,7 @@ impl LogView {
             ui.ctx().request_repaint();
             let time = ui.input(|i| i.time);
             let d_time = time - self.last_time;
-            println!("time: {}", d_time);
+            //println!("time: {}", d_time);
             self.last_time = time;
     }
 }
