@@ -34,12 +34,12 @@ fn main() -> Result<(), eframe::Error> {
 #[ cfg(target_arch = "wasm32") ]
 fn main() {
     log::simple("wasmMAIN has beed entered..");
-    ttt();
 
     console_error_panic_hook::set_once();
     tracing_wasm::set_as_global_default();
 
     let options = eframe::WebOptions::default();
+    ttt();
 
     wasm_bindgen_futures::spawn_local(async {
         eframe::start_web(
