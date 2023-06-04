@@ -1,4 +1,4 @@
-const VERS: &str = "v0.10.0";
+const VERS: &str = "v0.10.01";
 
 use std::sync::{Mutex,Arc};
 
