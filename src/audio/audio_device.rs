@@ -22,11 +22,11 @@ pub struct AudioDevice{
     proxy_render: Arc<Mutex<ProxyRender>>,
 }
 
-impl Default for AudioDevice {
-    fn default() -> Self {
-        Self::new( 44100, 441*2 )
-    }
-}
+//impl Default for AudioDevice {
+//    fn default() -> Self {
+//        Self::new( 44100, 441*2 )
+//    }
+//}
 impl Drop for AudioDevice {
     fn drop(&mut self) {
         self.invoke_reset();
