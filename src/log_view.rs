@@ -16,6 +16,7 @@ impl LogView {
 
     pub fn updateUI(&mut self, ui: &mut egui::Ui ) {
             ui.label( log::get() );
+            ui.ctx().request_repaint();
     }
 }
 
