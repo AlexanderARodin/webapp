@@ -15,7 +15,7 @@ use tinyaudio::prelude::*;
 
 #[ cfg(not(target_arch = "wasm32")) ]
 fn main() -> Result<(), eframe::Error> {
-    log::simple("MAIN has beed entered..");
+    log::simple("MAIN has beed entered ->");
     
     let params = OutputDeviceParameters {
         channels_count: 2,
@@ -56,7 +56,7 @@ fn main() -> Result<(), eframe::Error> {
 
 #[ cfg(target_arch = "wasm32") ]
 fn main() {
-    log::simple("wasmMAIN has beed entered..");
+    log::simple("wasmMAIN has beed entered ->");
     
     let params = OutputDeviceParameters {
         channels_count: 2,
