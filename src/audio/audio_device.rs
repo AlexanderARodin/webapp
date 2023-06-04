@@ -84,7 +84,7 @@ impl AudioDevice{
             log::error("AudioDevice", "Device is still active!");
             Err("[ AudioDevice] E: device still active!".to_string().into() )
         }else{
-            log::info("AudioDevice", "start ");
+            log::info("AudioDevice", "starting");
             let proxy_render_clone = self.proxy_render.clone();
             let params = OutputDeviceParameters{ 
                     channels_count: 2,
