@@ -5,9 +5,7 @@ help:
 	@echo 'there is no help.. yet'
 
 edit:
-	@nvim ./src/audio/midi_sequencer.rs
-edit2:
-	@nvim ./src/audio/audio_device.rs
+	@nvim .
 editview:
 	@nvim ./src/domik_view.rs
 editapp:
