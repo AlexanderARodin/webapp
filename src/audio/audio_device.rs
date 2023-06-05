@@ -48,7 +48,7 @@ impl AudioDevice {
 impl MidiSender for AudioDevice {
     fn invoke_reset(&mut self) {
         log::info("AudioDevice", "midi.RESET");
-        let mut proxy_lock = self.proxy_render.lock()
+        let proxy_lock = self.proxy_render.lock()
             .expect("can't lock proxy_render");
         match &proxy_lock.sound_render {
             None => {
@@ -95,7 +95,8 @@ impl AudioDevice{
                 let proxy_render = proxy_render_clone;
                 move |data: &mut [f32]| {
                     //log::tick();
-                    let mut proxy_render_lock = proxy_render.lock().expect("panic on locking PROXY_audio_render");
+                    let mut proxy_render_lock = proxy_render.lock()
+                        .expect("panic on locking PROXY_audio_render");
                     proxy_render_lock.render( data );
                 }
             });
@@ -133,7 +134,8 @@ impl AudioDevice{
     }
 
     pub fn set_soundrender(&mut self, new_soundrender: Option<Arc<Mutex<dyn SoundRender>>>) {
-        let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
+        let mut proxy_lock = self.proxy_render.lock()
+            .expect("can't lock proxy_render");
         proxy_lock.sound_render = new_soundrender;
     }
 }

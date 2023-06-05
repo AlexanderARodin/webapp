@@ -2,7 +2,7 @@ const VERS: &str = "v0.10.01";
 
 use std::sync::{Mutex,Arc};
 
-use crate::audio::audio_device::{AudioDevice, SoundRender};
+use crate::audio::audio_device::AudioDevice;
 use crate::audio::midi_rx_tx::MidiSender;
 
 use crate::audio::simple_synth::SimpleSynth;

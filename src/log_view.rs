@@ -18,11 +18,11 @@ impl LogView {
     pub fn updateUI(&mut self, ui: &mut egui::Ui ) {
             ui.label( log::get() );
 
-            //ui.ctx().request_repaint();
-            //let time = ui.input(|i| i.time);
-            //let d_time = time - self.last_time;
+            ui.ctx().request_repaint();
+            let time = ui.input(|i| i.time);
+            let d_time = time - self.last_time;
             //println!("time: {}", d_time);
-            //self.last_time = time;
+            self.last_time = time;
     }
 }
 
