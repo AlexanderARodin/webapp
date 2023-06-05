@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use tinyaudio::prelude::*;
 use rustysynth::*;
 //  //  //  //  //  //  //
 
@@ -20,9 +21,9 @@ impl Drop for RustySynthWrapper {
     }
 }
 impl RustySynthWrapper {
-    pub fn new( sample_rate: i32, channel_sample_count: usize, font_type: bool ) -> Result<Self, SynthesizerError> {
+    pub fn new( device_parameters: &OutputDeviceParameters, font_type: bool ) -> Result<Self, SynthesizerError> {
         log::create("RustySynthWrapper");
-        let init_params = SynthesizerSettings::new( sample_rate );
+        let init_params = SynthesizerSettings::new( device_parameters.sample_rate as i32 );
         let mut file = match font_type {
             true => super::SF_PIANO.clone(),
             false => super::SF_STRINGS.clone()
@@ -51,8 +52,8 @@ impl RustySynthWrapper {
                 },
             Ok(loaded_synth) => Ok(
                     Self{
-                        left_buf:  vec![ 0_f32; channel_sample_count],
-                        right_buf: vec![ 0_f32; channel_sample_count],
+                        left_buf:  vec![ 0_f32; device_parameters.channel_sample_count],
+                        right_buf: vec![ 0_f32; device_parameters.channel_sample_count],
                         synth: loaded_synth
                     }
             )

@@ -4,13 +4,11 @@ use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
 
 use tinyaudio::prelude::*;
-//use rustysynth::SoundFont;
 //  //  //  //  //  //  //
 mod proxy_render;
 use proxy_render::*;
 
 use super::midi_rx_tx::*;
-use super::simple_synth::*;
 //  //  //  //  //  //  //
 
 
@@ -29,7 +27,6 @@ pub struct AudioDevice{
 //}
 impl Drop for AudioDevice {
     fn drop(&mut self) {
-        self.invoke_reset();
         self.stop();
         log::drop("AudioDevice");
     }
@@ -51,25 +48,28 @@ impl AudioDevice {
 impl MidiSender for AudioDevice {
     fn invoke_reset(&mut self) {
         log::info("AudioDevice", "midi.RESET");
-        let mut proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
+        let mut proxy_lock = self.proxy_render.lock()
+            .expect("can't lock proxy_render");
         match &proxy_lock.sound_render {
             None => {
-                let simsyn = SimpleSynth::new( self.sample_rate );
-                proxy_lock.sound_render = Some(Arc::new(Mutex::new( simsyn )));
             },
-            Some(_sound_render) => {
-                proxy_lock.sound_render = None;
+            Some(sound_render) => {
+                let mut sound_render_lock = sound_render.lock()
+                    .expect("panic on locking Some(sound_render)");
+                sound_render_lock.reset();
             }
         }
     }
     fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
         //log::info("AudioDevice", "midi.invoke_midi_command");
-        let proxy_lock = self.proxy_render.lock().expect("can't lock proxy_render");
+        let proxy_lock = self.proxy_render.lock()
+            .expect("can't lock proxy_render");
         match &proxy_lock.sound_render {
             None => {
             },
             Some(sound_render) => {
-                let mut sound_render_lock = sound_render.lock().expect("panic on locking Some(sound_render)");
+                let mut sound_render_lock = sound_render.lock()
+                    .expect("panic on locking Some(sound_render)");
                 sound_render_lock.process_midi_command( channel, command, data1, data2 );
           }
         }
@@ -94,9 +94,9 @@ impl AudioDevice{
             let dev = run_output_device( params, {
                 let proxy_render = proxy_render_clone;
                 move |data: &mut [f32]| {
-                    log::tick();
-                    //let mut proxy_render_lock = proxy_render.lock().expect("panic on locking PROXY_audio_render");
-                    //proxy_render_lock.render( data );
+                    //log::tick();
+                    let mut proxy_render_lock = proxy_render.lock().expect("panic on locking PROXY_audio_render");
+                    proxy_render_lock.render( data );
                 }
             });
             match dev {
@@ -112,6 +112,7 @@ impl AudioDevice{
     }
 
     pub fn stop(&mut self) {
+        self.invoke_reset();
         self.device = None;
         log::info("AudioDevice", "stop!");
     }
@@ -123,7 +124,7 @@ impl AudioDevice{
         }
     }
 
-    pub fn get_params(&self) -> OutputDeviceParameters  {
+    pub fn get_parameters(&self) -> OutputDeviceParameters  {
         OutputDeviceParameters {
             sample_rate: self.sample_rate, 
             channels_count: 2,

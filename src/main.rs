@@ -10,7 +10,6 @@ mod audio;
 mod raadbg;
 use raadbg::log;
 
-use tinyaudio::prelude::*;
 
 
 #[ cfg(not(target_arch = "wasm32")) ]
