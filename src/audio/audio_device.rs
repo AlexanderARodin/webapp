@@ -1,9 +1,9 @@
 use std::error::Error;
 use std::sync::{Arc,Mutex};
+use tinyaudio::prelude::*;
 
 use crate::raadbg::log;
 
-use tinyaudio::prelude::*;
 //  //  //  //  //  //  //
 mod proxy_render;
 use proxy_render::*;
@@ -42,40 +42,6 @@ impl AudioDevice {
         }
     }
 }
-
-//
-
-impl MidiSender for AudioDevice {
-    fn invoke_reset(&mut self) {
-        log::info("AudioDevice", "midi.RESET");
-        let proxy_lock = self.proxy_render.lock()
-            .expect("can't lock proxy_render");
-        match &proxy_lock.sound_render {
-            None => {
-            },
-            Some(sound_render) => {
-                let mut sound_render_lock = sound_render.lock()
-                    .expect("panic on locking Some(sound_render)");
-                sound_render_lock.reset();
-            }
-        }
-    }
-    fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
-        //log::info("AudioDevice", "midi.invoke_midi_command");
-        let proxy_lock = self.proxy_render.lock()
-            .expect("can't lock proxy_render");
-        match &proxy_lock.sound_render {
-            None => {
-            },
-            Some(sound_render) => {
-                let mut sound_render_lock = sound_render.lock()
-                    .expect("panic on locking Some(sound_render)");
-                sound_render_lock.process_midi_command( channel, command, data1, data2 );
-          }
-        }
-    }
-}
-
 
 //
 impl AudioDevice{
@@ -136,7 +102,23 @@ impl AudioDevice{
     pub fn set_soundrender(&mut self, new_soundrender: Option<Arc<Mutex<dyn SoundRender>>>) {
         let mut proxy_lock = self.proxy_render.lock()
             .expect("can't lock proxy_render");
-        proxy_lock.sound_render = new_soundrender;
+        //proxy_lock.sound_render = new_soundrender;
+        proxy_lock.set_soundrender( new_soundrender );
+    }
+}
+
+
+//
+impl MidiSender for AudioDevice {
+    fn invoke_reset(&mut self) {
+        let mut proxy_lock = self.proxy_render.lock()
+            .expect("can't lock proxy_render");
+        proxy_lock.reset();
+    }
+    fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
+        let mut proxy_lock = self.proxy_render.lock()
+            .expect("can't lock proxy_render");
+        proxy_lock.process_midi_command( channel, command, data1, data2 );
     }
 }
 
