@@ -25,7 +25,7 @@ impl Default for MainApp {
         Self {
             txt:"<empty>".to_owned(), pressed:false, 
             log_view: LogView::new(),
-            audio_device: AudioDevice::new( 44100/2, 441*3 ),
+            audio_device: AudioDevice::new( 44100/2, 441* 10),
             domikView: DomikView::new()
         }
     }

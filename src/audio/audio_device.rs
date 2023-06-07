@@ -68,9 +68,11 @@ impl AudioDevice{
                 let sequencer = sequencer_clone;
                 move |data: &mut [f32]| {
                     //log::tick();
-                    let mut sequencer_lock = sequencer.lock()
-                        .expect("panic on locking PROXY_audio_render");
-                    sequencer_lock.render_all( data );
+                    for chunk in data.chunks_mut(441*2) {
+                        let mut sequencer_lock = sequencer.lock()
+                            .expect("panic on locking PROXY_audio_render");
+                        sequencer_lock.render_all( chunk );
+                    }
                 }
             });
             match dev {

@@ -24,8 +24,8 @@ impl Sequencer {
     pub fn new(device_parameters: &OutputDeviceParameters) -> Self {
 //        log::create("ProxyRender");
         Self{ 
-            left_buf:  vec![ 0_f32; device_parameters.channel_sample_count],
-            right_buf: vec![ 0_f32; device_parameters.channel_sample_count],
+            left_buf:  vec![ 0_f32; device_parameters.channel_sample_count/10],
+            right_buf: vec![ 0_f32; device_parameters.channel_sample_count/10],
             sound_render: None
         }
     }
