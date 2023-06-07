@@ -17,3 +17,9 @@ pub trait MidiSender {
     }
 }
 
+pub struct MidiMessage {
+    channel: i32,
+    command: i32,
+    data1: i32,
+    data2: i32,
+}

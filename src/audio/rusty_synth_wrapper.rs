@@ -10,8 +10,6 @@ use super::midi_rx_tx::MidiReceiver;
 
 
 pub struct RustySynthWrapper{
-    left_buf:  Vec<f32>,
-    right_buf: Vec<f32>,
     synth: Synthesizer,
 }
 impl Drop for RustySynthWrapper {
@@ -52,8 +50,6 @@ impl RustySynthWrapper {
                 },
             Ok(loaded_synth) => Ok(
                     Self{
-                        left_buf:  vec![ 0_f32; device_parameters.channel_sample_count],
-                        right_buf: vec![ 0_f32; device_parameters.channel_sample_count],
                         synth: loaded_synth
                     }
             )
@@ -64,13 +60,9 @@ impl RustySynthWrapper {
 //
 //
 impl SoundRender for RustySynthWrapper {
-    fn render(&mut self, data: &mut [f32]) {
+    fn render(&mut self, left: &mut [f32], right: &mut [f32]) {
         //log::tick();
-        self.synth.render(&mut self.left_buf[..], &mut self.right_buf[..]);
-        for (i, l_value) in self.left_buf.iter().enumerate() {
-            data[i*2] = *l_value;
-            data[i*2+1] = self.right_buf[i];
-        }
+        self.synth.render(&mut left[..], &mut right[..]);
     }
 }
 

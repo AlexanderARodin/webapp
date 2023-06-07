@@ -1,26 +1,31 @@
 use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
 
-use super::SoundRender;
-use super::super::midi_rx_tx::MidiReceiver;
+use tinyaudio::prelude::*;
+use super::audio_device::SoundRender;
+use super::midi_rx_tx::MidiReceiver;
 //  //  //  //  //  //  //  //  //
 
 
-pub struct ProxyRender {
+pub struct Sequencer {
+    left_buf:  Vec<f32>,
+    right_buf: Vec<f32>,
     sound_render: Option< Arc<Mutex<dyn SoundRender>> >,
 }
-impl Drop for ProxyRender{
+impl Drop for Sequencer{
     fn drop(&mut self) {
 //        log::drop("ProxyRender");
     }
 }
-impl ProxyRender {
-    pub fn new_arc_mutex() -> Arc<Mutex<Self>> {
-        Arc::new(Mutex::new( Self::new() ))
+impl Sequencer {
+    pub fn new_arc_mutex(device_parameters: &OutputDeviceParameters) -> Arc<Mutex<Self>> {
+        Arc::new(Mutex::new( Self::new(device_parameters) ))
     }
-    pub fn new() -> Self {
+    pub fn new(device_parameters: &OutputDeviceParameters) -> Self {
 //        log::create("ProxyRender");
         Self{ 
+            left_buf:  vec![ 0_f32; device_parameters.channel_sample_count],
+            right_buf: vec![ 0_f32; device_parameters.channel_sample_count],
             sound_render: None
         }
     }
@@ -29,7 +34,7 @@ impl ProxyRender {
         self.sound_render = new_soundrender;
     }
     
-    pub fn render(&mut self, data: &mut [f32]) {
+    pub fn render_all(&mut self, data: &mut [f32]) {
         match &self.sound_render {
             None => {
                 for sample in data {
@@ -39,7 +44,11 @@ impl ProxyRender {
             Some(sound_render) => {
                 let mut sound_render_lock = sound_render
                     .lock().expect("FATAL: can't lock SoundRender.render!");
-                sound_render_lock.render(data);
+                sound_render_lock.render(&mut self.left_buf,&mut self.right_buf);
+                for (i, samples) in data.chunks_mut(2).enumerate() {
+                    samples[0] = self.left_buf[i];
+                    samples[1] = self.right_buf[i];
+                }
             }
         }
     }
@@ -47,7 +56,7 @@ impl ProxyRender {
 
 
 //
-impl MidiReceiver for ProxyRender {
+impl MidiReceiver for Sequencer {
     fn reset(&mut self) {
         log::info("ProxyRender", "MIDI.reset");
         match &self.sound_render {

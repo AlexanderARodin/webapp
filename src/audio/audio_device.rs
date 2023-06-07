@@ -5,10 +5,17 @@ use tinyaudio::prelude::*;
 use crate::raadbg::log;
 
 //  //  //  //  //  //  //
-mod proxy_render;
-use proxy_render::*;
+use super::sequencer::*;
 
 use super::midi_rx_tx::*;
+//  //  //  //  //  //  //  //  //
+
+pub trait SoundRender: Sync + Send + MidiReceiver {
+    //fn render(&mut self, data: &mut [f32]);
+    fn render(&mut self, left: &mut [f32], right: &mut [f32]);
+}
+
+
 //  //  //  //  //  //  //
 
 
@@ -17,14 +24,9 @@ pub struct AudioDevice{
     sample_rate: usize,
     channel_sample_count: usize,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
-    proxy_render: Arc<Mutex<ProxyRender>>,
+    sequencer: Arc<Mutex<Sequencer>>,
 }
 
-//impl Default for AudioDevice {
-//    fn default() -> Self {
-//        Self::new( 44100, 441*2 )
-//    }
-//}
 impl Drop for AudioDevice {
     fn drop(&mut self) {
         self.stop();
@@ -34,11 +36,16 @@ impl Drop for AudioDevice {
 impl AudioDevice {
     pub fn new( sample_rate: usize, channel_sample_count: usize ) -> Self {
         log::create("AudioDevice");
+        let params = OutputDeviceParameters {
+                sample_rate: sample_rate, 
+                channels_count: 2,
+                channel_sample_count: channel_sample_count
+            };
         Self{ 
-            sample_rate: sample_rate,
-            channel_sample_count: channel_sample_count,
+            sample_rate,
+            channel_sample_count,
             device: None,
-            proxy_render: ProxyRender::new_arc_mutex(),
+            sequencer: Sequencer::new_arc_mutex(&params),
         }
     }
 }
@@ -51,19 +58,19 @@ impl AudioDevice{
             Err("[ AudioDevice] E: device still active!".to_string().into() )
         }else{
             log::info("AudioDevice", "starting");
-            let proxy_render_clone = self.proxy_render.clone();
+            let sequencer_clone = self.sequencer.clone();
             let params = OutputDeviceParameters{ 
                     channels_count: 2,
                     sample_rate: self.sample_rate,
                     channel_sample_count: self.channel_sample_count
                 };
             let dev = run_output_device( params, {
-                let proxy_render = proxy_render_clone;
+                let sequencer = sequencer_clone;
                 move |data: &mut [f32]| {
                     //log::tick();
-                    let mut proxy_render_lock = proxy_render.lock()
+                    let mut sequencer_lock = sequencer.lock()
                         .expect("panic on locking PROXY_audio_render");
-                    proxy_render_lock.render( data );
+                    sequencer_lock.render_all( data );
                 }
             });
             match dev {
@@ -100,10 +107,12 @@ impl AudioDevice{
     }
 
     pub fn set_soundrender(&mut self, new_soundrender: Option<Arc<Mutex<dyn SoundRender>>>) {
-        let mut proxy_lock = self.proxy_render.lock()
+        let mut seq_lock = self.sequencer.lock()
             .expect("can't lock proxy_render");
-        //proxy_lock.sound_render = new_soundrender;
-        proxy_lock.set_soundrender( new_soundrender );
+        seq_lock.set_soundrender( new_soundrender );
+    }
+    pub fn get_sequencer(&self) -> Arc<Mutex<Sequencer>> {
+        self.sequencer.clone()
     }
 }
 
@@ -111,21 +120,15 @@ impl AudioDevice{
 //
 impl MidiSender for AudioDevice {
     fn invoke_reset(&mut self) {
-        let mut proxy_lock = self.proxy_render.lock()
+        let mut seq_lock = self.sequencer.lock()
             .expect("can't lock proxy_render");
-        proxy_lock.reset();
+        seq_lock.reset();
     }
     fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
-        let mut proxy_lock = self.proxy_render.lock()
+        let mut seq_lock = self.sequencer.lock()
             .expect("can't lock proxy_render");
-        proxy_lock.process_midi_command( channel, command, data1, data2 );
+        seq_lock.process_midi_command( channel, command, data1, data2 );
     }
-}
-
-
-//  //  //  //  //  //  //  //  //
-pub trait SoundRender: Sync + Send + MidiReceiver {
-    fn render(&mut self, data: &mut [f32]);
 }
 
 

@@ -35,14 +35,13 @@ impl SimpleSynth {
 //
 //
 impl SoundRender for SimpleSynth {
-    fn render(&mut self, data: &mut [f32]) {
+    fn render(&mut self, left: &mut [f32], right: &mut [f32]) {
         log::tick();
         let mult = self.frequency * PI2 / self.sample_rate;
-        for samples in data.chunks_mut(2) {
+        for (i, l_sample) in left.iter_mut().enumerate() {
             let ampl = self.amplitude*(self.counter * mult ).sin();
-            for sample in samples {
-                *sample = ampl;
-            }
+                *l_sample = ampl;
+                right[i] = ampl;
             self.counter += 1.;
         }
     }
@@ -89,7 +88,8 @@ impl SimpleSynth {
         (VELO_PAR).powf( norm - 1. ) * norm
     }
 }
-//
+
+
 //
 //
 //
