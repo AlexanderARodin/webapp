@@ -1,18 +1,21 @@
 use std::error::Error;
 use std::sync::{Arc,Mutex};
+use tinyaudio::prelude::*;
 
 use crate::raadbg::log;
-
-use tinyaudio::prelude::*;
-//  //  //  //  //  //  //
 use super::proxy_render::*;
-
 use super::super::midi_rx_tx::*;
-//  //  //  //  //  //  //
+
+use super::audio_device_parameters::AudioDeviceParameters;
+//  //  //  //  //  //  //  //  //
+
+pub trait SoundRender: Sync + Send + MidiReceiver {
+    fn render(&mut self, data: &mut [f32]);
+}
 
 
-// TinyAudio wrapper
-pub struct AudioDevice{
+pub struct AudioDevice{ // TinyAudio wrapper
+    params: AudioDeviceParameters,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
 }
 
@@ -27,6 +30,7 @@ impl AudioDevice {
     pub fn new( ) -> Self {
         log::create("AudioDevice");
         Self{ 
+            params: Default::default(),
             device: None,
         }
     }
@@ -47,20 +51,34 @@ impl AudioDevice {
         }else{
             log::info("AudioDevice", "starting");
         }
-        let params = OutputDeviceParameters{ 
-                channels_count: 2,
-                sample_rate: 44100,
-                channel_sample_count: 4410
-            };
+        self.create_tiny_loop()
+    }
+
+    fn create_tiny_loop(&mut self) -> Result< (), Box<dyn Error>> {
+        let params = self.params.get_output_device_parameters();
+        
         let device = run_output_device( params, {
             //let proxy_render = proxy_render_clone;
+            let block_chunk = 2*self.params.block_size;
+            let mut left :Vec<f32> = vec![ 0_f32; self.params.block_size ];
+            let mut right:Vec<f32> = vec![ 0_f32; self.params.block_size ];
             move |data: &mut [f32]| {
                 log::tick();
+                left[0] = 1.;
+                right[1] = 1.;
+                for chunk in data.chunks_mut(block_chunk) {
+                    //
+                    for (i, l_sample) in left.iter().enumerate() {
+                        chunk[i*2] = *l_sample;
+                        chunk[i*2 + 1] = right[i];
+                    }
+                }
                 //let mut proxy_render_lock = proxy_render.lock()
                 //l    .expect("panic on locking PROXY_audio_render");
                 //proxy_render_lock.render( data );
             }
         });
+
         match device {
             Err(e) => {
                 let errmsg = format!("{:?}",e);
@@ -72,6 +90,9 @@ impl AudioDevice {
         Ok(())
     }
 }
+
+
+
 
 
 impl MidiSender for AudioDevice {
@@ -93,16 +114,8 @@ impl MidiSender for AudioDevice {
 
 
 
+/*
 
-
-pub struct AudioDevice_OLD{
-    sample_rate: usize,
-    channel_sample_count: usize,
-    device: Option< Box<dyn BaseAudioOutputDevice> >,
-    proxy_render: Arc<Mutex<ProxyRender>>,
-}
-
-//
 
 impl MidiSender for AudioDevice_OLD {
     fn invoke_reset(&mut self) {
@@ -171,26 +184,6 @@ impl AudioDevice_OLD {
         }
     }
 
-    pub fn stop(&mut self) {
-        self.invoke_reset();
-        self.device = None;
-        log::info("AudioDevice", "stop!");
-    }
-
-    pub fn is_started(&self) -> bool {
-        match self.device {
-            None => false,
-            _ => true
-        }
-    }
-
-    pub fn get_parameters(&self) -> OutputDeviceParameters  {
-        OutputDeviceParameters {
-            sample_rate: self.sample_rate, 
-            channels_count: 2,
-            channel_sample_count: self.channel_sample_count
-        }
-    }
 
     pub fn set_soundrender(&mut self, new_soundrender: Option<Arc<Mutex<dyn SoundRender>>>) {
         let mut proxy_lock = self.proxy_render.lock()
@@ -200,10 +193,8 @@ impl AudioDevice_OLD {
 }
 
 
-//  //  //  //  //  //  //  //  //
-pub trait SoundRender: Sync + Send + MidiReceiver {
-    fn render(&mut self, data: &mut [f32]);
-}
+
+*/
 
 
 //
