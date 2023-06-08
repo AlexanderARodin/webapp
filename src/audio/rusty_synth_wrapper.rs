@@ -19,7 +19,8 @@ impl Drop for RustySynthWrapper {
     }
 }
 impl RustySynthWrapper {
-    pub fn new( device_parameters: &OutputDeviceParameters, font_type: bool ) -> Result<Self, SynthesizerError> {
+    pub fn new( device_parameters: &OutputDeviceParameters, 
+                font_type: bool ) -> Result<Self, SynthesizerError> {
         log::create("RustySynthWrapper");
         let init_params = SynthesizerSettings::new( device_parameters.sample_rate as i32 );
         let mut file = match font_type {
