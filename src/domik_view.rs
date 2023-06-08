@@ -1,4 +1,4 @@
-const VERS: &str = "v0.10.03";
+const VERS: &str = "v0.10.05";
 
 use std::sync::{Mutex,Arc};
 
@@ -44,29 +44,31 @@ impl DomikView {
             ui.horizontal( |ui| {
                     let btnN = ui.button( "None" );
                     if btnN.clicked(){
-                        audio_device.set_soundrender(None);
+                        //audio_device.set_soundrender(None);
                     }
+                    /*
                     let device_params= audio_device.get_parameters();
                     let btnS = ui.button( "SimpleSynth" );
                     if btnS.clicked(){
                         let simsyn = SimpleSynth::new( &device_params );
                         let simsyn_wrapper = Arc::new(Mutex::new( simsyn ));
-                        audio_device.set_soundrender( Some(simsyn_wrapper) );
+                        //audio_device.set_soundrender( Some(simsyn_wrapper) );
                     }
                     let btnRA = ui.button( "RustySynt - Strings" );
                     if btnRA.clicked(){
                         if let Ok(ryssyn) = RustySynthWrapper::new( &device_params, false ) {
                             let ryssyn_wrapper = Arc::new(Mutex::new( ryssyn ));
-                            audio_device.set_soundrender( Some(ryssyn_wrapper) );
+                            //audio_device.set_soundrender( Some(ryssyn_wrapper) );
                         }
                     }
                     let btnRB = ui.button( "RustySynt - Piano" );
                     if btnRB.clicked(){
                         if let Ok(ryssyn) = RustySynthWrapper::new( &device_params, true ) {
                             let ryssyn_wrapper = Arc::new(Mutex::new( ryssyn ));
-                            audio_device.set_soundrender( Some(ryssyn_wrapper) );
+                            //audio_device.set_soundrender( Some(ryssyn_wrapper) );
                         }
                     }
+                    */
                 });
             ui.separator();
             ui.separator();
