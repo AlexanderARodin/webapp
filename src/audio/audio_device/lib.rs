@@ -14,9 +14,10 @@ pub trait SoundRender: Sync + Send + MidiReceiver {
 }
 
 
-pub struct AudioDevice{ // TinyAudio wrapper
+pub struct AudioDevice{ 
     params: AudioDeviceParameters,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
+    proxy_render: Arc<Mutex<ProxyRender>>,
 }
 
 
@@ -32,6 +33,7 @@ impl AudioDevice {
         Self{ 
             params: Default::default(),
             device: None,
+            proxy_render: ProxyRender::new_arc_mutex(),
         }
     }
     pub fn is_started(&self) -> bool {

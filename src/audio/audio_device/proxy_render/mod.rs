@@ -8,7 +8,7 @@ pub struct ProxyRender {
 }
 impl Drop for ProxyRender{
     fn drop(&mut self) {
-//        log::drop("ProxyRender");
+        log::drop("ProxyRender");
     }
 }
 impl ProxyRender {
@@ -16,7 +16,7 @@ impl ProxyRender {
         Arc::new(Mutex::new( Self::new() ))
     }
     pub fn new() -> Self {
-//        log::create("ProxyRender");
+        log::create("ProxyRender");
         Self{ 
             sound_render: None
         }
@@ -30,7 +30,8 @@ impl ProxyRender {
                 }
             },
             Some(sound_render) => {
-                let mut sound_render_lock = sound_render.lock().expect("FATAL: can't lock SoundRender!");
+                let mut sound_render_lock = sound_render.lock()
+                    .expect("FATAL: can't lock SoundRender!");
                 sound_render_lock.render(data);
             }
         }
