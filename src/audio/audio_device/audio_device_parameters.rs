@@ -1,7 +1,6 @@
 use tinyaudio::prelude::*;
 
 
-
 pub struct AudioDeviceParameters {
     pub sample_rate: usize,
     pub block_size: usize,
@@ -29,3 +28,4 @@ impl Default for AudioDeviceParameters {
         Self::new()
     }
 }
+

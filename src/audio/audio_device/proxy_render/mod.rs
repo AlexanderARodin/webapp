@@ -1,15 +1,13 @@
 use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
-//  //  //  //  //  //  //  //  //
 
+
+pub trait SoundRender: Sync + Send {
+    fn render(&mut self, data: &mut [f32]);
+}
 
 pub struct ProxyRender {
-    pub(crate) sound_render: Option< Arc<Mutex<dyn super::SoundRender>> >,
-}
-impl Drop for ProxyRender{
-    fn drop(&mut self) {
-        log::drop("ProxyRender");
-    }
+    pub(crate) sound_render: Option< Arc<Mutex<dyn SoundRender>> >,
 }
 impl ProxyRender {
     pub fn new_arc_mutex() -> Arc<Mutex<Self>> {
@@ -35,6 +33,12 @@ impl ProxyRender {
                 sound_render_lock.render(data);
             }
         }
+    }
+}
+
+impl Drop for ProxyRender{
+    fn drop(&mut self) {
+        log::drop("ProxyRender");
     }
 }
 
