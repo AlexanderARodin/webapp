@@ -1,12 +1,12 @@
-const VERS: &str = "v0.10.05";
+const VERS: &str = "v0.10.06";
 
-//use std::sync::{Mutex,Arc};
+use std::sync::{Mutex,Arc};
 
 use crate::audio::audio_device::AudioDevice;
 use crate::audio::midi_rx_tx::MidiSender;
 
-//use crate::audio::simple_synth::SimpleSynth;
-//use crate::audio::rusty_synth_wrapper::RustySynthWrapper;
+use crate::audio::simple_synth::SimpleSynth;
+use crate::audio::rusty_synth_wrapper::RustySynthWrapper;
 
 
 
@@ -44,31 +44,30 @@ impl DomikView {
             ui.horizontal( |ui| {
                     let btnN = ui.button( "None" );
                     if btnN.clicked(){
-                        //audio_device.set_soundrender(None);
+                        audio_device.set_soundrender(None);
                     }
-                    /*
-                    let device_params= audio_device.get_parameters();
+                    
+                    let sample_rate = audio_device.get_sample_rate();
                     let btnS = ui.button( "SimpleSynth" );
                     if btnS.clicked(){
-                        let simsyn = SimpleSynth::new( &device_params );
+                        let simsyn = SimpleSynth::new( &sample_rate );
                         let simsyn_wrapper = Arc::new(Mutex::new( simsyn ));
-                        //audio_device.set_soundrender( Some(simsyn_wrapper) );
+                        audio_device.set_soundrender( Some(simsyn_wrapper) );
                     }
                     let btnRA = ui.button( "RustySynt - Strings" );
                     if btnRA.clicked(){
-                        if let Ok(ryssyn) = RustySynthWrapper::new( &device_params, false ) {
+                        if let Ok(ryssyn) = RustySynthWrapper::new( &sample_rate, false ) {
                             let ryssyn_wrapper = Arc::new(Mutex::new( ryssyn ));
-                            //audio_device.set_soundrender( Some(ryssyn_wrapper) );
+                            audio_device.set_soundrender( Some(ryssyn_wrapper) );
                         }
                     }
                     let btnRB = ui.button( "RustySynt - Piano" );
                     if btnRB.clicked(){
-                        if let Ok(ryssyn) = RustySynthWrapper::new( &device_params, true ) {
+                        if let Ok(ryssyn) = RustySynthWrapper::new( &sample_rate, true ) {
                             let ryssyn_wrapper = Arc::new(Mutex::new( ryssyn ));
-                            //audio_device.set_soundrender( Some(ryssyn_wrapper) );
+                            audio_device.set_soundrender( Some(ryssyn_wrapper) );
                         }
                     }
-                    */
                 });
             ui.separator();
             ui.separator();

@@ -1,9 +1,10 @@
 use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
+use super::super::midi_rx_tx::MidiReceiver;
 
 
-pub trait SoundRender: Sync + Send {
-    fn render(&mut self, data: &mut [f32]);
+pub trait SoundRender: Sync + Send + MidiReceiver {
+    fn render(&mut self, left: &mut [f32], right: &mut [f32]);
 }
 
 pub struct ProxyRender {
@@ -20,17 +21,21 @@ impl ProxyRender {
         }
     }
     
-    pub fn render(&mut self, data: &mut [f32]) {
+    pub fn render(&mut self, left: &mut [f32], right: &mut [f32]) {
         match &self.sound_render {
             None => {
-                for sample in data {
+                log::tick();
+                for sample in left {
+                    *sample = 0_f32;
+                }
+                for sample in right {
                     *sample = 0_f32;
                 }
             },
             Some(sound_render) => {
                 let mut sound_render_lock = sound_render.lock()
                     .expect("FATAL: can't lock SoundRender!");
-                sound_render_lock.render(data);
+                sound_render_lock.render(left, right);
             }
         }
     }

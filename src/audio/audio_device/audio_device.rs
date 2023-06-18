@@ -56,16 +56,19 @@ impl AudioDevice {
 
     fn run_device_loop(&mut self) -> Result< (), Box<dyn Error>> {
         let params = self.params.get_output_device_parameters();
-        
+        let proxy_render_clone = self.proxy_render.clone();
         let device = run_output_device( params, {
-            //let proxy_render = proxy_render_clone;
+            let proxy_render = proxy_render_clone;
             let block_chunk = 2*self.params.block_size;
             let mut left :Vec<f32> = vec![ 0_f32; self.params.block_size ];
             let mut right:Vec<f32> = vec![ 0_f32; self.params.block_size ];
             move |data: &mut [f32]| {
-                log::tick();
+                //log::tick();
                 left[0] = 1.;
                 right[1] = 1.;
+                let mut proxy_render_lock = proxy_render.lock()
+                    .expect("panic on locking PROXY_audio_render");
+                proxy_render_lock.render( &mut left, &mut right );
                 for chunk in data.chunks_mut(block_chunk) {
                     //
                     for (i, l_sample) in left.iter().enumerate() {
@@ -73,9 +76,6 @@ impl AudioDevice {
                         chunk[i*2 + 1] = right[i];
                     }
                 }
-                //let mut proxy_render_lock = proxy_render.lock()
-                //l    .expect("panic on locking PROXY_audio_render");
-                //proxy_render_lock.render( data );
             }
         });
 
@@ -89,6 +89,15 @@ impl AudioDevice {
         }
         Ok(())
     }
+
+    pub fn get_sample_rate(&self) -> usize {
+        self.params.sample_rate
+    }
+    pub fn set_soundrender(&mut self, new_soundrender: Option<Arc<Mutex<dyn SoundRender>>>) {
+        let mut proxy_lock = self.proxy_render.lock()
+            .expect("can't lock proxy_render");
+        proxy_lock.sound_render = new_soundrender;
+    }
 }
 
 
@@ -101,6 +110,17 @@ impl MidiSender for AudioDevice {
     }
     fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
         log::info("AudioDevice", "midi.invoke_midi_command");
+        let proxy_lock = self.proxy_render.lock()
+            .expect("can't lock proxy_render");
+        match &proxy_lock.sound_render {
+            None => {
+            },
+            Some(sound_render) => {
+                let mut sound_render_lock = sound_render.lock()
+                    .expect("panic on locking Some(sound_render)");
+                sound_render_lock.process_midi_command( channel, command, data1, data2 );
+          }
+        }
     }
 }
 

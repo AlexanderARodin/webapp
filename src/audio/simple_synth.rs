@@ -1,6 +1,6 @@
 use crate::raadbg::log;
 
-use tinyaudio::prelude::*;
+//use tinyaudio::prelude::*;
 use super::audio_device::proxy_render::SoundRender;
 use super::midi_rx_tx::MidiReceiver;
 
@@ -21,10 +21,10 @@ impl Drop for SimpleSynth {
     }
 }
 impl SimpleSynth {
-    pub fn new( device_parameters: &OutputDeviceParameters ) -> Self {
+    pub fn new( sample_rate: &usize ) -> Self {
         log::create("SimpleSynth");
         Self{
-            sample_rate: device_parameters.sample_rate as f32,
+            sample_rate: *sample_rate as f32,
             counter: 0_f32,
             frequency: 1_f32,
             amplitude: 0_f32
@@ -35,14 +35,13 @@ impl SimpleSynth {
 //
 //
 impl SoundRender for SimpleSynth {
-    fn render(&mut self, data: &mut [f32]) {
+    fn render(&mut self, left: &mut [f32], right: &mut [f32]) {
         log::tick();
         let mult = self.frequency * PI2 / self.sample_rate;
-        for samples in data.chunks_mut(2) {
+        for (i, sample) in left.iter_mut().enumerate() {
             let ampl = self.amplitude*(self.counter * mult ).sin();
-            for sample in samples {
-                *sample = ampl;
-            }
+            *sample = ampl;
+            right[i] = ampl;
             self.counter += 1.;
         }
     }
