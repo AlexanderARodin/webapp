@@ -51,10 +51,10 @@ impl AudioDevice {
         }else{
             log::info("AudioDevice", "starting");
         }
-        self.create_tiny_loop()
+        self.run_device_loop()
     }
 
-    fn create_tiny_loop(&mut self) -> Result< (), Box<dyn Error>> {
+    fn run_device_loop(&mut self) -> Result< (), Box<dyn Error>> {
         let params = self.params.get_output_device_parameters();
         
         let device = run_output_device( params, {

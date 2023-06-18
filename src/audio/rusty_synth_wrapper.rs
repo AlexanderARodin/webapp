@@ -4,7 +4,7 @@ use rustysynth::*;
 //  //  //  //  //  //  //
 
 use crate::raadbg::log;
-use super::audio_device::SoundRender;
+use super::audio_device::proxy_render::SoundRender;
 use super::midi_rx_tx::MidiReceiver;
 //  //  //  //  //  //  //
 
