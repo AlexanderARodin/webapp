@@ -36,7 +36,7 @@ impl SimpleSynth {
 //
 impl SoundRender for SimpleSynth {
     fn render(&mut self, left: &mut [f32], right: &mut [f32]) {
-        log::tick();
+        //log::tick();
         let mult = self.frequency * PI2 / self.sample_rate;
         for (i, sample) in left.iter_mut().enumerate() {
             let ampl = self.amplitude*(self.counter * mult ).sin();

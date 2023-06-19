@@ -64,13 +64,12 @@ impl AudioDevice {
             let mut right:Vec<f32> = vec![ 0_f32; self.params.block_size ];
             move |data: &mut [f32]| {
                 //log::tick();
-                left[0] = 1.;
-                right[1] = 1.;
+                //left[0] = 1.;
+                //right[1] = 1.;
                 let mut proxy_render_lock = proxy_render.lock()
                     .expect("panic on locking PROXY_audio_render");
-                proxy_render_lock.render( &mut left, &mut right );
                 for chunk in data.chunks_mut(block_chunk) {
-                    //
+                    proxy_render_lock.render( &mut left, &mut right );
                     for (i, l_sample) in left.iter().enumerate() {
                         chunk[i*2] = *l_sample;
                         chunk[i*2 + 1] = right[i];

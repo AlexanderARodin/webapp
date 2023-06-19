@@ -24,7 +24,7 @@ impl ProxyRender {
     pub fn render(&mut self, left: &mut [f32], right: &mut [f32]) {
         match &self.sound_render {
             None => {
-                log::tick();
+                //log::tick();
                 for sample in left {
                     *sample = 0_f32;
                 }
