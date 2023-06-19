@@ -12,7 +12,7 @@ impl AudioDeviceParameters {
         Self {
             sample_rate: 44100,
             block_size: 441,
-            blocks_count: 6
+            blocks_count: 8
         }
     }
     pub fn get_output_device_parameters(&self) -> OutputDeviceParameters {
