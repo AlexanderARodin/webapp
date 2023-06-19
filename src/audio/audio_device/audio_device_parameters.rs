@@ -22,6 +22,11 @@ impl AudioDeviceParameters {
             channel_sample_count: self.block_size * self.blocks_count
         }
     }
+    pub fn get_tick_time(&self) -> f32 {
+        let res = 2. * (self.block_size as f32) / (self.sample_rate as f32);
+        println!("tick time = {res}");
+        return res;
+    }
 }
 impl Default for AudioDeviceParameters {
     fn default() -> Self {
