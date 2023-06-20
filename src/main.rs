@@ -6,6 +6,7 @@ use main_app::MainApp;
 
 mod domik_view;
 mod audio;
+mod midi_lib;
 
 mod raadbg;
 use raadbg::log;

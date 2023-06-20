@@ -1,17 +1,40 @@
 
 
 pub enum MidiMessage {
-  general( channel: i32, command: i32, data1: i32, data2: i32 ),
-  note_on( channel: i32, key: i32, velocity: i32 ),
-  note_off( channel: i32, key: i32 ),
+  General( i32, i32, i32, i32 ), // channel, command, data1, data2
+  NoteOn( i32, i32, i32 ), // channel, 0x90, key, velocity
+  NoteOff( i32, i32 ), // channel, 0x80, key, -1
 }
 
 impl MidiMessage {
-  pub fn to_general(&self) -> Self {
-    match self {
-      general( channel: i32, command: i32, data1: i32, data2: i32 ) => {
-            Self::general( channel, command, data1, data2 )
-          }
-  }
+
+    pub fn to_general(&self) -> Self {
+        match self {
+            Self::General( channel, command, data1, data2 ) => {
+                Self::General( *channel, *command, *data1, *data2 )
+            },
+            Self::NoteOn( channel, key, velocity ) => {
+                Self::General( *channel, 0x90, *key, *velocity )
+            },
+            Self::NoteOff( channel, key) => {
+                Self::General( *channel, 0x90, *key, -1 )
+            },
+        }
+    }
+
+    pub fn parse_general(&self) -> Self {
+        match self {
+            Self::General( channel, command, data1, data2 ) => {
+                Self::General( *channel, *command, *data1, *data2 )
+            },
+            Self::NoteOn( channel, key, velocity ) => {
+                Self::NoteOn( *channel, *key, *velocity )
+            },
+            Self::NoteOff( channel, key) => {
+                Self::NoteOff( *channel, *key)
+            },
+        }
+    }
+
 }
 
