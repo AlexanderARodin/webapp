@@ -40,27 +40,30 @@ impl ProxyRender {
             Some(sound_render) => {
                 let mut sound_render_lock = sound_render.lock()
                     .expect("FATAL: can't lock SoundRender!");
-                sound_render_lock.render(left, right);
-                return;
                 match self.elapsed_time {
-                    x if x > 0. => {
+                    x if x < 1. => {
                         log::tick();
                         sound_render_lock.process_midi_command( 1, 0x80, 90, 80);
                         sound_render_lock.process_midi_command( 1, 0x80, 91, 80);
                         sound_render_lock.process_midi_command( 1, 0x80, 92, 80);
                         sound_render_lock.process_midi_command( 1, 0x90, 90, 80);
                     },
-                    x if x > 1. => {
+                    x if x < 2. => {
                         sound_render_lock.process_midi_command( 1, 0x80, 90, 80);
                         sound_render_lock.process_midi_command( 1, 0x80, 91, 80);
                         sound_render_lock.process_midi_command( 1, 0x80, 92, 80);
                         sound_render_lock.process_midi_command( 1, 0x90, 91, 80);
                     },
-                    x if (x > 2.) & (x < 3.) => {
+                    x if x < 3. => {
                         sound_render_lock.process_midi_command( 1, 0x80, 90, 80);
                         sound_render_lock.process_midi_command( 1, 0x80, 91, 80);
                         sound_render_lock.process_midi_command( 1, 0x80, 92, 80);
                         sound_render_lock.process_midi_command( 1, 0x90, 92, 80);
+                    },
+                    x if x < 4. => {
+                        sound_render_lock.process_midi_command( 1, 0x80, 90, 80);
+                        sound_render_lock.process_midi_command( 1, 0x80, 91, 80);
+                        sound_render_lock.process_midi_command( 1, 0x80, 92, 80);
                     },
                     _ => {
                         self.elapsed_time = 0.;
