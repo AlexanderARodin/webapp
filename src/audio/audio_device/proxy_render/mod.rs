@@ -1,6 +1,6 @@
 use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
-use super::super::midi_rx_tx::MidiReceiver;
+use super::super::super::midi_lib::MidiReceiver;
 
 
 pub trait SoundRender: Sync + Send + MidiReceiver {

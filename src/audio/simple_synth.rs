@@ -2,7 +2,7 @@ use crate::raadbg::log;
 
 //use tinyaudio::prelude::*;
 use super::audio_device::proxy_render::SoundRender;
-use super::midi_rx_tx::MidiReceiver;
+use super::super::midi_lib::MidiReceiver;
 
 const PI2: f32 = 2. * std::f32::consts::PI;
 const VELO_PAR: f32 = 2.;
