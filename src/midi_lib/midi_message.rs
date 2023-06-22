@@ -48,6 +48,12 @@ impl MidiMessage {
 
 }
 
+impl Clone for MidiMessage {
+    fn clone(&self) -> Self {
+        let general_copy = self.to_general();
+        general_copy.get_parsed()
+    }
+}
 
 
 //  //  //  //  //  //  //  //
