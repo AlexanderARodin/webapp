@@ -23,7 +23,7 @@ pub enum MidiMessage {
 }
 
 impl MidiMessage {
-
+    #[allow(dead_code)]
     pub fn new(channel:i32, command:i32, data1:i32, data2:i32) -> Self {
         Self::General( MidiGeneral {
             channel,
@@ -35,6 +35,7 @@ impl MidiMessage {
     pub fn from_midi_general( midi_general: &MidiGeneral ) -> Self {
         Self::General( midi_general.clone() )
     }
+    #[allow(dead_code)]
     pub fn to_general(&self) -> Self {
         let midi_general = self.to_midi_general();
         Self::from_midi_general( &midi_general )

@@ -1,6 +1,5 @@
 use crate::raadbg::log;
 
-//use tinyaudio::prelude::*;
 use super::audio_device::proxy_render::SoundRender;
 use super::super::midi_lib::MidiReceiver;
 
@@ -88,10 +87,16 @@ impl SimpleSynth {
         (VELO_PAR).powf( norm - 1. ) * norm
     }
 }
-//
-//
-//
-//
+
+
+
+
+
+
+//  //  //  //  //  //  //  //
+//  //  //  //  //  //  //  //
+//  //  //  //  //  //  //  //
+//  //  //  //  //  //  //  //
 #[cfg(test)]
 mod test_velocity {
     #[test]
