@@ -62,6 +62,9 @@ impl SoundRender for RustySynthWrapper {
         //log::tick();
         self.synth.render(&mut left[..], &mut right[..]);
     }
+    fn get_as_midi_receiver(&mut self) -> &mut dyn MidiReceiver {
+        self
+    }
 }
 
 

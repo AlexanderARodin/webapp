@@ -44,6 +44,9 @@ impl SoundRender for SimpleSynth {
             self.counter += 1.;
         }
     }
+    fn get_as_midi_receiver(&mut self) -> &mut dyn MidiReceiver {
+        self
+    }
 }
 
 

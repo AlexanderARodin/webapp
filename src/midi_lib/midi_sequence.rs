@@ -53,6 +53,11 @@ impl MidiSequence {
         }
     }
 
+    #[allow(dead_code)]
+    pub fn is_finished(&self) -> bool {
+        self.current_index >= self.list.len()
+    }
+
 }
 
 

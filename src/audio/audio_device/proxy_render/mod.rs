@@ -1,12 +1,11 @@
 use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
-//use super::super::super::midi_lib::{MidiMessage,MidiReceiver,MidiSequence};
-use super::super::super::midi_lib::{MidiMessage,MidiSequence};
-use crate::midi_lib::MidiReceiver;
 
+use super::super::super::midi_lib::{MidiMessage,MidiReceiver,MidiSequence};
 
-pub trait SoundRender: crate::midi_lib::MidiReceiver + Sync + Send {
+pub trait SoundRender: MidiReceiver + Sync + Send {
     fn render(&mut self, left: &mut [f32], right: &mut [f32]);
+    fn get_as_midi_receiver(&mut self) -> &mut dyn MidiReceiver;
 }
 
 pub struct ProxyRender {
@@ -24,11 +23,11 @@ impl ProxyRender {
         let mut seq = MidiSequence::new();
         seq.push( 0.0, &MidiMessage::NoteOn( 1,90,80) );
         seq.push( 0.5, &MidiMessage::NoteOff(1,90,80) );
-        seq.push( 0.5, &MidiMessage::NoteOn( 1,91,80) );
-        seq.push( 1.0, &MidiMessage::NoteOff(1,91,80) );
-        seq.push( 1.0, &MidiMessage::NoteOn( 1,92,80) );
-        seq.push( 1.5, &MidiMessage::NoteOff(1,92,80) );
-        seq.push( 2.0, &MidiMessage::NoteOff(1,92,80) );
+        seq.push( 0., &MidiMessage::NoteOn( 1,91,80) );
+        seq.push( 0.5, &MidiMessage::NoteOff(1,91,80) );
+        seq.push( 0., &MidiMessage::NoteOn( 1,92,80) );
+        seq.push( 1., &MidiMessage::NoteOff(1,92,80) );
+        seq.push( 1., &MidiMessage::NoteOff(1,92,80) );
         Self{ 
             test_seq: seq,
             tick_time: 0.,
@@ -52,39 +51,13 @@ impl ProxyRender {
             Some(sound_render) => {
                 let mut sound_render_lock = sound_render.lock()
                     .expect("FATAL: can't lock SoundRender!");
-                let mut midi_rec: &mut dyn MidiReceiver = &sound_render_lock;
-                self.test_seq.send_next_sequence( self.elapsed_time, midi_rec );
-                return;
-                match self.elapsed_time {
-                    x if x < 1. => {
-                        log::tick();
-                        sound_render_lock.process_midi_command( 1, 0x80, 90, 80);
-                        sound_render_lock.process_midi_command( 1, 0x80, 91, 80);
-                        sound_render_lock.process_midi_command( 1, 0x80, 92, 80);
-                        sound_render_lock.process_midi_command( 1, 0x90, 90, 80);
-                    },
-                    x if x < 2. => {
-                        sound_render_lock.process_midi_command( 1, 0x80, 90, 80);
-                        sound_render_lock.process_midi_command( 1, 0x80, 91, 80);
-                        sound_render_lock.process_midi_command( 1, 0x80, 92, 80);
-                        sound_render_lock.process_midi_command( 1, 0x90, 91, 80);
-                    },
-                    x if x < 3. => {
-                        sound_render_lock.process_midi_command( 1, 0x80, 90, 80);
-                        sound_render_lock.process_midi_command( 1, 0x80, 91, 80);
-                        sound_render_lock.process_midi_command( 1, 0x80, 92, 80);
-                        sound_render_lock.process_midi_command( 1, 0x90, 92, 80);
-                    },
-                    x if x < 4. => {
-                        sound_render_lock.process_midi_command( 1, 0x80, 90, 80);
-                        sound_render_lock.process_midi_command( 1, 0x80, 91, 80);
-                        sound_render_lock.process_midi_command( 1, 0x80, 92, 80);
-                    },
-                    _ => {
-                        self.elapsed_time = 0.;
-                    }
-                }
+                let midi_recevier: &mut dyn MidiReceiver = sound_render_lock.get_as_midi_receiver();
+                self.test_seq.send_next_sequence( self.elapsed_time, midi_recevier );
                 sound_render_lock.render(left, right);
+                if self.test_seq.is_finished() {
+                    self.elapsed_time = 0.;
+                    self.test_seq.restart();
+                }
             }
         }
     }
@@ -96,5 +69,11 @@ impl Drop for ProxyRender {
     }
 }
 
+impl MidiReceiver for ProxyRender {
+    fn reset(&mut self) {
+    }
+    fn process_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
+    }
+}
 
 
