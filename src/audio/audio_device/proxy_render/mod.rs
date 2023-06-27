@@ -11,7 +11,6 @@ pub trait SoundRender: MidiReceiver + Sync + Send {
 pub struct ProxyRender {
     test_seq: MidiSequence,
     pub(crate) tick_time: f32,
-    elapsed_time: f32,
     pub(crate) sound_render: Option< Arc<Mutex<dyn SoundRender>> >,
 }
 impl ProxyRender {
@@ -31,16 +30,13 @@ impl ProxyRender {
         Self{ 
             test_seq: seq,
             tick_time: 0.,
-            elapsed_time: 0.,
             sound_render: None
         }
     }
     
     pub fn render(&mut self, left: &mut [f32], right: &mut [f32]) {
-        self.elapsed_time += self.tick_time;
         match &self.sound_render {
             None => {
-                //log::tick();
                 for sample in left {
                     *sample = 0_f32;
                 }
@@ -52,10 +48,9 @@ impl ProxyRender {
                 let mut sound_render_lock = sound_render.lock()
                     .expect("FATAL: can't lock SoundRender!");
                 let midi_recevier: &mut dyn MidiReceiver = sound_render_lock.get_as_midi_receiver();
-                self.test_seq.send_next_sequence( self.elapsed_time, midi_recevier );
+                self.test_seq.send_next_sequence( &self.tick_time, midi_recevier );
                 sound_render_lock.render(left, right);
                 if self.test_seq.is_finished() {
-                    self.elapsed_time = 0.;
                     self.test_seq.restart();
                 }
             }
@@ -68,6 +63,5 @@ impl Drop for ProxyRender {
         log::drop("ProxyRender");
     }
 }
-
 
 

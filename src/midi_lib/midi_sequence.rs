@@ -4,6 +4,7 @@ use super::MidiReceiver;
 
 pub struct MidiSequence {
     current_index: usize,
+    elapsed_time: f32,
     list: Vec<TimedMidiMessage>,
 }
 
@@ -12,6 +13,7 @@ impl MidiSequence {
     pub fn new() -> Self {
         Self {
             current_index: 0,
+            elapsed_time: 0_f32,
             list: Vec::new()
         }
     }
@@ -33,15 +35,17 @@ impl MidiSequence {
     #[allow(dead_code)]
     pub fn restart(&mut self) {
         self.current_index = 0;
+        self.elapsed_time = 0_f32;
     }
 
     #[allow(dead_code)]
-    pub fn send_next_sequence(&mut self, til_time: f32, receiver: &mut dyn MidiReceiver) {
+    pub fn send_next_sequence(&mut self, tick_time: &f32, receiver: &mut dyn MidiReceiver) {
+        self.elapsed_time += tick_time;
         for (i, tm_msg) in self.list.iter().enumerate() {
             if i < self.current_index {
                 continue;
             }
-            if til_time < tm_msg.time {
+            if self.elapsed_time < tm_msg.time {
                 break;
             }
             let midi = tm_msg.midi_msg.to_midi_general();
