@@ -1,7 +1,7 @@
 use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
-
 use super::super::super::midi_lib::{MidiMessage,MidiReceiver,MidiSequence};
+
 
 pub trait SoundRender: MidiReceiver + Sync + Send {
     fn render(&mut self, left: &mut [f32], right: &mut [f32]);
