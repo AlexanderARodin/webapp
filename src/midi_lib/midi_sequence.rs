@@ -1,5 +1,4 @@
-use super::MidiMessage;
-use super::MidiReceiver;
+use super::{MidiMessage,MidiReceiver};
 
 
 pub struct MidiSequence {

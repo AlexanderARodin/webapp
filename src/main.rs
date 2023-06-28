@@ -6,7 +6,7 @@ use main_app::MainApp;
 
 mod domik_view;
 mod midi_audio;
-mod audio;
+mod synths;
 mod midi_lib;
 
 mod raadbg;

@@ -4,8 +4,8 @@ use std::sync::{Mutex,Arc};
 
 use crate::midi_audio::MidiAudio;
 
-use crate::audio::simple_synth::SimpleSynth;
-use crate::audio::rusty_synth_wrapper::RustySynthWrapper;
+use crate::synths::simple_synth::SimpleSynth;
+use crate::synths::rusty_synth_wrapper::RustySynthWrapper;
 use crate::midi_lib::MidiMessage;
 
 
