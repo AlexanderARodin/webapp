@@ -5,7 +5,7 @@ mod main_app;
 use main_app::MainApp;
 
 mod domik_view;
-mod midi_to_audio;
+mod midi_audio;
 mod audio;
 mod midi_lib;
 
