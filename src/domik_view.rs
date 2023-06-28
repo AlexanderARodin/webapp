@@ -46,7 +46,7 @@ impl DomikView {
             ui.horizontal( |ui| {
                     let btnN = ui.button( "None" );
                     if btnN.clicked(){
-                        midi_audio.set_soundrender(None);
+                        midi_audio.install_synth(None);
                     }
                     
                     let sample_rate = midi_audio.get_sample_rate();
@@ -54,20 +54,20 @@ impl DomikView {
                     if btnS.clicked(){
                         let simsyn = SimpleSynth::new( &sample_rate );
                         let simsyn_wrapper = Arc::new(Mutex::new( simsyn ));
-                        midi_audio.set_soundrender( Some(simsyn_wrapper) );
+                        midi_audio.install_synth( Some(simsyn_wrapper) );
                     }
                     let btnRA = ui.button( "RustySynt - Strings" );
                     if btnRA.clicked(){
                         if let Ok(ryssyn) = RustySynthWrapper::new( &sample_rate, false ) {
                             let ryssyn_wrapper = Arc::new(Mutex::new( ryssyn ));
-                            midi_audio.set_soundrender( Some(ryssyn_wrapper) );
+                            midi_audio.install_synth( Some(ryssyn_wrapper) );
                         }
                     }
                     let btnRB = ui.button( "RustySynt - Piano" );
                     if btnRB.clicked(){
                         if let Ok(ryssyn) = RustySynthWrapper::new( &sample_rate, true ) {
                             let ryssyn_wrapper = Arc::new(Mutex::new( ryssyn ));
-                            midi_audio.set_soundrender( Some(ryssyn_wrapper) );
+                            midi_audio.install_synth( Some(ryssyn_wrapper) );
                         }
                     }
                 });
@@ -77,19 +77,19 @@ impl DomikView {
             ui.horizontal( |ui| {
                     let btnA = ui.button( "note ON" );
                     if btnA.clicked(){
-                        midi_audio.invoke_note_on(1,60,127);
+                        //midi_audio.invoke_note_on(1,60,127);
                     }
                     let btnA1 = ui.button( "note ON2" );
                     if btnA1.clicked(){
-                        midi_audio.invoke_note_on(1,67,64);
+                        //midi_audio.invoke_note_on(1,67,64);
                     }
                     let btnA2 = ui.button( "note ON2" );
                     if btnA2.clicked(){
-                        midi_audio.invoke_note_on(1,72,1);
+                        //midi_audio.invoke_note_on(1,72,1);
                     }
                     let btnB = ui.button( "note OFF" );
                     if btnB.clicked(){
-                        midi_audio.invoke_note_off(1,60);
+                        //midi_audio.invoke_note_off(1,60);
                     }
                 });
     }

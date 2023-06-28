@@ -1,10 +1,13 @@
+use crate::raadbg::log;
+
+mod proxy_render;
+use proxy_render::ProxyRender;
+pub use proxy_render::SoundRender as SoundRender;
+
 use std::error::Error;
 use std::sync::{Arc,Mutex};
 use tinyaudio::prelude::*;
 
-use crate::raadbg::log;
-//use super::proxy_render::*;
-//use super::super::midi_rx_tx::*;
 
 //use super::audio_device_parameters::AudioDeviceParameters;
 //  //  //  //  //  //  //  //  //
@@ -13,18 +16,18 @@ use crate::raadbg::log;
 
 
 pub struct MidiAudio {
-    //params: AudioDeviceParameters,
+    params: AudioDeviceParameters,
     device: Option< Box<dyn BaseAudioOutputDevice> >,
-    //proxy_render: Arc<Mutex<ProxyRender>>,
+    proxy_render: Arc<Mutex<ProxyRender>>,
 }
 
 impl MidiAudio {
     pub fn new( ) -> Self {
         log::create("MidiAudio");
         Self{ 
-            //params: Default::default(),
+            params: Default::default(),
             device: None,
-            //proxy_render: ProxyRender::new_arc_mutex(),
+            proxy_render: ProxyRender::new_arc_mutex(),
         }
     }
     pub fn start(&mut self) -> Result< (), Box<dyn Error> > {
@@ -56,6 +59,10 @@ impl MidiAudio {
     pub fn send_to_synth(&self) {
     }
     pub fn load_sequence(&mut self) {
+    }
+
+    pub fn get_sample_rate(&self) -> usize {
+        self.params.sample_rate
     }
 }
 
@@ -125,9 +132,6 @@ impl AudioDevice {
     }
 
 
-    pub fn get_sample_rate(&self) -> usize {
-        self.params.sample_rate
-    }
 }
 
 

@@ -1,6 +1,6 @@
 use std::sync::{Arc,Mutex};
 use crate::raadbg::log;
-use super::super::super::midi_lib::{MidiMessage,MidiReceiver,MidiSequence};
+use super::super::midi_lib::{MidiMessage,MidiReceiver,MidiSequence};
 
 
 pub trait SoundRender: MidiReceiver + Sync + Send {
@@ -8,7 +8,7 @@ pub trait SoundRender: MidiReceiver + Sync + Send {
     fn get_as_midi_receiver(&mut self) -> &mut dyn MidiReceiver;
 }
 
-pub struct ProxyRender {
+pub(crate) struct ProxyRender {
     test_seq: MidiSequence,
     pub(crate) tick_time: f32,
     pub(crate) sound_render: Option< Arc<Mutex<dyn SoundRender>> >,
