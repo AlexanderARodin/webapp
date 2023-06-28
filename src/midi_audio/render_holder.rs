@@ -20,14 +20,14 @@ impl RenderHolder {
     pub fn new() -> Self {
         log::create("RenderHolder");
         let mut seq = MidiSequence::new();
-        seq.push( 0.0, &MidiMessage::NoteOn( 1,90,80) );
+        /*seq.push( 0.0, &MidiMessage::NoteOn( 1,90,80) );
         seq.push( 0.5, &MidiMessage::NoteOff(1,90,80) );
         seq.push( 0., &MidiMessage::NoteOn( 1,91,80) );
         seq.push( 0.5, &MidiMessage::NoteOff(1,91,80) );
         seq.push( 0., &MidiMessage::NoteOn( 1,92,80) );
         seq.push( 1., &MidiMessage::NoteOff(1,92,80) );
         seq.push( 1., &MidiMessage::NoteOff(1,92,80) );
-        Self{ 
+        */Self{ 
             test_seq: seq,
             tick_time: 0.,
             sound_render: None

@@ -6,6 +6,7 @@ use crate::midi_audio::MidiAudio;
 
 use crate::audio::simple_synth::SimpleSynth;
 use crate::audio::rusty_synth_wrapper::RustySynthWrapper;
+use crate::midi_lib::MidiMessage;
 
 
 
@@ -74,19 +75,23 @@ impl DomikView {
             ui.horizontal( |ui| {
                     let btnA = ui.button( "note ON" );
                     if btnA.clicked(){
-                        //midi_audio.invoke_note_on(1,60,127);
+                        let midi = MidiMessage::NoteOn(1,60,127);
+                        midi_audio.send_to_synth( &midi );
                     }
                     let btnA1 = ui.button( "note ON2" );
                     if btnA1.clicked(){
-                        //midi_audio.invoke_note_on(1,67,64);
+                        let midi = MidiMessage::NoteOn(1,67,64);
+                        midi_audio.send_to_synth( &midi );
                     }
                     let btnA2 = ui.button( "note ON2" );
                     if btnA2.clicked(){
-                        //midi_audio.invoke_note_on(1,72,1);
+                        let midi = MidiMessage::NoteOn(1,72,1);
+                        midi_audio.send_to_synth( &midi );
                     }
                     let btnB = ui.button( "note OFF" );
                     if btnB.clicked(){
-                        //midi_audio.invoke_note_off(1,60);
+                        let midi = MidiMessage::NoteOff(1,60,100);
+                        midi_audio.send_to_synth( &midi );
                     }
                 });
     }

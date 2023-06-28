@@ -1,15 +1,16 @@
 use std::error::Error;
 use std::sync::{Arc,Mutex};
 use tinyaudio::prelude::*;
+
 use crate::raadbg::log;
 use crate::midi_lib::MidiMessage;
+
 mod render_holder;
 use render_holder::RenderHolder;
 pub use render_holder::SoundRender as SoundRender;
 
 mod audio_device_parameters;
 use audio_device_parameters::AudioDeviceParameters;
-
 //  //  //  //  //  //  //  //  //
 
 
@@ -35,7 +36,7 @@ impl MidiAudio {
         }else{
             log::info("MidiAudio", "starting");
         }
-        //self.refresh_tick_time();
+        self.refresh_tick_time();
         self.run_device_loop()
     }
     pub fn stop(&mut self) {
@@ -54,7 +55,22 @@ impl MidiAudio {
             .expect("can't lock hoder_lock");
         holder_lock.sound_render = new_synth;
     }
-    pub fn send_to_synth(&self, midi_command: &MidiMessage) {
+    pub fn send_to_synth(&self, midi_msg: &MidiMessage) {
+        let mut holder_lock = self.render_holder.lock()
+            .expect("can't lock hoder_lock");
+        match &holder_lock.sound_render {
+            None => {
+            },
+            Some(sound_render) => {
+                let mut sound_render_lock = sound_render.lock()
+                    .expect("panic on locking Some(sound_render)");
+                let midi = midi_msg.to_midi_general();
+                sound_render_lock.process_midi_command( midi.channel, 
+                                                        midi.command, 
+                                                        midi.data1, 
+                                                        midi.data2 );
+          }
+        }
     }
     pub fn load_sequence(&mut self) {
     }
