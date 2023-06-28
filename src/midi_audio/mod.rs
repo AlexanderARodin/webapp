@@ -133,29 +133,3 @@ impl Drop for MidiAudio {
 }
 
 
-
-
-
-/*
-
-impl MidiSender for AudioDevice {
-    fn invoke_reset(&mut self) {
-        log::info("AudioDevice", "midi.RESET");
-    }
-    fn invoke_midi_command(&mut self, channel: i32, command: i32, data1: i32, data2: i32) {
-        log::info("AudioDevice", "midi.invoke_midi_command");
-        let proxy_lock = self.proxy_render.lock()
-            .expect("can't lock proxy_render");
-        match &proxy_lock.sound_render {
-            None => {
-            },
-            Some(sound_render) => {
-                let mut sound_render_lock = sound_render.lock()
-                    .expect("panic on locking Some(sound_render)");
-                sound_render_lock.process_midi_command( channel, command, data1, data2 );
-          }
-        }
-    }
-}
-
-*/

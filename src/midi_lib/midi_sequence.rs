@@ -22,7 +22,7 @@ impl MidiSequence {
         let len = self.list.len();
         let prev_time:f32 = match len {
             0 => {
-                0.
+                0_f32
             },
             _ => {
                 self.list[len - 1].time
@@ -38,7 +38,7 @@ impl MidiSequence {
     }
 
     #[allow(dead_code)]
-    pub fn send_next_sequence(&mut self, tick_time: &f32, receiver: &mut dyn MidiReceiver) {
+    pub fn send_next_sequence(&mut self, tick_time: f32, receiver: &mut dyn MidiReceiver) {
         self.elapsed_time += tick_time;
         for (i, tm_msg) in self.list.iter().enumerate() {
             if i < self.current_index {

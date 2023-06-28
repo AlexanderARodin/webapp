@@ -20,7 +20,7 @@ impl RenderHolder {
     pub fn new() -> Self {
         log::create("RenderHolder");
         let mut seq = MidiSequence::new();
-        /*seq.push( 0.0, &MidiMessage::NoteOn( 1,90,80) );
+        /* seq.push( 0.0, &MidiMessage::NoteOn( 1,90,80) );
         seq.push( 0.5, &MidiMessage::NoteOff(1,90,80) );
         seq.push( 0., &MidiMessage::NoteOn( 1,91,80) );
         seq.push( 0.5, &MidiMessage::NoteOff(1,91,80) );
@@ -48,7 +48,7 @@ impl RenderHolder {
                 let mut sound_render_lock = sound_render.lock()
                     .expect("FATAL: can't lock SoundRender!");
                 let midi_recevier: &mut dyn MidiReceiver = sound_render_lock.get_as_midi_receiver();
-                self.test_seq.send_next_sequence( &self.tick_time, midi_recevier );
+                self.test_seq.send_next_sequence( self.tick_time, midi_recevier );
                 sound_render_lock.render(left, right);
                 if self.test_seq.is_finished() {
                     self.test_seq.restart();
