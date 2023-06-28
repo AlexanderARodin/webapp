@@ -8,17 +8,17 @@ pub trait SoundRender: MidiReceiver + Sync + Send {
     fn get_as_midi_receiver(&mut self) -> &mut dyn MidiReceiver;
 }
 
-pub(crate) struct ProxyRender {
+pub(crate) struct RenderHolder {
     test_seq: MidiSequence,
     pub(crate) tick_time: f32,
     pub(crate) sound_render: Option< Arc<Mutex<dyn SoundRender>> >,
 }
-impl ProxyRender {
+impl RenderHolder {
     pub fn new_arc_mutex() -> Arc<Mutex<Self>> {
         Arc::new(Mutex::new( Self::new() ))
     }
     pub fn new() -> Self {
-        log::create("ProxyRender");
+        log::create("RenderHolder");
         let mut seq = MidiSequence::new();
         seq.push( 0.0, &MidiMessage::NoteOn( 1,90,80) );
         seq.push( 0.5, &MidiMessage::NoteOff(1,90,80) );
@@ -58,9 +58,9 @@ impl ProxyRender {
     }
 }
 
-impl Drop for ProxyRender {
+impl Drop for RenderHolder {
     fn drop(&mut self) {
-        log::drop("ProxyRender");
+        log::drop("RenderHolder");
     }
 }
 

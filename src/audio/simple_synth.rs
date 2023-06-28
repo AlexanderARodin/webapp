@@ -1,6 +1,6 @@
 use crate::raadbg::log;
 
-use super::audio_device::proxy_render::SoundRender;
+use super::super::midi_audio::SoundRender;
 use super::super::midi_lib::MidiReceiver;
 
 const PI2: f32 = 2. * std::f32::consts::PI;

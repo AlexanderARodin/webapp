@@ -2,7 +2,7 @@
 
 use crate::log_view::LogView;
 use crate::domik_view::*;
-use crate::audio::audio_device::AudioDevice;
+use crate::midi_audio::MidiAudio;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
@@ -15,7 +15,7 @@ pub struct MainApp {
     log_view: LogView,
     
     #[serde(skip)]
-    audio_device: AudioDevice,
+    midi_audio: MidiAudio,
     #[serde(skip)]
     domikView: DomikView,
 }
@@ -25,7 +25,7 @@ impl Default for MainApp {
         Self {
             txt:"<empty>".to_owned(), pressed:false, 
             log_view: LogView::new(),
-            audio_device: AudioDevice::new( ), //44100/2, 441*3 ),
+            midi_audio: MidiAudio::new( ),
             domikView: DomikView::new()
         }
     }
@@ -53,7 +53,7 @@ impl eframe::App for MainApp {
         });
 
         egui::Window::new(self.domikView.title.clone()).show( ctx, |ui| {
-            self.domikView.updateUI( ui, &mut self.audio_device );
+            self.domikView.updateUI( ui, &mut self.midi_audio );
         });
 
         egui::CentralPanel::default()

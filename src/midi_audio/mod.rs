@@ -4,12 +4,12 @@ mod proxy_render;
 use proxy_render::ProxyRender;
 pub use proxy_render::SoundRender as SoundRender;
 
+mod audio_device_parameters;
+use audio_device_parameters::AudioDeviceParameters;
+
 use std::error::Error;
 use std::sync::{Arc,Mutex};
 use tinyaudio::prelude::*;
-
-
-//use super::audio_device_parameters::AudioDeviceParameters;
 //  //  //  //  //  //  //  //  //
 
 

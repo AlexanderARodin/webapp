@@ -5,7 +5,7 @@ use std::sync::{Mutex,Arc};
 //use crate::audio::audio_device::AudioDevice;
 use crate::midi_audio::MidiAudio;
 
-use crate::audio::midi_rx_tx::MidiSender;
+//use crate::audio::midi_rx_tx::MidiSender;
 
 use crate::audio::simple_synth::SimpleSynth;
 use crate::audio::rusty_synth_wrapper::RustySynthWrapper;
