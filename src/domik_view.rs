@@ -73,6 +73,11 @@ impl DomikView {
             ui.separator();
             ui.label("playing notes:");
             ui.horizontal( |ui| {
+                    let btnO = ui.button( "[#]" );
+                    if btnO.clicked(){
+                        midi_audio.load_sequence();
+                    }
+                    ui.separator();
                     let btnA = ui.button( "note ON" );
                     if btnA.clicked(){
                         let midi = MidiMessage::NoteOn(1,60,127);

@@ -73,6 +73,8 @@ impl MidiAudio {
         }
     }
     pub fn load_sequence(&mut self) {
+        let errmsg = format!("LOAD_SEQUENCE!!!!!!!!!!1111111111....");
+        log::error("MidiAudio", &errmsg);
     }
 
     pub fn get_sample_rate(&self) -> usize {
@@ -107,7 +109,7 @@ impl MidiAudio {
         match device {
             Err(e) => {
                 let errmsg = format!("{:?}",e);
-                log::error("AudioDevice", &errmsg);
+                log::error("MidiAudio", &errmsg);
                 return Err(e)
             },
             Ok(running_device) => self.device = Some(running_device),
